@@ -1,121 +1,142 @@
-# Dl4j-Benchmarks
+# Benchmarks
+Repository to track Dl4j benchmarks in relation to well known architectures on CPUs and GPUs.
 
-Repository to track Dl4j benchmarks in relation to well known frameworks on cpu and gpu and for dl4j on spark.
+#### Purpose
+These benchmarks are designed to show the comparison performance between CPUs and GPUs.
+We tested various sort of neural networks including CNNs, RNNs, MLP and also tested MultiLayerNetwork and ComputationGraph as well. for more details, you can refer to Benchmark Details below.
 
-#### Core Benchmarks
+#### How to run the benchmarks
+```sh
+# build with cudnn8.0 (for cpus, -P native, for gpus -P cuda8)
+$ mvn clean package -DskipTests -P cudnn8
 
-* ModelCompare: compares same structure across all frameworks in this repo
-    * MLP: using simple, single layer feed forward with MNIST data 
-    * Lenet: using common LeNet CNN model with MNIST data
-* Cifar10: compares Dl4j against best structures from each framework 
-* Experiment: explores other comparisons and more of storage for drafts and works in progress
+# run VGG16 benchmark for 16x3x224x224 input
+$ java -cp dl4j-core-benchmark/dl4j-core-benchmark.jar org.deeplearning4j.benchmarks.BenchmarkTinyImageNet --modelType VGG16 -w 224 -h 224 -c 3 -b 16
+```
 
-#### Spark Benchmarks
+#### Benchmark Environment
 
-The deeplearning4j-spark-benchmark package contains a number of synthetic benchmarks to test Spark training performance under a variety of situations.
+| Device | DGX-1 |
+| ---------- |:-----:|
+| Operating System  | GNU/Linux Ubuntu 14.04.4 LTS |
+| CPU  | Intel(R) Xeon(R) CPU E5-2698 v4 @ 2.20GHz |
+| CPU Cores | 80 |
+| BLAS Vendor for CPU | OPENBLAS |
+| GPU (#)  | Tesla P100-SXM2-16GB (8) |
+| BLAS Vendor for GPU  | CUBLAS, CUDA 8.0 |
+| CUDNN | v5.1|
+| DL4J Version | 0.8.0 |
 
-For more details, see the readme [here - TODO]
+#### Benchmark Details
 
+[**MLP**](#mlp)
+- Input : 64x784
+- Total Params : 1796010
+- Total Layers : 3
 
-## Core Packages Comparison
-Main packages included for comparison so far...
+|                       | CPU       | GPU       | Multi   |
+| --------------------- |:---------:| ---------:| -------:|
+| Avg Feedforward (ms)  | 14.32     | 1.95      |
+| Avg Backprop (ms)     | 24.8      | 2.48      |
+| Avg Iteration (ms)    | 50.51     | 15.21     |
+| Avg Samples/sec       | 1429.2    | 11491.08  | 23389.24|
+| Avg Batches/sec       | 22.33     | 179.55    | 366.79  |
 
-**Dl4j (v0.6.0)**
-* Install: http://deeplearning4j.org/quickstart
-* Setup packages: add to pom.xml
-* Set GPU: change in pom file under nd4j-backends (native for cpu and cuda-7.5 for gpu) 
-* Compile: mvn clean install -P (native or cuda)
+[**LeNet**](#lenet)
+- Input : 64x1x28x28
+- Total Params : 431080
+- Total Layers : 6
 
-**Caffe (vr3)**
-* Install: http://caffe.berkeleyvision.org/installation.html
-* Set GPU: change in solver prototext under solver_mode as either CPU or GPU
-* Pass in -gpu # for the number of GPUs to use or all for all
+|                       | CPU       | GPU       | Multi   |
+| --------------------- |:---------:| ---------:| -------:|
+| Avg Feedforward (ms)  | 44.21     | 3.29      |
+| Avg Backprop (ms)     | 94.32     | 6.21      |
+| Avg Iteration (ms)    | 170.35    | 16.72     |
+| Avg Samples/sec       | 420.51    | 10280.08  | 20531.8 |
+| Avg Batches/sec       | 6.57      | 160.63    | 321.14  |
 
-**Tensorflow(v0.9.0)**
-* Install: https://www.tensorflow.org/versions/r0.9/get_started/os_setup.html
-* Setup packages: pip install \<*filename*>
-* cuDNN required for CNN models and cuDNN > 4 requires to compile from source
-* Checkout for configuration fixes: https://stackoverflow.com/questions/37663064/cudnn-compile-configuration-in-tensorflow
+[**LSTM**](#lstm)
+- Input : 64x300x256
+- Total Params : 571650
+- Total Layers : 2
 
-**Torch (v7)**
-* Install: http://torch.ch/docs/getting-started.html 
-* Setup packages: luarocks install \<*filename*>
-* Utilize cutorch, cunn, cudnn packages for cuda backend integration 
-* cuDNN required for CNN models
-
-To run any of these examples, configure the system to the platform, install this repo and run:
-
-        ./dl4j-core-benchmarks/scripts/model_compare_.sh
-
-Note: If multiple GPUs, control how many used by adding 'export CUDA_VISIBLE_DEVICES=' to .bashrc or .bash_profile and setting empty for CPU and 0,1,2,3 for GPUs (0 if just one and 0,1 if just two) 
-
-#### Benchmark System
-Running benchmarks on following system setup:
-* Ubuntu 14.0.4
-* 60GB RAM 
-* 32 Intel Xeon E5-2670 CPUs
-* 4 Grid GPUs 4GB RAM
-* gcc & g++ v4.9
-* BLAS: OpenBLAS v1.13 or Cublas v7.5
-* cuDNN v5.1.3
-
-In order to run all examples in core, you need to configure a system for all of the platforms. Each platform differs in requirements and be especially aware of software versions that are not supported.
-
-#### Package Comparisons
-
-Initial analysis. Consider all numbers hostile with potential to change as we get additional reviews sorted.
-
-
-##### Timing for Training Only
-
-**MLP Example**
-
-| Package    | CPU   | GPU   | Multi | Accuracy |
-| ---------- |:-----:| -----:| -----:| --------:| 
-| Dl4j       | 6m18s | 2m40ms| 1m10s | ~97.5%   | 
-| Caffe      | 2m18s |   13s |   33s | ~97.4%   |
-| Tensorflow | 1m10s |   38s | 1m11s | ~98.3%*  |
-| Torch      | 4m54s |   51s | 1m34s | ~98.0%   |
-
-**Lenet Example w/ cuDNN**
-
-| Package    | CPU   | GPU   | Multi | Accuracy |
-| ---------: |------:| -----:| -----:| --------:| 
-| Dl4j       | 19m58s| 3m03s | 1m07s | ~99.0%   | 
-| Caffe      | 19m49s|   52s | 1m12s | ~99.0%   |
-| Tensorflow |  5m10s| 1m37s | 2m36s | ~98.6%   |
-| Torch      | 17m59s| 6m11s | 3m37s | ~98.3%   |
+|                       | CPU       | GPU       | Multi   |
+| --------------------- |:---------:| ---------:| -------:|
+| Avg Feedforward (ms)  | 825.28    | 233.66    |         |
+| Avg Backprop (ms)     | 2820.08   | 792.96    |         |
+| Avg Iteration (ms)    | 5905.69   | 1285      |         |
+| Avg Samples/sec       | 11.46     | 49.34     | 189.96  |
+| Avg Batches/sec       | 0.18      | 0.77      | 2.97    |
 
 
-##### Timing for Full Script Run
+[**AlexNet**](#alexnet)
+- Input : 32x3x224x224
+- Total Params : 59100744
+- Total Layers : 13
 
-**MLP Example**
+|                       | CPU       | GPU       | Multi   |
+| --------------------- |:---------:| ---------:| -------:|
+| Avg Feedforward (ms)  | 812.67    | 307.46    |
+| Avg Backprop (ms)     | 2083.62   | 1105.46   |
+| Avg Iteration (ms)    | 3710.5    | 2335.57   |
+| Avg Samples/sec       | 8.59      | 13.52     | 52.39   |
+| Avg Batches/sec       | 0.27      | 0.42      | 1.64    |
 
-| Package    | CPU   | GPU   | Multi | Accuracy |
-| ---------- |:-----:| -----:| -----:| --------:| 
-| Dl4j       | 6m26s | 2m50ms| 1m20s | ~97.5%   | 
-| Caffe      | 2m20s |   15s |   36s | ~97.4%   |
-| Tensorflow | 1m15s |   43s | 1m18s | ~98.3%*  |
-| Torch      | 4m56s | 1m03s | 1m46s | ~98.0%   |
 
-**Lenet Example w/ cuDNN**
+[**INCEPTIONRESNETV1**](#inceptionv1)
+- Input : 32x3x160x160
+- Total Params : 16003768
+- Total Layers : 301
 
-| Package    | CPU   | GPU   | Multi | Accuracy |
-| ---------: |------:| -----:| -----:| --------:| 
-| Dl4j       | 20m08s| 3m13s | 1m18s | ~99.0%   | 
-| Caffe      | 19m52s|   53s | 1m14s | ~99.0%   |
-| Tensorflow |  5m15s| 1m44s | 2m44s | ~98.6%   |
-| Torch      | 18m03s| 6m25s | 3m50s | ~98.3%   |
+|                       | CPU       | GPU       | Multi   |
+| --------------------- |:---------:| ---------:| -------:|
+| Avg Feedforward (ms)  | 2806.36   | 62.98     |         |
+| Avg Backprop (ms)     | 10426.49  | 205.49    |         |
+| Avg Iteration (ms)    | 17373.15  | 582.21    |         |
+| Avg Samples/sec       | 1.85      | 56.07     | 148.72  |
+| Avg Batches/sec       | 0.06      | 1.75      | 4.63    |
 
-Note: 
- * Tensorflow required learning rate modification on MLP by 1/10th otherwise accuracy drops to 9%
- - Accuracy varies slighty between cpu, single gpu & multi-gpu (e.g. DL4J multi-gpu is .90 for mlp and .97 for lenet). 
- - Timings vary (potentially a couple seconds) for all packages on each run
- - Time to transfer and consolidate data can lead to longer performance times on multi-gpu (larger datasets needed for comparison)
- - Issues getting nccl setup on system for Torch multiple gpu tests; thus, not used 
+[**VGG16**](#vgg16)
+- Input : 32x3x224x224
+- Total Params : 135079944
+- Total Layers : 21
 
-## *How to Help*
-Help is welcome to improve comparisons. If you know a better way or see a fix that is needed, please submit a pull request. Top of mind next steps that help would be appreciated:
+|                       | CPU       | GPU       | Multi   |
+| --------------------- |:---------:| ---------:| -------:|
+| Avg Feedforward (ms)  | 14452.92  | 1245.66   |         |
+| Avg Backprop (ms)     | 40445.12  | 2834.26   |         |
+| Avg Iteration (ms)    | 52013.42  | 6299.24   |         |
+| Avg Samples/sec       | 0.52      | 5.03      | 13.1    |
+| Avg Batches/sec       | 0.02      | 0.16      | 0.4     |
 
-    - Compare LSTMs, Autoencoders, RBMs where available
-    - Setup Dl4j AlexNet functionality with multiple GPUs for benchmark
+
+
+
+#### APPENDIX
+
+<a name="mlp">**MLP**</a>
+- Implementation Code : [here](https://github.com/deeplearning4j/dl4j-benchmark/blob/dh_nvidiakr/dl4j-core-benchmark/src/main/java/org/deeplearning4j/models/mlp/SimpleMLP.java)
+- Network Summary : [here](https://gist.github.com/kepricon/622fc5f6131b2f6fdbf02e755bcb0d7b)
+
+<a name="lenet">**LeNet**</a>
+- Implementation Code : [here](https://github.com/deeplearning4j/dl4j-benchmark/blob/dh_nvidiakr/dl4j-core-benchmark/src/main/java/org/deeplearning4j/models/cnn/LeNet.java)
+- Network Summary : [here](https://gist.github.com/kepricon/86f76610dbf6c8f629c53a6d1cbccc8e)
+
+<a name="lstm">**LSTM**</a>
+- Implementation Code : [here](https://github.com/deeplearning4j/dl4j-benchmark/blob/dh_nvidiakr/dl4j-core-benchmark/src/main/java/org/deeplearning4j/models/rnn/W2VSentiment.java)
+- Network Summary : [here](https://gist.github.com/kepricon/8637248febfa41350f89643695ba6a1b)
+
+<a name="alexnet">**AlexNet**</a>
+- Implementation Code : [here](https://github.com/deeplearning4j/dl4j-benchmark/blob/master/dl4j-core-benchmark/src/main/java/org/deeplearning4j/models/cnn/AlexNet.java)
+- Reference: https://www.cs.toronto.edu/~kriz/imagenet_classification_with_deep_convolutional.pdf
+- Network Summary : [here](https://gist.github.com/kepricon/f3184026890024bc44f73da22d1fed27)
+
+<a name="vgg16">**VGG16**</a>
+- Implementation Code : [here](https://github.com/deeplearning4j/dl4j-benchmark/blob/master/dl4j-core-benchmark/src/main/java/org/deeplearning4j/models/cnn/VGG16.java)
+- Reference: https://arxiv.org/pdf/1409.1556.pdf
+- Network Summary : [here](https://gist.github.com/kepricon/3ae1776656432382cf02c1c8f110c98d)
+
+<a name="inceptionv1">**INCEPTIONRESNETV1**</a>
+- Implementation Code : [here](https://github.com/deeplearning4j/dl4j-benchmark/blob/master/dl4j-core-benchmark/src/main/java/org/deeplearning4j/models/cnn/InceptionResNetV1.java)
+- Reference: https://arxiv.org/abs/1503.03832
+- Network Summary : [here](https://gist.github.com/kepricon/1dad994a6bfaa79dcbf5903870f1d187)
