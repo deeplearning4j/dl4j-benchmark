@@ -73,14 +73,14 @@ $ java -cp dl4j-core-benchmark/dl4j-core-benchmark.jar org.deeplearning4j.benchm
 - Input : 32x3x224x224
 - Total Params : 59100744
 - Total Layers : 13
-
+             
 |                       | CPU       | GPU       | Multi   |
 | --------------------- |:---------:| ---------:| -------:|
-| Avg Feedforward (ms)  | 812.67    | 307.46    |
-| Avg Backprop (ms)     | 2083.62   | 1105.46   |
-| Avg Iteration (ms)    | 3710.5    | 2335.57   |
-| Avg Samples/sec       | 8.59      | 13.52     | 52.39   |
-| Avg Batches/sec       | 0.27      | 0.42      | 1.64    |
+| Avg Feedforward (ms)  | 812.67    | 2.96      |
+| Avg Backprop (ms)     | 2083.62   | 43.7      |
+| Avg Iteration (ms)    | 3710.5    | 895.95    |
+| Avg Samples/sec       | 8.59      | 35.34     | 52.39   |
+| Avg Batches/sec       | 0.27      | 1.1       | 1.64    |
 
 
 [**INCEPTIONRESNETV1**](#inceptionv1)
