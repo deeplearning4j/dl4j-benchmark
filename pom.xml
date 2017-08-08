@@ -6,6 +6,7 @@
     </prerequisites>
     <modules>
         <module>dl4j-core-benchmark</module>
+        <module>dl4j-hdfs-benchmark</module>
         <!--<module>dl4j-spark-benchmark</module>-->
     </modules>
 
@@ -18,14 +19,14 @@
     <description>Examples of training different data sets</description>
 
     <properties>
-        <dl4j.version>0.8.1-SNAPSHOT</dl4j.version>
-        <nd4j.version>0.8.1-SNAPSHOT</nd4j.version>
-        <datavec.version>0.8.1-SNAPSHOT</datavec.version>
+        <dl4j.version>0.9.1-SNAPSHOT</dl4j.version>
+        <nd4j.version>0.9.1-SNAPSHOT</nd4j.version>
+        <datavec.version>0.9.1-SNAPSHOT</datavec.version>
         <scala.version>2.11.6</scala.version>
         <scala.binary.version>2.11</scala.binary.version>
         <maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
         <exec-maven-plugin.version>1.4.0</exec-maven-plugin.version>
-        <dl4j.spark.version>0.8.1_spark_2-SNAPSHOT</dl4j.spark.version>
+        <dl4j.spark.version>0.9.1_spark_2-SNAPSHOT</dl4j.spark.version>
     </properties>
 
 
@@ -36,7 +37,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <nd4j.backend>nd4j-native-platform</nd4j.backend>
+                <nd4j.backend>nd4j-native</nd4j.backend>
             </properties>
         </profile>
         <profile>
