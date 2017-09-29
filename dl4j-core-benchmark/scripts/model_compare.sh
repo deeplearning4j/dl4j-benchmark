@@ -4,7 +4,7 @@ dl4j_path="${dl4j_path:-"org.deeplearning4j.ModelCompare.dl4j.Dl4j_1Main"}"
 caffe_path="${caffe_path:-"dl4j-core-benchmark/src/main/java/org/deeplearning4j/ModelCompare/caffe/"}"
 tf_path="${tf_path:-"dl4j-core-benchmark/src/main/java/org/deeplearning4j/ModelCompare/tensorflow/tensorflow-1main.py"}"
 torch_path="${torch_path:-"dl4j-core-benchmark/src/main/java/org/deeplearning4j/ModelCompare/torch/torch-1main.lua"}"
-dl4j_warning= "Make sure pom nd4j-backend set to cuda-7.5"
+dl4j_warning="Make sure pom nd4j-backend set to cuda-7.5"
 
 model_type='lenet'
 model_type='mlp'
