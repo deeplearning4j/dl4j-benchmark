@@ -174,7 +174,7 @@ public abstract class BaseBenchmark {
                     ((ComputationGraph)model).getConfiguration().setInferenceWorkspaceMode(WorkspaceMode.NONE);
                     ((ComputationGraph) model).setInput(0, input);
                     ((ComputationGraph) model).setLabels(labels);
-                    ((ComputationGraph) model).feedForward(true, false); //Train mode, don't clear inputs
+                    ((ComputationGraph) model).feedForward(new INDArray[]{input}, true, false); //Train mode, don't clear inputs
                     ((ComputationGraph)model).getConfiguration().setTrainingWorkspaceMode(ws_train);
                     ((ComputationGraph)model).getConfiguration().setInferenceWorkspaceMode(ws_inference);
                     Nd4j.getExecutioner().commit();
