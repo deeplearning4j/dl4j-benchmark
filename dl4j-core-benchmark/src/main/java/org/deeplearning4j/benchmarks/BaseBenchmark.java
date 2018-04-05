@@ -11,6 +11,7 @@ import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.api.Updater;
+import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.optimize.listeners.PerformanceListener;
@@ -108,6 +109,25 @@ public abstract class BaseBenchmark {
                     forwardTime = System.nanoTime() - forwardTime;
                     totalForward += (forwardTime / 1e6);
 
+
+                    //Prepare network for backprop benchmark:
+                    //We need to do forward pass, and
+                    // (a) keep input activation arrays set on the layer input field
+                    // (b) ensure input activation arrays are not defined in workspaces
+                    //To do this, we'll temporarily disable workspaces, then use the FF method that doesn't clear input arrays
+
+                    WorkspaceMode ws_train = ((MultiLayerNetwork)model).getLayerWiseConfigurations().getTrainingWorkspaceMode();
+                    WorkspaceMode ws_inference = ((MultiLayerNetwork)model).getLayerWiseConfigurations().getInferenceWorkspaceMode();
+                    ((MultiLayerNetwork)model).getLayerWiseConfigurations().setTrainingWorkspaceMode(WorkspaceMode.NONE);
+                    ((MultiLayerNetwork)model).getLayerWiseConfigurations().setInferenceWorkspaceMode(WorkspaceMode.NONE);
+                    ((MultiLayerNetwork) model).setInput(input);
+                    ((MultiLayerNetwork) model).setLabels(labels);
+                    ((MultiLayerNetwork) model).feedForward(true, false); //Train mode, don't clear inputs
+                    ((MultiLayerNetwork)model).getLayerWiseConfigurations().setTrainingWorkspaceMode(ws_train);
+                    ((MultiLayerNetwork)model).getLayerWiseConfigurations().setInferenceWorkspaceMode(ws_inference);
+                    Nd4j.getExecutioner().commit();
+                    System.gc();
+
                     // backward
                     long backwardTime = 0;
                     Method m = MultiLayerNetwork.class.getDeclaredMethod("backprop"); // requires reflection
@@ -141,6 +161,24 @@ public abstract class BaseBenchmark {
                     Nd4j.getExecutioner().commit();
                     forwardTime = System.nanoTime() - forwardTime;
                     totalForward += (forwardTime / 1e6);
+
+                    //Prepare network for backprop benchmark:
+                    //We need to do forward pass, and
+                    // (a) keep input activation arrays set on the layer input field
+                    // (b) ensure input activation arrays are not defined in workspaces
+                    //To do this, we'll temporarily disable workspaces, then use the FF method that doesn't clear input arrays
+
+                    WorkspaceMode ws_train = ((ComputationGraph)model).getConfiguration().getTrainingWorkspaceMode();
+                    WorkspaceMode ws_inference = ((ComputationGraph)model).getConfiguration().getInferenceWorkspaceMode();
+                    ((ComputationGraph)model).getConfiguration().setTrainingWorkspaceMode(WorkspaceMode.NONE);
+                    ((ComputationGraph)model).getConfiguration().setInferenceWorkspaceMode(WorkspaceMode.NONE);
+                    ((ComputationGraph) model).setInput(0, input);
+                    ((ComputationGraph) model).setLabels(labels);
+                    ((ComputationGraph) model).feedForward(true, false); //Train mode, don't clear inputs
+                    ((ComputationGraph)model).getConfiguration().setTrainingWorkspaceMode(ws_train);
+                    ((ComputationGraph)model).getConfiguration().setInferenceWorkspaceMode(ws_inference);
+                    Nd4j.getExecutioner().commit();
+                    System.gc();
 
                     // backward
                     long backwardTime = System.nanoTime();
