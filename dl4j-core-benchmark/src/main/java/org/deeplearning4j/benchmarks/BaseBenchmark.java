@@ -93,7 +93,7 @@ public abstract class BaseBenchmark {
         if(model instanceof MultiLayerNetwork) {
             profileStart(profile);
             while(iter.hasNext()) {
-                try (MemoryWorkspace workspace = Nd4j.getWorkspaceManager().getAndActivateWorkspace(ComputationGraph.workspaceExternal)) {
+                try (MemoryWorkspace workspace = Nd4j.getWorkspaceManager().getAndActivateWorkspace("LOOP_EXTERNAL")) {
                 DataSet ds = iter.next();
                 ds.migrate();
                 INDArray input = ds.getFeatures();
@@ -131,7 +131,7 @@ public abstract class BaseBenchmark {
                 INDArray input = ds.getFeatures();
                 INDArray labels = ds.getLabels();
 
-                try (MemoryWorkspace workspace = Nd4j.getWorkspaceManager().getAndActivateWorkspace(ComputationGraph.workspaceExternal)) {
+                try (MemoryWorkspace workspace = Nd4j.getWorkspaceManager().getAndActivateWorkspace("LOOP_EXTERNAL")) {
 
                     // forward
                     ((ComputationGraph) model).setInput(0, input);

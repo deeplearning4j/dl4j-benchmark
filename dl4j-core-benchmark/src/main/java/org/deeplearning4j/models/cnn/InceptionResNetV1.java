@@ -68,13 +68,11 @@ public class InceptionResNetV1 implements TestableModel {
 
         ComputationGraphConfiguration.GraphBuilder graph = new NeuralNetConfiguration.Builder()
             .seed(seed)
-            .iterations(iterations)
             .activation(Activation.RELU)
             .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
             .updater(new RmsProp(0.1, 0.96, 0.001))
             .weightInit(WeightInit.DISTRIBUTION)
             .dist(new NormalDistribution(0.0, 0.5))
-            .regularization(true)
             .l2(5e-5)
             .miniBatch(true)
             .convolutionMode(ConvolutionMode.Truncate)

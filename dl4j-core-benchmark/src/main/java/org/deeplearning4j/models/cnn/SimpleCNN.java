@@ -50,12 +50,10 @@ public class SimpleCNN implements TestableModel {
         MultiLayerConfiguration conf =
                         new NeuralNetConfiguration.Builder().trainingWorkspaceMode(workspaceMode)
                                 .seed(seed)
-                                .iterations(iterations)
                                 .activation(Activation.IDENTITY)
                                 .weightInit(WeightInit.RELU)
                                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                                 .updater(new AdaDelta())
-                                .regularization(false)
                                 .convolutionMode(ConvolutionMode.Same)
                                 .inferenceWorkspaceMode(workspaceMode)
                                 .trainingWorkspaceMode(workspaceMode)

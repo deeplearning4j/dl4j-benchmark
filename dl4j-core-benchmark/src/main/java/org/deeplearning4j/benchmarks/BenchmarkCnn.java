@@ -35,7 +35,7 @@ public class BenchmarkCnn extends BaseBenchmark {
     @Option(name="--profile",usage="Run profiler and print results",aliases = "-profile")
     public static boolean profile = false;
 
-    private String datasetName  = "SIMUALTEDCNN";
+    private String datasetName  = "SIMULATEDCNN";
     private int seed = 42;
 
     public void run(String[] args) throws Exception {

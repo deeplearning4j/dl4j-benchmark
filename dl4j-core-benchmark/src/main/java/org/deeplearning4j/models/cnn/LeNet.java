@@ -14,6 +14,7 @@ import org.deeplearning4j.nn.conf.layers.SubsamplingLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.learning.config.NoOp;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 /**
@@ -42,15 +43,13 @@ public class LeNet implements TestableModel {
                 .inferenceWorkspaceMode(WorkspaceMode.SINGLE)
                 .cacheMode(CacheMode.DEVICE)
                 .seed(seed)
-                .iterations(iterations)
                 .activation(Activation.IDENTITY)
 //                .weightInit(WeightInit.XAVIER)
                 .weightInit(WeightInit.DISTRIBUTION)
-                .learningRate(1e-2)//.biasLearningRate(2e-2)
                 //.learningRateDecayPolicy(LearningRatePolicy.Inverse).lrPolicyDecayRate(0.001).lrPolicyPower(0.75)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                .regularization(true).l2(5e-4)
-                .updater(Updater.NONE)
+                .l2(5e-4)
+                .updater(new NoOp())
                 .list()
                 .layer(0, new ConvolutionLayer.Builder(new int[]{5, 5}, new int[]{1, 1})
                         .name("cnn1")
