@@ -62,6 +62,7 @@ public class BenchmarkCustom extends BaseBenchmark {
             // handling of wrong arguments
             System.err.println(e.getMessage());
             parser.printUsage(System.err);
+            System.exit(1);
         }
 
         if(datasetPath==null)
