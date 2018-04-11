@@ -53,6 +53,7 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
             // handling of wrong arguments
             System.err.println(e.getMessage());
             parser.printUsage(System.err);
+            System.exit(1);
         }
 
         // memory management optimizations

@@ -34,7 +34,6 @@ public abstract class BaseMemoryBenchmark {
 
     private static final long MEM_RUNNABLE_ITER_FREQ_MS = 100;
     private static final AtomicLong maxMem = new AtomicLong(0);
-    private static final AtomicLong maxMemPhys = new AtomicLong(0);
 
     private static final int WARMUP_ITERS = 10;
     private static final int MEASURE_ITERS = 5;
@@ -45,20 +44,16 @@ public abstract class BaseMemoryBenchmark {
             try{
                 runHelper();
             } catch (Throwable t){
-                t.printStackTrace();
+                log.error("Memory measuring runnable died", t);
+                System.exit(1);
             }
         }
 
         private void runHelper() throws Exception {
             while(true){
-                long curr = Pointer.totalBytes();
+                long curr = Pointer.physicalBytes();    //.totalBytes();
                 if(curr > maxMem.get()){
                     maxMem.set(curr);
-                }
-
-                curr = Pointer.physicalBytes();
-                if(curr > maxMemPhys.get()){
-                    maxMemPhys.set(curr);
                 }
 
                 Thread.sleep(MEM_RUNNABLE_ITER_FREQ_MS);
@@ -67,7 +62,7 @@ public abstract class BaseMemoryBenchmark {
     }
 
     public void benchmark(String name, String description, ModelType modelType, TestableModel testableModel, MemoryTest memoryTest,
-                          int[] minibatchSizes) throws Exception {
+                          int[] batchSizes) throws Exception {
 
         new Thread(new MemoryRunnable()).start();
 
@@ -87,7 +82,7 @@ public abstract class BaseMemoryBenchmark {
         MultiLayerNetwork mln = (model instanceof MultiLayerNetwork ? (MultiLayerNetwork)model : null);
         ComputationGraph cg = (model instanceof ComputationGraph ? (ComputationGraph)model : null);
         report.setModel(model);
-        report.setMinibatchSizes(minibatchSizes);
+        report.setMinibatchSizes(batchSizes);
 
         Thread.sleep(1000);
         long memAfter = maxMem.get();
@@ -100,13 +95,19 @@ public abstract class BaseMemoryBenchmark {
         if(memoryTest == MemoryTest.INFERENCE){
             boolean hitOOM = false;
             Map<Integer,Object> memUseVsMinibatch = new LinkedHashMap<>();
-            for( int i=0; i<minibatchSizes.length; i++ ){
-                int[] inShape = inputShape.clone();
-                inShape[0] = minibatchSizes[i];
+            report.setBytesForMinibatchInference(memUseVsMinibatch);
 
+            for( int i=0; i<batchSizes.length; i++ ){
+                int[] inShape = new int[inputShape.length+1];
+                inShape[0] = batchSizes[i];
+                for(int j=0; j<inputShape.length; j++ ){
+                    inShape[j+1] = inputShape[j];
+                }
+
+                log.info("Starting minibatch size: {}", batchSizes[i]);
 
                 if(hitOOM){
-                    memUseVsMinibatch.put(minibatchSizes[i], "OOM");
+                    memUseVsMinibatch.put(batchSizes[i], "OOM");
                 } else {
                     try{
                         Nd4j.getWorkspaceManager().destroyAllWorkspacesForCurrentThread();
@@ -129,7 +130,6 @@ public abstract class BaseMemoryBenchmark {
 
                         //Do measure iterations
                         maxMem.set(0);
-                        maxMemPhys.set(0);
 
                         for( int iter=0; iter<MEASURE_ITERS; iter++){
                             INDArray input = Nd4j.create(inShape, 'c');
@@ -142,18 +142,16 @@ public abstract class BaseMemoryBenchmark {
                             Thread.sleep(2 * MEM_RUNNABLE_ITER_FREQ_MS);
                         }
 
-                        memUseVsMinibatch.put(minibatchSizes[i], maxMem.get());
+                        memUseVsMinibatch.put(batchSizes[i], maxMem.get());
                     } catch (Exception e){
-                        log.warn("Hit exception for minibatch size: {}", minibatchSizes[i], e);
+                        log.warn("Hit exception for minibatch size: {}", batchSizes[i], e);
                         hitOOM = true;
                         Nd4j.getWorkspaceManager().destroyAllWorkspacesForCurrentThread();
                         System.gc();
 
-                        memUseVsMinibatch.put(minibatchSizes[i], "OOM");
+                        memUseVsMinibatch.put(batchSizes[i], "OOM");
                     }
                 }
-
-                report.setBytesForMinibatchInference(memUseVsMinibatch);
             }
         } else if(memoryTest == MemoryTest.TRAINING){
 

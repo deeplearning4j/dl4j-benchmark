@@ -5,6 +5,7 @@ import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.util.StringUtils;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
@@ -12,6 +13,7 @@ import oshi.software.os.OperatingSystem;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -112,7 +114,7 @@ public class MemoryBenchmarkReport {
         OperatingSystem os = sys.getOperatingSystem();
         HardwareAbstractionLayer hardware = sys.getHardware();
 
-        final Object[][] table = new String[16][];
+
 
         List<Object[]> t = new ArrayList<>();
         t.add(new String[]{"Name", name});
@@ -136,17 +138,32 @@ public class MemoryBenchmarkReport {
         if(memoryTest == MemoryTest.INFERENCE){
             t.add(new String[]{"Memory use vs minibatch (inference)", ""});
             for(Map.Entry<Integer,Object> e : bytesForMinibatchInference.entrySet()){
-                t.add(new String[]{"  Minibatch " + e.getKey(), e.getValue().toString()});
+                String str;
+                if(e.getValue() instanceof Number){
+                    Long l = ((Number) e.getValue()).longValue();
+                    str = l + " - " + StringUtils.TraditionalBinaryPrefix.long2String(l, null, 2);
+                } else {
+                    str = e.getValue().toString();
+                }
+                t.add(new String[]{"  Minibatch " + e.getKey(), str});
             }
         } else if(memoryTest == MemoryTest.TRAINING){
             t.add(new String[]{"Memory use vs minibatch (training)", ""});
             for(Map.Entry<Integer,Object> e : bytesForMinibatchTrain.entrySet()){
-                t.add(new String[]{"  Minibatch " + e.getKey(), e.getValue().toString()});
+                String str;
+                if(e.getValue() instanceof Number){
+                    Long l = ((Number) e.getValue()).longValue();
+                    str = l + " - " + StringUtils.TraditionalBinaryPrefix.long2String(l, null, 2);
+                } else {
+                    str = e.getValue().toString();
+                }
+                t.add(new String[]{"  Minibatch " + e.getKey(), str});
             }
         } else {
             throw new RuntimeException(memoryTest.toString());
         }
 
+        final Object[][] table = t.toArray(new Object[t.size()][0]);
 
         StringBuilder sb = new StringBuilder();
 
