@@ -25,6 +25,8 @@ import org.nd4j.linalg.dataset.api.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.profiler.OpProfiler;
+import org.nd4j.versioncheck.VersionCheck;
+import org.nd4j.versioncheck.VersionInfo;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -46,6 +48,8 @@ public abstract class BaseBenchmark {
         log.info("=======================================");
         log.info("===== Benchmarking selected model =====");
         log.info("=======================================");
+
+        //log.info("{}", VersionCheck.getVersionInfos());
 
         Model model = net.getValue().init();
         BenchmarkReport report = new BenchmarkReport(net.getKey().toString(), description);
@@ -122,7 +126,16 @@ public abstract class BaseBenchmark {
                     ((MultiLayerNetwork)model).getLayerWiseConfigurations().setInferenceWorkspaceMode(WorkspaceMode.NONE);
                     ((MultiLayerNetwork) model).setInput(input);
                     ((MultiLayerNetwork) model).setLabels(labels);
-                    ((MultiLayerNetwork) model).feedForward(true, false); //Train mode, don't clear inputs
+                    //Ugly hack to support both 0.9.1 and 1.0.0-alpha and later...
+                    try{
+                        Method m = MultiLayerNetwork.class.getDeclaredMethod("feedForward", boolean.class, boolean.class);
+//                        ((MultiLayerNetwork) model).feedForward(true, false); //Train mode, don't clear inputs
+                        m.invoke(model, true, false);
+                    } catch (NoSuchMethodException e){
+                        //Must be 0.9.1
+                        ((MultiLayerNetwork)model).feedForward(true);
+                    }
+
                     ((MultiLayerNetwork)model).getLayerWiseConfigurations().setTrainingWorkspaceMode(ws_train);
                     ((MultiLayerNetwork)model).getLayerWiseConfigurations().setInferenceWorkspaceMode(ws_inference);
                     Nd4j.getExecutioner().commit();
@@ -174,7 +187,14 @@ public abstract class BaseBenchmark {
                     ((ComputationGraph)model).getConfiguration().setInferenceWorkspaceMode(WorkspaceMode.NONE);
                     ((ComputationGraph) model).setInput(0, input);
                     ((ComputationGraph) model).setLabels(labels);
-                    ((ComputationGraph) model).feedForward(new INDArray[]{input}, true, false); //Train mode, don't clear inputs
+                    try{
+                        Method m = ComputationGraph.class.getDeclaredMethod("feedForward", INDArray[].class, boolean.class, boolean.class);
+                        //((ComputationGraph) model).feedForward(new INDArray[]{input}, true, false); //Train mode, don't clear inputs
+                        m.invoke(model, new INDArray[]{input}, true, false);
+                    } catch (NoSuchMethodException e){
+                        //Must be 0.9.1
+                        ((ComputationGraph)model).feedForward(new INDArray[]{input}, true);
+                    }
                     ((ComputationGraph)model).getConfiguration().setTrainingWorkspaceMode(ws_train);
                     ((ComputationGraph)model).getConfiguration().setInferenceWorkspaceMode(ws_inference);
                     Nd4j.getExecutioner().commit();
