@@ -2,8 +2,10 @@ package org.deeplearning4j.memory;
 
 import lombok.Data;
 import org.deeplearning4j.nn.api.Model;
+import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.nd4j.linalg.api.buffer.DataBuffer;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.util.StringUtils;
 import oshi.SystemInfo;
@@ -27,6 +29,8 @@ public class MemoryBenchmarkReport {
     private String name;
     private String description;
     private MemoryTest memoryTest;
+    private DataBuffer.Type dType;
+    private WorkspaceMode workspaceMode;
     private List<String> devices = new ArrayList<>();
     private String backend;
     private String cpuCores;
@@ -46,9 +50,9 @@ public class MemoryBenchmarkReport {
         this.name = name;
         this.description = description;
         this.memoryTest = memoryTest;
+        dType = Nd4j.dataType();
 
         Properties env = Nd4j.getExecutioner().getEnvironmentInformation();
-
         backend = env.get("backend").toString();
         cpuCores = env.get("cores").toString();
         blasVendor = env.get("blas.vendor").toString();
@@ -120,6 +124,8 @@ public class MemoryBenchmarkReport {
         t.add(new String[]{"Name", name});
         t.add(new String[]{"Description", description});
         t.add(new String[]{"Memory Test Type", memoryTest.toString()});
+        t.add(new String[]{"Workspace mode", workspaceMode.toString()});
+        t.add(new String[]{"Data type", dType.toString()});
         t.add(new String[]{"Operating System",
                 os.getManufacturer() + " " +
                         os.getFamily() + " " +
@@ -132,8 +138,8 @@ public class MemoryBenchmarkReport {
         t.add(new String[]{"CUDNN Version", cudnnVersion});
         t.add(new String[]{"Total Params", Integer.toString(numParams)});
         t.add(new String[]{"Total Layers", Integer.toString(numLayers)});
-        t.add(new String[]{"Bytes before init", Long.toString(bytesMaxBeforeInit)});
-        t.add(new String[]{"Bytes post init", Long.toString(bytesMaxPostInit)});
+        t.add(new String[]{"Bytes before init", formatBytes(bytesMaxBeforeInit)});
+        t.add(new String[]{"Bytes post init", formatBytes(bytesMaxPostInit)});
         t.add(new String[]{"Tested minibatch sizes", Arrays.toString(minibatchSizes)});
         if(memoryTest == MemoryTest.INFERENCE){
             t.add(new String[]{"Memory use vs minibatch (inference)", ""});
@@ -141,7 +147,7 @@ public class MemoryBenchmarkReport {
                 String str;
                 if(e.getValue() instanceof Number){
                     Long l = ((Number) e.getValue()).longValue();
-                    str = l + " - " + StringUtils.TraditionalBinaryPrefix.long2String(l, null, 2);
+                    str = formatBytes(l);
                 } else {
                     str = e.getValue().toString();
                 }
@@ -153,7 +159,7 @@ public class MemoryBenchmarkReport {
                 String str;
                 if(e.getValue() instanceof Number){
                     Long l = ((Number) e.getValue()).longValue();
-                    str = l + " - " + StringUtils.TraditionalBinaryPrefix.long2String(l, null, 2);
+                    str = formatBytes(l);
                 } else {
                     str = e.getValue().toString();
                 }
@@ -172,6 +178,10 @@ public class MemoryBenchmarkReport {
         }
 
         return sb.toString();
+    }
+
+    private static String formatBytes(long bytes){
+        return bytes + " - " + StringUtils.TraditionalBinaryPrefix.long2String(bytes, null, 2);
     }
 
 }

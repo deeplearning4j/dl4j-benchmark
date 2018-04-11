@@ -62,7 +62,7 @@ public abstract class BaseMemoryBenchmark {
     }
 
     public void benchmark(String name, String description, ModelType modelType, TestableModel testableModel, MemoryTest memoryTest,
-                          int[] batchSizes) throws Exception {
+                          int[] batchSizes, WorkspaceMode workspaceMode) throws Exception {
 
         new Thread(new MemoryRunnable()).start();
 
@@ -83,6 +83,15 @@ public abstract class BaseMemoryBenchmark {
         ComputationGraph cg = (model instanceof ComputationGraph ? (ComputationGraph)model : null);
         report.setModel(model);
         report.setMinibatchSizes(batchSizes);
+        report.setWorkspaceMode(workspaceMode);
+
+        if(mln != null){
+            mln.getLayerWiseConfigurations().setTrainingWorkspaceMode(workspaceMode);
+            mln.getLayerWiseConfigurations().setInferenceWorkspaceMode(workspaceMode);
+        } else {
+            cg.getConfiguration().setTrainingWorkspaceMode(workspaceMode);
+            cg.getConfiguration().setInferenceWorkspaceMode(workspaceMode);
+        }
 
         Thread.sleep(1000);
         long memAfter = maxMem.get();
@@ -104,7 +113,7 @@ public abstract class BaseMemoryBenchmark {
                     inShape[j+1] = inputShape[j];
                 }
 
-                log.info("Starting minibatch size: {}", batchSizes[i]);
+                log.info("Inference test: Starting minibatch size: {}", batchSizes[i]);
 
                 if(hitOOM){
                     memUseVsMinibatch.put(batchSizes[i], "OOM");
@@ -155,7 +164,81 @@ public abstract class BaseMemoryBenchmark {
             }
         } else if(memoryTest == MemoryTest.TRAINING){
 
-            throw new UnsupportedOperationException("Not yet implemented");
+            boolean hitOOM = false;
+            Map<Integer,Object> memUseVsMinibatch = new LinkedHashMap<>();
+            report.setBytesForMinibatchTrain(memUseVsMinibatch);
+
+            int[] inShape = new int[inputShape.length+1];
+            inShape[0] = 1;
+            for(int j=0; j<inputShape.length; j++ ){
+                inShape[j+1] = inputShape[j];
+            }
+
+            //Work out output size:
+            int[] outShape;
+            if(mln != null){
+                outShape = mln.output(Nd4j.create(inShape)).shape();
+            } else {
+                outShape = cg.outputSingle(Nd4j.create(inShape)).shape();
+            }
+
+
+            for( int i=0; i<batchSizes.length; i++ ){
+                inShape[0] = batchSizes[i];
+                outShape[0] = batchSizes[i];
+
+                log.info("Training test: Starting minibatch size: {}", batchSizes[i]);
+
+                if(hitOOM){
+                    memUseVsMinibatch.put(batchSizes[i], "OOM");
+                } else {
+                    try{
+                        Nd4j.getWorkspaceManager().destroyAllWorkspacesForCurrentThread();
+                        if(mln != null){
+                            mln.clear();
+                        }
+                        if(cg != null){
+                            cg.clear();
+                        }
+                        //Do warm-up iterations to initialize workspaces etc
+                        for( int iter=0; iter<WARMUP_ITERS; iter++){
+                            INDArray input = Nd4j.create(inShape, 'c');
+                            INDArray output = Nd4j.create(outShape, 'c');
+                            if(mln != null){
+                                mln.fit(input, output);
+                            } else {
+                                cg.fit(new org.nd4j.linalg.dataset.DataSet(input, output));
+                            }
+                            System.gc();
+                        }
+
+                        //Do measure iterations
+                        maxMem.set(0);
+
+                        for( int iter=0; iter<MEASURE_ITERS; iter++){
+                            INDArray input = Nd4j.create(inShape, 'c');
+                            INDArray output = Nd4j.create(outShape, 'c');
+                            if(mln != null){
+                                mln.fit(input, output);
+                            } else {
+                                cg.fit(new org.nd4j.linalg.dataset.DataSet(input, output));
+                            }
+
+                            Thread.sleep(2 * MEM_RUNNABLE_ITER_FREQ_MS);
+                        }
+
+                        memUseVsMinibatch.put(batchSizes[i], maxMem.get());
+                    } catch (Exception e){
+                        log.warn("Hit exception for minibatch size: {}", batchSizes[i], e);
+                        hitOOM = true;
+                        Nd4j.getWorkspaceManager().destroyAllWorkspacesForCurrentThread();
+                        System.gc();
+
+                        memUseVsMinibatch.put(batchSizes[i], "OOM");
+                    }
+                }
+            }
+
         } else {
             throw new IllegalStateException("Unknown memory test: " + memoryTest);
         }

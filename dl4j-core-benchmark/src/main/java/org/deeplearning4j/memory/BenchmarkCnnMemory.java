@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.deeplearning4j.models.ModelSelector;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
+import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -25,7 +26,9 @@ public class BenchmarkCnnMemory extends BaseMemoryBenchmark {
     @Option(name="--gcWindow",usage="Set Garbage Collection window in milliseconds.",aliases = "-gcwindow")
     public static int gcWindow = 5000;
     @Option(name="--memoryTest", usage = "Type of memory test")
-    public static MemoryTest memoryTest = MemoryTest.INFERENCE;
+    public static MemoryTest memoryTest = MemoryTest.TRAINING;
+    @Option(name="--workspaceMode", usage = "Workspace mode to use")
+    public static WorkspaceMode workspaceMode = WorkspaceMode.SEPARATE;
 
     private String datasetName  = "SIMULATEDCNN";
     private int seed = 42;
@@ -56,7 +59,7 @@ public class BenchmarkCnnMemory extends BaseMemoryBenchmark {
 
         log.info("Preparing memory benchmark: {}", description);
         String name = mt.toString();
-        benchmark(name, description, mt, net, memoryTest, batchSizes);
+        benchmark(name, description, mt, net, memoryTest, batchSizes, workspaceMode);
 
         System.exit(0);
     }
