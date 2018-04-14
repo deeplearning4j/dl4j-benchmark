@@ -127,7 +127,7 @@ public class AlexNet implements TestableModel {
                         .build())
                 .backprop(true)
                 .pretrain(false)
-                .setInputType(InputType.convolutionalFlat(inputShape[2],inputShape[1],inputShape[0]))
+                .setInputType(InputType.convolutional(inputShape[2],inputShape[1],inputShape[0]))
                 .build();
 
         return conf;
