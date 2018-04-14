@@ -9,7 +9,7 @@ public class StandardMemBenchmarks {
 
     public static void main(String[] args) throws Exception {
 
-        int testNum = 0;
+        int testNum = 1;
 
         ModelType modelType;
         String batchSizes;
