@@ -1,5 +1,6 @@
 package org.deeplearning4j.listeners;
 
+import lombok.Data;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -18,6 +19,7 @@ import java.util.*;
  *
  * @author Justin Long (@crockpotveggies)
  */
+@Data
 public class BenchmarkReport {
 
     private String name;
@@ -37,6 +39,7 @@ public class BenchmarkReport {
     private double totalBatchesSec;
     private double avgFeedForward;
     private double avgBackprop;
+    private double avgFit;
     private long avgUpdater;
 
     public BenchmarkReport(String name, String description) {
@@ -102,10 +105,6 @@ public class BenchmarkReport {
 
     public void addBatchesSec(double batchesSec) { totalBatchesSec += batchesSec; }
 
-    public void setAvgFeedForward(double feedForwardTime) { avgFeedForward = feedForwardTime; }
-
-    public void setAvgBackprop(double backpropTime) { this.avgBackprop = backpropTime; }
-
     public void setAvgUpdater(long updaterTime) { this.avgUpdater = updaterTime; }
 
     public List<String> devices() { return devices; }
@@ -146,7 +145,8 @@ public class BenchmarkReport {
         table[10] = new String[] { "Total Layers", Integer.toString(numLayers) };
         table[11] = new String[] { "Avg Feedforward (ms)", df.format(avgFeedForward) };
         table[12] = new String[] { "Avg Backprop (ms)", df.format(avgBackprop) };
-        table[13] = new String[] { "Avg Iteration (ms)", df.format(avgIterationTime()) };
+        table[13] = new String[] { "Avg Fit (ms)", df.format(avgFit) };
+        table[14] = new String[] { "Avg Iteration (ms)", df.format(avgIterationTime()) };
         table[14] = new String[] { "Avg Samples/sec", df.format(avgSamplesSec()) };
         table[15] = new String[] { "Avg Batches/sec", df.format(avgBatchesSec()) };
 

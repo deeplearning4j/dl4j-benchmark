@@ -9,7 +9,7 @@ public class StandardMemBenchmarks {
 
     public static void main(String[] args) throws Exception {
 
-        int testNum = 0;
+        int testNum = 7;
 
         ModelType modelType;
         String batchSizes;
@@ -27,19 +27,19 @@ public class StandardMemBenchmarks {
             case 1:
                 modelType = ModelType.ALEXNET;
                 memoryTest = MemoryTest.TRAINING;
-                batchSizes = "1 2 4 8 16 32 64 128 256 512";
+                batchSizes = "1 2 4 8 16 32 64 128 256";
                 workspaceMode = WorkspaceMode.SINGLE;
                 break;
             case 2:
                 modelType = ModelType.VGG16;
                 memoryTest = MemoryTest.INFERENCE;
-                batchSizes = "1 2 4 8 16 32 64 128 256 512";
+                batchSizes = "1 2 4 8 16 32 64";
                 workspaceMode = WorkspaceMode.SINGLE;
                 break;
             case 3:
                 modelType = ModelType.VGG16;
                 memoryTest = MemoryTest.TRAINING;
-                batchSizes = "1 2 4 8 16 32 64 128 256 512";
+                batchSizes = "1 2 4 8 16 32 64";
                 workspaceMode = WorkspaceMode.SINGLE;
                 break;
 
@@ -60,13 +60,14 @@ public class StandardMemBenchmarks {
             case 6:
                 modelType = ModelType.INCEPTIONRESNETV1;
                 memoryTest = MemoryTest.INFERENCE;
-                batchSizes = "1 2 4 8 16 32 64";
+//                batchSizes = "1 2 4 8 16 32 64";
+                batchSizes = "128 256 512";
                 workspaceMode = WorkspaceMode.SINGLE;
                 break;
             case 7:
                 modelType = ModelType.INCEPTIONRESNETV1;
                 memoryTest = MemoryTest.TRAINING;
-                batchSizes = "1 2 4 8 16 32 64";
+                batchSizes = "1 2 4 8 16 32 64 128";
                 workspaceMode = WorkspaceMode.SINGLE;
                 break;
 

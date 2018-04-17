@@ -233,7 +233,7 @@ public abstract class BaseMemoryBenchmark {
                         }
 
                         memUseVsMinibatch.put(batchSizes.get(i), maxMem.get());
-                    } catch (Exception e){
+                    } catch (Throwable e){
                         log.warn("Hit exception for minibatch size: {}", batchSizes.get(i), e);
                         hitOOM = true;
                         Nd4j.getWorkspaceManager().destroyAllWorkspacesForCurrentThread();
