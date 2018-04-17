@@ -21,6 +21,8 @@ import java.util.Map;
 @Slf4j
 public class BenchmarkCnn extends BaseBenchmark {
 
+    public static boolean EXIT_ON_COMPLETION = true;
+
     // values to pass in from command line when compiled, esp running remotely
     @Option(name = "--modelType", usage = "Model type (e.g. ALEXNET, VGG16, or CNN).", aliases = "-model")
     public static ModelType modelType = ModelType.VGG16;
@@ -65,7 +67,9 @@ public class BenchmarkCnn extends BaseBenchmark {
             benchmark(net, description, numLabels, batchSize, seed, datasetName, iter, modelType, profile);
         }
 
-        System.exit(0);
+        if(EXIT_ON_COMPLETION) {
+            System.exit(0);
+        }
     }
 
     public static void main(String[] args) throws Exception {

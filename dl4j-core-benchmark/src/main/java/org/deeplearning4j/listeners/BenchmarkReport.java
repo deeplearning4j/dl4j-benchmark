@@ -41,6 +41,7 @@ public class BenchmarkReport {
     private double avgBackprop;
     private double avgFit;
     private long avgUpdater;
+    private int batchSize;
 
     public BenchmarkReport(String name, String description) {
         this.name = name;
@@ -128,7 +129,7 @@ public class BenchmarkReport {
         OperatingSystem os = sys.getOperatingSystem();
         HardwareAbstractionLayer hardware = sys.getHardware();
 
-        final Object[][] table = new String[16][];
+        final Object[][] table = new String[18][];
         table[0] = new String[] { "Name", name };
         table[1] = new String[] { "Description", description };
         table[2] = new String[] { "Operating System",
@@ -147,8 +148,9 @@ public class BenchmarkReport {
         table[12] = new String[] { "Avg Backprop (ms)", df.format(avgBackprop) };
         table[13] = new String[] { "Avg Fit (ms)", df.format(avgFit) };
         table[14] = new String[] { "Avg Iteration (ms)", df.format(avgIterationTime()) };
-        table[14] = new String[] { "Avg Samples/sec", df.format(avgSamplesSec()) };
-        table[15] = new String[] { "Avg Batches/sec", df.format(avgBatchesSec()) };
+        table[15] = new String[] { "Avg Samples/sec", df.format(avgSamplesSec()) };
+        table[16] = new String[] { "Avg Batches/sec", df.format(avgBatchesSec()) };
+        table[17] = new String[] { "Batch size", Integer.toString(batchSize)};
 
         StringBuilder sb = new StringBuilder();
 

@@ -45,6 +45,7 @@ public abstract class BaseBenchmark {
         Model model = net.getValue().init();
         BenchmarkReport report = new BenchmarkReport(net.getKey().toString(), description);
         report.setModel(model);
+        report.setBatchSize(batchSize);
 
         // ADSI
         AsyncDataSetIterator asyncIter = new AsyncDataSetIterator(iter, 2, true);

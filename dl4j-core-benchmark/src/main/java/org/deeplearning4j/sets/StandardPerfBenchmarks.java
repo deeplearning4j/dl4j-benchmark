@@ -5,6 +5,7 @@ import org.deeplearning4j.memory.BenchmarkCnnMemory;
 import org.deeplearning4j.memory.MemoryTest;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
+import org.nd4j.linalg.factory.Nd4j;
 
 public class StandardPerfBenchmarks {
 
@@ -15,25 +16,25 @@ public class StandardPerfBenchmarks {
         ModelType modelType;
         int[] batchSizes;
         int gcWindow = 10000;
-        int totalIter = 20;
+        int totalIter = 200;
 
         switch (testNum){
             //MultiLayerNetwork tests:
             case 0:
                 modelType = ModelType.ALEXNET;
-                batchSizes = new int[]{1, 2, 4, 8, 16, 32, 64};
+                batchSizes = new int[]{16, 32, 64};
                 break;
             case 1:
                 modelType = ModelType.ALEXNET;
-                batchSizes = new int[]{1, 2, 4, 8, 16, 32, 64};
+                batchSizes = new int[]{16, 32, 64};
                 break;
             case 2:
                 modelType = ModelType.VGG16;
-                batchSizes = new int[]{1, 2, 4, 8, 16, 32, 64};
+                batchSizes = new int[]{16, 32, 64};
                 break;
             case 3:
                 modelType = ModelType.VGG16;
-                batchSizes = new int[]{1, 2, 4, 8, 16, 32, 64};
+                batchSizes = new int[]{16, 32, 64};
                 break;
 
 
@@ -59,6 +60,7 @@ public class StandardPerfBenchmarks {
                 throw new IllegalArgumentException("Invalid test: " + testNum);
         }
 
+        BenchmarkCnn.EXIT_ON_COMPLETION = false;
         for( int b : batchSizes) {
 
             BenchmarkCnn.main(new String[]{
@@ -67,6 +69,9 @@ public class StandardPerfBenchmarks {
                     "--gcWindow", String.valueOf(gcWindow),
                     "--totalIterations", String.valueOf(totalIter)
             });
+            System.gc();
+            Nd4j.getWorkspaceManager().destroyAllWorkspacesForCurrentThread();
+
         }
 
     }
