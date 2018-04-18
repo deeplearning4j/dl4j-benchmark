@@ -40,13 +40,15 @@ public class AlexNet implements TestableModel {
     private int iterations = 90;
     private WorkspaceMode workspaceMode;
     private CacheMode cacheMode;
+    private Updater updater;
 
-    public AlexNet(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode) {
+    public AlexNet(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode, Updater updater) {
         this.numLabels = numLabels;
         this.seed = seed;
         this.iterations = iterations;
         this.cacheMode = cacheMode;
         this.workspaceMode = workspaceMode;
+        this.updater = updater;
     }
 
     public MultiLayerConfiguration conf() {
@@ -59,7 +61,7 @@ public class AlexNet implements TestableModel {
                 .dist(new NormalDistribution(0.0, 0.01))
                 .activation(Activation.RELU)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                .updater(new NoOp())
+                .updater(updater)
                 .convolutionMode(ConvolutionMode.Same)
                 .gradientNormalization(GradientNormalization.RenormalizeL2PerLayer) // normalize to prevent vanishing or exploding gradients
                 .trainingWorkspaceMode(workspaceMode)

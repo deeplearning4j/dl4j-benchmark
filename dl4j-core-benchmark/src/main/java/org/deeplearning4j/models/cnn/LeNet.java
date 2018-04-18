@@ -31,13 +31,15 @@ public class LeNet implements TestableModel {
     private int iterations;
     private WorkspaceMode workspaceMode;
     private CacheMode cacheMode;
+    private Updater updater;
 
-    public LeNet(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode) {
+    public LeNet(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode, Updater updater) {
         this.numLabels = numLabels;
         this.seed = seed;
         this.iterations = iterations;
         this.workspaceMode = workspaceMode;
         this.cacheMode = cacheMode;
+        this.updater = updater;
     }
 
     public MultiLayerConfiguration conf() {
@@ -53,7 +55,7 @@ public class LeNet implements TestableModel {
                 //.learningRateDecayPolicy(LearningRatePolicy.Inverse).lrPolicyDecayRate(0.001).lrPolicyPower(0.75)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                 .l2(5e-4)
-                .updater(new NoOp())
+                .updater(updater)
                 .list()
                 .layer(0, new ConvolutionLayer.Builder(new int[]{5, 5}, new int[]{1, 1})
                         .name("cnn1")

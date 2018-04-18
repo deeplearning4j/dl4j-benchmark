@@ -30,8 +30,9 @@ public class SimpleCNN implements TestableModel {
     private WorkspaceMode workspaceMode;
     private ConvolutionLayer.AlgoMode cudnnAlgoMode;
     private CacheMode cacheMode;
+    private Updater updater;
 
-    public SimpleCNN(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode) {
+    public SimpleCNN(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode, Updater updater) {
         this.numLabels = numLabels;
         this.seed = seed;
         this.iterations = iterations;
@@ -40,6 +41,7 @@ public class SimpleCNN implements TestableModel {
                         : ConvolutionLayer.AlgoMode.NO_WORKSPACE;
         this.workspaceMode = workspaceMode;
         this.cacheMode = cacheMode;
+        this.updater = updater;
     }
 
     public MultiLayerConfiguration conf() {
@@ -49,7 +51,7 @@ public class SimpleCNN implements TestableModel {
                                 .activation(Activation.IDENTITY)
                                 .weightInit(WeightInit.RELU)
                                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                                .updater(new AdaDelta())
+                                .updater(updater)
                                 .convolutionMode(ConvolutionMode.Same)
                                 .inferenceWorkspaceMode(workspaceMode)
                                 .trainingWorkspaceMode(workspaceMode)

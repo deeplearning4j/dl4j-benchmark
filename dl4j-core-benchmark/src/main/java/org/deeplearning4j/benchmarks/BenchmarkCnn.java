@@ -7,6 +7,7 @@ import org.deeplearning4j.models.ModelSelector;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.conf.CacheMode;
+import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -43,6 +44,8 @@ public class BenchmarkCnn extends BaseBenchmark {
     public static CacheMode cacheMode = CacheMode.NONE;
     @Option(name="--workspaceMode", usage="Workspace mode for net")
     public static WorkspaceMode workspaceMode = WorkspaceMode.SINGLE;
+    @Option(name="--updater", usage="Updater for net")
+    public static Updater updater = Updater.ADAM;
 
     private String datasetName  = "SIMULATEDCNN";
     private int seed = 42;
@@ -60,7 +63,7 @@ public class BenchmarkCnn extends BaseBenchmark {
         }
 
         log.info("Building models for "+modelType+"....");
-        networks = ModelSelector.select(modelType, null, numLabels, seed, iterations, workspaceMode, cacheMode);
+        networks = ModelSelector.select(modelType, null, numLabels, seed, iterations, workspaceMode, cacheMode, updater);
 
         for (Map.Entry<ModelType, TestableModel> net : networks.entrySet()) {
             int[][] inputShape = net.getValue().metaData().getInputShape();
@@ -68,8 +71,8 @@ public class BenchmarkCnn extends BaseBenchmark {
             log.info("Selected: " + net.getKey().toString() + " " + description);
 
 //            log.info("Preparing benchmarks for " + totalIterations + " iterations, " + numLabels + " labels");
-            log.info("Preparing benchmarks for {} iterations, {} labels, workspace: {}, cache mode: {}",
-                    totalIterations, numLabels, workspaceMode, cacheMode);
+            log.info("Preparing benchmarks for {} iterations, {} labels, updater: {}, workspace: {}, cache mode: {}",
+                    totalIterations, numLabels, updater, workspaceMode, cacheMode);
 
             int[] iterShape = ArrayUtils.addAll(new int[]{batchSize}, inputShape[0]);
             DataSetIterator iter = new BenchmarkDataSetIterator(iterShape, numLabels, totalIterations);

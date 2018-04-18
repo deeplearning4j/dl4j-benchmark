@@ -5,6 +5,7 @@ import org.deeplearning4j.models.ModelSelector;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.conf.CacheMode;
+import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.deeplearning4j.sets.IntegerListOptionHandler;
 import org.kohsuke.args4j.CmdLineException;
@@ -39,6 +40,8 @@ public class BenchmarkCnnMemory extends BaseMemoryBenchmark {
     public static CacheMode cacheMode = CacheMode.NONE;
     @Option(name="--workspaceMode", usage="Workspace mode for net")
     public static WorkspaceMode workspaceMode = WorkspaceMode.SINGLE;
+    @Option(name="--updater", usage="Updater for net")
+    public static Updater updater = Updater.ADAM;
 
     private String datasetName  = "SIMULATEDCNN";
     private int seed = 42;
@@ -56,7 +59,7 @@ public class BenchmarkCnnMemory extends BaseMemoryBenchmark {
         }
 
         log.info("Building models for "+modelType+"....");
-        Map<ModelType, TestableModel> map = ModelSelector.select(modelType, null, numLabels, seed, 1, workspaceMode, cacheMode);
+        Map<ModelType, TestableModel> map = ModelSelector.select(modelType, null, numLabels, seed, 1, workspaceMode, cacheMode, updater);
         if(map.size() != 1){
             throw new IllegalStateException();
         }
@@ -66,7 +69,7 @@ public class BenchmarkCnnMemory extends BaseMemoryBenchmark {
 
         int[][] inputShape = net.metaData().getInputShape();
         String description = datasetName + " " + batchSizes + "x" + inputShape[0][0] + "x" + inputShape[0][1] + "x" + inputShape[0][2]
-                + ", workspaceMode = " + workspaceMode + ", cacheMode = " + cacheMode;
+                + ", workspaceMode = " + workspaceMode + ", cacheMode = " + cacheMode + ", updater = " + updater;
 
         log.info("Preparing memory benchmark: {}", description);
         String name = mt.toString();

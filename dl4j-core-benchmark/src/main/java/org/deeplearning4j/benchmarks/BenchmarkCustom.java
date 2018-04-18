@@ -19,6 +19,7 @@ import org.deeplearning4j.models.ModelSelector;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.conf.CacheMode;
+import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -55,6 +56,8 @@ public class BenchmarkCustom extends BaseBenchmark {
     public static CacheMode cacheMode = CacheMode.NONE;
     @Option(name="--workspaceMode", usage="Workspace mode for net")
     public static WorkspaceMode workspaceMode = WorkspaceMode.SINGLE;
+    @Option(name="--updater", usage="Updater for net")
+    public static Updater updater = Updater.ADAM;
 
     private String datasetName  = "CUSTOM";
     private int seed = 42;
@@ -75,14 +78,14 @@ public class BenchmarkCustom extends BaseBenchmark {
             throw new IllegalArgumentException("You must specify a valid path to a labelled dataset of images.");
 
         log.info("Building models for "+modelType+"....");
-        networks = ModelSelector.select(modelType, null, numLabels, seed, iterations, workspaceMode, cacheMode);
+        networks = ModelSelector.select(modelType, null, numLabels, seed, iterations, workspaceMode, cacheMode, updater);
 
         for (Map.Entry<ModelType, TestableModel> net : networks.entrySet()) {
             int[][] inputShape = net.getValue().metaData().getInputShape();
             String description = datasetName + " " + batchSize + "x" + inputShape[0][0] + "x" + inputShape[0][1] + "x" + inputShape[0][2];
             log.info("Selected: " + net.getKey().toString() + " " + description);
             //            log.info("Preparing benchmarks for " + totalIterations + " iterations, " + numLabels + " labels");
-            log.info("Preparing benchmarks for workspace: {}, cache mode: {}",workspaceMode, cacheMode);
+            log.info("Preparing benchmarks for updater: {}, workspace: {}, cache mode: {}", updater, workspaceMode, cacheMode);
 
             log.info("Loading data...");
             ParentPathLabelGenerator labelMaker = new ParentPathLabelGenerator();

@@ -25,13 +25,15 @@ public class VGG16 implements TestableModel {
     private int iterations;
     private WorkspaceMode workspaceMode;
     private CacheMode cacheMode;
+    private Updater updater;
 
-    public VGG16(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode) {
+    public VGG16(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode, Updater updater) {
         this.numLabels = numLabels;
         this.seed = seed;
         this.iterations = iterations;
         this.workspaceMode = workspaceMode;
         this.cacheMode = cacheMode;
+        this.updater = updater;
     }
 
     public MultiLayerConfiguration conf() {

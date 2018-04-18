@@ -6,6 +6,7 @@ import org.deeplearning4j.models.ModelSelector;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.conf.CacheMode;
+import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -47,6 +48,8 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
     public static CacheMode cacheMode = CacheMode.NONE;
     @Option(name="--workspaceMode", usage="Workspace mode for net")
     public static WorkspaceMode workspaceMode = WorkspaceMode.SINGLE;
+    @Option(name="--updater", usage="Updater for net")
+    public static Updater updater = Updater.ADAM;
 
     private int seed = 42;
 
@@ -77,7 +80,7 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
         }
 
 
-        log.info("Preparing benchmarks for workspace: {}, cache mode: {}",workspaceMode, cacheMode);
+        log.info("Preparing benchmarks for updater: {}, workspace: {}, cache mode: {}", updater, workspaceMode, cacheMode);
         log.info("Loading data...");
         //TODO export instead? This won't scale to large number of minibatches due to memory requirement
         List<DataSet> l = new ArrayList<>(numMinibatches);
@@ -99,7 +102,7 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
         DataSetIterator iter = new ExistingDataSetIterator(l);
 
         log.info("Building models for "+modelType+"....");
-        networks = ModelSelector.select(modelType, new int[]{inputDimension}, outputDimension, seed, iterations, workspaceMode, cacheMode);
+        networks = ModelSelector.select(modelType, new int[]{inputDimension}, outputDimension, seed, iterations, workspaceMode, cacheMode, updater);
 
         for (Map.Entry<ModelType, TestableModel> net : networks.entrySet()) {
             String description = net.getKey().toString()+" 1x"+inputDimension;

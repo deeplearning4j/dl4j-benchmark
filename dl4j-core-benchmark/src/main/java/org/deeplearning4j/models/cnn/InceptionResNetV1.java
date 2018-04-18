@@ -30,13 +30,15 @@ public class InceptionResNetV1 implements TestableModel {
     private int numClasses;
     private WorkspaceMode workspaceMode;
     private CacheMode cacheMode;
+    private Updater updater;
 
-    public InceptionResNetV1(int outputNum, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode) {
+    public InceptionResNetV1(int outputNum, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode, Updater updater) {
       this.seed = seed;
       this.numClasses = outputNum;
       this.iterations = iterations;
       this.workspaceMode = workspaceMode;
       this.cacheMode = cacheMode;
+      this.updater = updater;
     }
 
     public ComputationGraph init() {
@@ -74,7 +76,7 @@ public class InceptionResNetV1 implements TestableModel {
             .seed(seed)
             .activation(Activation.RELU)
             .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-            .updater(new RmsProp(0.1, 0.96, 0.001))
+            .updater(updater)
             .weightInit(WeightInit.DISTRIBUTION)
             .dist(new NormalDistribution(0.0, 0.5))
             .l2(5e-5)

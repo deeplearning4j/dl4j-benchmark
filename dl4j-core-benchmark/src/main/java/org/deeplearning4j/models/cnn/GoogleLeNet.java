@@ -5,6 +5,7 @@ import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.conf.CacheMode;
+import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.deeplearning4j.zoo.model.GoogLeNet;
 
@@ -15,12 +16,14 @@ public class GoogleLeNet implements TestableModel {
     private long seed;
     private int iterations;
     private CacheMode cacheMode;
+    private Updater updater;
 
-    public GoogleLeNet(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode) {
+    public GoogleLeNet(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode, Updater updater) {
         this.numLabels = numLabels;
         this.seed = seed;
         this.iterations = iterations;
         this.cacheMode = cacheMode;
+        this.updater = updater;
     }
 
     @Override
