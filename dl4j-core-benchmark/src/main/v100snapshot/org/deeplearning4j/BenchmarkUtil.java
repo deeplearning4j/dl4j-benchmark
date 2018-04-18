@@ -3,6 +3,7 @@ package org.deeplearning4j;
 import org.deeplearning4j.benchmarks.BenchmarkOp;
 import org.deeplearning4j.nn.api.FwdPassType;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
+import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.workspace.ArrayType;
 import org.deeplearning4j.nn.workspace.LayerWorkspaceMgr;
@@ -14,6 +15,7 @@ import org.nd4j.linalg.api.memory.enums.LearningPolicy;
 import org.nd4j.linalg.api.memory.enums.ResetPolicy;
 import org.nd4j.linalg.api.memory.enums.SpillPolicy;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
 
 import java.lang.reflect.InvocationTargetException;
@@ -81,7 +83,7 @@ public class BenchmarkUtil {
     public static long benchmark(BenchmarkOp op, INDArray input, INDArray labels, MultiLayerNetwork net) throws Exception {
         
         if(op == BenchmarkOp.FORWARD){
-            return forwardTimeMultiLayerNetwork(input, labels, net);
+            return forwardTimeMultiLayerNetwork(input, net);
         } else if(op == BenchmarkOp.BACKWARD) {
             //Prepare network for backprop benchmark:
             //We need to do forward pass, and keep input activation arrays set on the layer input field, in the appropriate workspace
@@ -126,14 +128,72 @@ public class BenchmarkUtil {
         }
     }
     
-    private static long forwardTimeMultiLayerNetwork(INDArray input, INDArray labels, MultiLayerNetwork net){
+    private static long forwardTimeMultiLayerNetwork(INDArray input, MultiLayerNetwork net){
         // forward
-        net.setInput(input);
-        net.setLabels(labels);
         long start = System.nanoTime();
-        net.feedForward();  //Note: output would probably be faster post ab_workspace_opt optimizations
+        net.output(input);  //Note: output would probably be faster post ab_workspace_opt optimizations
         Nd4j.getExecutioner().commit();
         long time = System.nanoTime() - start;
         return time;
+    }
+
+
+    public static long benchmark(BenchmarkOp op, INDArray input, INDArray labels, ComputationGraph net) throws Exception {
+
+        if(op == BenchmarkOp.FORWARD){
+            long start = System.nanoTime();
+            net.outputSingle(input);
+            Nd4j.getExecutioner().commit();
+            long time = System.nanoTime();
+            return time;
+        } else if(op == BenchmarkOp.BACKWARD){
+
+
+            LayerWorkspaceMgr mgr;
+            if(net.getConfiguration().getTrainingWorkspaceMode() == WorkspaceMode.NONE){
+                mgr = LayerWorkspaceMgr.noWorkspaces();
+            } else {
+                mgr = LayerWorkspaceMgr.builder()
+                        .with(ArrayType.INPUT, WS_ALL_LAYERS_ACT, WS_ALL_LAYERS_ACT_CONFIG)
+                        .with(ArrayType.ACTIVATIONS, WS_ALL_LAYERS_ACT, WS_ALL_LAYERS_ACT_CONFIG)
+                        .with(ArrayType.FF_WORKING_MEM, WS_LAYER_WORKING_MEM, WS_LAYER_WORKING_MEM_CONFIG)
+                        .with(ArrayType.BP_WORKING_MEM, WS_LAYER_WORKING_MEM, WS_LAYER_WORKING_MEM_CONFIG)
+                        .with(ArrayType.RNN_FF_LOOP_WORKING_MEM, WS_RNN_LOOP_WORKING_MEM, WS_RNN_LOOP_WORKING_MEM_CONFIG)
+                        .with(ArrayType.RNN_BP_LOOP_WORKING_MEM, WS_RNN_LOOP_WORKING_MEM, WS_RNN_LOOP_WORKING_MEM_CONFIG)
+                        .build();
+            }
+
+            //Prepare network for backprop benchmark:
+            //We need to do forward pass, and
+            // (a) keep input activation arrays set on the layer input field
+            // (b) ensure input activation arrays are not defined in workspaces
+            //To do this, we'll temporarily disable workspaces, then use the FF method that doesn't clear input arrays
+
+            WorkspaceMode wsmTrain = net.getConfiguration().getTrainingWorkspaceMode();
+            WorkspaceMode wsmTest = net.getConfiguration().getInferenceWorkspaceMode();
+
+            net.getConfiguration().setTrainingWorkspaceMode(WorkspaceMode.NONE);
+            net.getConfiguration().setInferenceWorkspaceMode(WorkspaceMode.NONE);
+            net.feedForward(new INDArray[]{input}, true, false);
+            net.getConfiguration().setTrainingWorkspaceMode(wsmTrain);
+            net.getConfiguration().setInferenceWorkspaceMode(wsmTest);
+
+
+            Method m = ComputationGraph.class.getDeclaredMethod("calcBackpropGradients", boolean.class, boolean.class, INDArray[].class);
+            m.setAccessible(true);
+
+            //Slight hack around validation:
+            try(MemoryWorkspace ws = mgr.notifyScopeEntered(ArrayType.ACTIVATIONS)){
+                long start = System.nanoTime();
+                m.invoke(net, true, false, null);
+                long end = System.nanoTime();
+                return end - start;
+            }
+        } else {
+            long start = System.nanoTime();
+            net.fit(new DataSet(input, labels));
+            return System.nanoTime() - start;
+        }
+
     }
 }

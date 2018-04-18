@@ -70,7 +70,6 @@ public class BenchmarkCnn extends BaseBenchmark {
             String description = datasetName + " " + batchSize + "x" + inputShape[0][0] + "x" + inputShape[0][1] + "x" + inputShape[0][2];
             log.info("Selected: " + net.getKey().toString() + " " + description);
 
-//            log.info("Preparing benchmarks for " + totalIterations + " iterations, " + numLabels + " labels");
             log.info("Preparing benchmarks for {} iterations, {} labels, updater: {}, workspace: {}, cache mode: {}",
                     totalIterations, numLabels, updater, workspaceMode, cacheMode);
 

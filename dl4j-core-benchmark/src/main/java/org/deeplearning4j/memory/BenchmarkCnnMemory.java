@@ -87,23 +87,4 @@ public class BenchmarkCnnMemory extends BaseMemoryBenchmark {
 
         new BenchmarkCnnMemory().run(args);
     }
-
-
-    public static class IntArrayOptionHandler extends OneArgumentOptionHandler<int[]> {
-
-        public IntArrayOptionHandler(CmdLineParser parser, OptionDef option, Setter<? super int[]> setter) {
-            super(parser, option, setter);
-        }
-
-        @Override
-        protected int[] parse(String s) throws NumberFormatException, CmdLineException {
-            s = s.replaceAll(" |\\[|\\]","");
-            String[] split = s.split(",");
-            int[] out = new int[split.length];
-            for( int i=0; i<split.length; i++ ){
-                out[i] = Integer.parseInt(split[i]);
-            }
-            return out;
-        }
-    }
 }

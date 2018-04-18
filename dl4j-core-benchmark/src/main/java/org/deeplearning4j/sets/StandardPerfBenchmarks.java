@@ -11,19 +11,19 @@ public class StandardPerfBenchmarks {
 
     public static void main(String[] args) throws Exception {
 
-        int testNum = 0;
+        int testNum = 6;
 
         ModelType modelType;
         int[] batchSizes;
         int gcWindow = 10000;
-        int totalIter = 50;
+//        int totalIter = 100;
+        int totalIter = 5;
 
         switch (testNum){
             //MultiLayerNetwork tests:
             case 0:
                 modelType = ModelType.ALEXNET;
-//                batchSizes = new int[]{16, 32, 64};
-                batchSizes = new int[]{16};
+                batchSizes = new int[]{16, 32, 64};
                 break;
             case 1:
                 modelType = ModelType.ALEXNET;
@@ -50,7 +50,8 @@ public class StandardPerfBenchmarks {
                 break;
             case 6:
                 modelType = ModelType.INCEPTIONRESNETV1;
-                batchSizes = new int[]{1, 2, 4, 8, 16, 32, 64};
+//                batchSizes = new int[]{16, 32, 64};
+                batchSizes = new int[]{1};
                 break;
             case 7:
                 modelType = ModelType.INCEPTIONRESNETV1;

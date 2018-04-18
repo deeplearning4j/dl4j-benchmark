@@ -43,6 +43,9 @@ public abstract class BaseBenchmark {
         //log.info("{}", VersionCheck.getVersionInfos());
 
         Model model = net.getValue().init();
+        if(model == null){
+            throw new IllegalStateException("Null model");
+        }
         BenchmarkReport report = new BenchmarkReport(net.getKey().toString(), description);
         report.setModel(model);
         report.setBatchSize(batchSize);
@@ -101,9 +104,11 @@ public abstract class BaseBenchmark {
                 long forwardTime = BenchmarkUtil.benchmark(BenchmarkOp.FORWARD, input, labels, m);
                 totalForward += (forwardTime / 1e6);
 
+                //Backward
                 long backwardTime = BenchmarkUtil.benchmark(BenchmarkOp.BACKWARD, input, labels, m);
                 totalBackward += (backwardTime / 1e6);
 
+                //Fit
                 long fitTime = BenchmarkUtil.benchmark(BenchmarkOp.FIT, input, labels, m);
                 totalFit += (fitTime / 1e6);
 
@@ -112,60 +117,29 @@ public abstract class BaseBenchmark {
             }
             profileEnd("Forward", profile);
         } else if (model instanceof ComputationGraph) {
+            ComputationGraph g = (ComputationGraph)model;
             profileStart(profile);
             while (iter.hasNext()) {
+
                 DataSet ds = iter.next();
+                ds.migrate();
                 INDArray input = ds.getFeatures();
                 INDArray labels = ds.getLabels();
 
-//                try (MemoryWorkspace workspace = Nd4j.getWorkspaceManager().getAndActivateWorkspace("LOOP_EXTERNAL")) {
-
                 // forward
-                ((ComputationGraph) model).setInput(0, input);
-                ((ComputationGraph) model).setLabels(labels);
-                long forwardTime = System.nanoTime();
-                ((ComputationGraph) model).feedForward();
-                Nd4j.getExecutioner().commit();
-                forwardTime = System.nanoTime() - forwardTime;
+                long forwardTime = BenchmarkUtil.benchmark(BenchmarkOp.FORWARD, input, labels, g);
                 totalForward += (forwardTime / 1e6);
 
-                //Prepare network for backprop benchmark:
-                //We need to do forward pass, and
-                // (a) keep input activation arrays set on the layer input field
-                // (b) ensure input activation arrays are not defined in workspaces
-                //To do this, we'll temporarily disable workspaces, then use the FF method that doesn't clear input arrays
-
-                WorkspaceMode ws_train = ((ComputationGraph) model).getConfiguration().getTrainingWorkspaceMode();
-                WorkspaceMode ws_inference = ((ComputationGraph) model).getConfiguration().getInferenceWorkspaceMode();
-                ((ComputationGraph) model).getConfiguration().setTrainingWorkspaceMode(WorkspaceMode.NONE);
-                ((ComputationGraph) model).getConfiguration().setInferenceWorkspaceMode(WorkspaceMode.NONE);
-                ((ComputationGraph) model).setInput(0, input);
-                ((ComputationGraph) model).setLabels(labels);
-                try {
-                    Method m = ComputationGraph.class.getDeclaredMethod("feedForward", INDArray[].class, boolean.class, boolean.class);
-                    //((ComputationGraph) model).feedForward(new INDArray[]{input}, true, false); //Train mode, don't clear inputs
-                    m.invoke(model, new INDArray[]{input}, true, false);
-                } catch (NoSuchMethodException e) {
-                    //Must be 0.9.1
-                    ((ComputationGraph) model).feedForward(new INDArray[]{input}, true);
-                }
-                ((ComputationGraph) model).getConfiguration().setTrainingWorkspaceMode(ws_train);
-                ((ComputationGraph) model).getConfiguration().setInferenceWorkspaceMode(ws_inference);
-                Nd4j.getExecutioner().commit();
-                System.gc();
-
-                // backward
-                long backwardTime = System.nanoTime();
-                Method m = ComputationGraph.class.getDeclaredMethod("calcBackpropGradients", boolean.class, INDArray[].class);
-                m.setAccessible(true);
-                m.invoke(model, false, null);
-                Nd4j.getExecutioner().commit();
-                backwardTime = System.nanoTime() - backwardTime;
+                //Backward
+                long backwardTime = BenchmarkUtil.benchmark(BenchmarkOp.BACKWARD, input, labels, g);
                 totalBackward += (backwardTime / 1e6);
 
-                nIterations += 1;
+                //Fit
+                long fitTime = BenchmarkUtil.benchmark(BenchmarkOp.FIT, input, labels, g);
+                totalFit += (fitTime / 1e6);
+
+                nIterations++;
                 if (nIterations % 100 == 0) log.info("Completed " + nIterations + " iterations");
-//                }
             }
             profileEnd("Backward", profile);
         }
