@@ -64,8 +64,8 @@ public class StandardMemBenchmarks {
             case 6:
                 modelType = ModelType.INCEPTIONRESNETV1;
                 memoryTest = MemoryTest.INFERENCE;
-//                batchSizes = "1 2 4 8 16 32 64";
-                batchSizes = "128 256 512";
+                batchSizes = "1 2 4 8 16 32 64";
+//                batchSizes = "128 256 512";
                 workspaceMode = WorkspaceMode.SINGLE;
                 break;
             case 7:

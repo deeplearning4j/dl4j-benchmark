@@ -11,13 +11,12 @@ public class StandardPerfBenchmarks {
 
     public static void main(String[] args) throws Exception {
 
-        int testNum = 6;
+        int testNum = 0;
 
         ModelType modelType;
         int[] batchSizes;
         int gcWindow = 10000;
-//        int totalIter = 100;
-        int totalIter = 5;
+        int totalIter = 100;
 
         switch (testNum){
             //MultiLayerNetwork tests:
@@ -42,20 +41,19 @@ public class StandardPerfBenchmarks {
             //ComputationGraph tests:
             case 4:
                 modelType = ModelType.GOOGLELENET;
-                batchSizes = new int[]{1, 2, 4, 8, 16, 32, 64};
+                batchSizes = new int[]{16, 32, 64};
                 break;
             case 5:
                 modelType = ModelType.GOOGLELENET;
-                batchSizes = new int[]{1, 2, 4, 8, 16, 32, 64};
+                batchSizes = new int[]{16, 32, 64};
                 break;
             case 6:
                 modelType = ModelType.INCEPTIONRESNETV1;
-//                batchSizes = new int[]{16, 32, 64};
-                batchSizes = new int[]{1};
+                batchSizes = new int[]{16, 32, 64};
                 break;
             case 7:
                 modelType = ModelType.INCEPTIONRESNETV1;
-                batchSizes = new int[]{1, 2, 4, 8, 16, 32, 64};
+                batchSizes = new int[]{16, 32, 64};
                 break;
 
             default:
