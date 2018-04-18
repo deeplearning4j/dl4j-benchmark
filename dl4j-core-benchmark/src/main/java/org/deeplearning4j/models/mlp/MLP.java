@@ -5,9 +5,7 @@ import org.deeplearning4j.models.ModelMetaData;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.api.Model;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
-import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.Updater;
+import org.deeplearning4j.nn.conf.*;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -26,6 +24,8 @@ public class MLP implements TestableModel {
     private int outputSize;
     private long seed;
     private Updater updater;
+    private WorkspaceMode workspaceMode;
+    private CacheMode cacheMode;
 
     public MultiLayerConfiguration conf(){
         NeuralNetConfiguration.ListBuilder builder = new NeuralNetConfiguration.Builder()
@@ -33,6 +33,9 @@ public class MLP implements TestableModel {
                 .updater(updater)
                 .seed(seed)
                 .activation(Activation.RELU)
+                .inferenceWorkspaceMode(workspaceMode)
+                .trainingWorkspaceMode(workspaceMode)
+                .cacheMode(cacheMode)
                 .list();
 
         for( int i=0; i<layerSizes.length; i++ ){

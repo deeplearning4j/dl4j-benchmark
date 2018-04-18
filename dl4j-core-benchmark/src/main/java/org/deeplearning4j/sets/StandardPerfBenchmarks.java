@@ -16,13 +16,14 @@ public class StandardPerfBenchmarks {
         ModelType modelType;
         int[] batchSizes;
         int gcWindow = 10000;
-        int totalIter = 200;
+        int totalIter = 50;
 
         switch (testNum){
             //MultiLayerNetwork tests:
             case 0:
                 modelType = ModelType.ALEXNET;
-                batchSizes = new int[]{16, 32, 64};
+//                batchSizes = new int[]{16, 32, 64};
+                batchSizes = new int[]{16};
                 break;
             case 1:
                 modelType = ModelType.ALEXNET;

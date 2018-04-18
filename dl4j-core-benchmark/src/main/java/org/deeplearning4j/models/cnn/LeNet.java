@@ -29,19 +29,23 @@ public class LeNet implements TestableModel {
     private int numLabels;
     private long seed;
     private int iterations;
+    private WorkspaceMode workspaceMode;
+    private CacheMode cacheMode;
 
-    public LeNet(int numLabels, long seed, int iterations) {
+    public LeNet(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode) {
         this.numLabels = numLabels;
         this.seed = seed;
         this.iterations = iterations;
+        this.workspaceMode = workspaceMode;
+        this.cacheMode = cacheMode;
     }
 
     public MultiLayerConfiguration conf() {
 
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
-                .trainingWorkspaceMode(WorkspaceMode.SINGLE)
-                .inferenceWorkspaceMode(WorkspaceMode.SINGLE)
-                .cacheMode(CacheMode.DEVICE)
+                .trainingWorkspaceMode(workspaceMode)
+                .inferenceWorkspaceMode(workspaceMode)
+                .cacheMode(cacheMode)
                 .seed(seed)
                 .activation(Activation.IDENTITY)
 //                .weightInit(WeightInit.XAVIER)

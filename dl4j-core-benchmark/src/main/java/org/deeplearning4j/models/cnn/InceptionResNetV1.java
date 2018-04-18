@@ -28,11 +28,15 @@ public class InceptionResNetV1 implements TestableModel {
     private long seed;
     private int iterations;
     private int numClasses;
+    private WorkspaceMode workspaceMode;
+    private CacheMode cacheMode;
 
-    public InceptionResNetV1(int outputNum, long seed, int iterations) {
+    public InceptionResNetV1(int outputNum, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode) {
       this.seed = seed;
       this.numClasses = outputNum;
       this.iterations = iterations;
+      this.workspaceMode = workspaceMode;
+      this.cacheMode = cacheMode;
     }
 
     public ComputationGraph init() {
@@ -76,6 +80,9 @@ public class InceptionResNetV1 implements TestableModel {
             .l2(5e-5)
             .miniBatch(true)
             .convolutionMode(ConvolutionMode.Truncate)
+            .trainingWorkspaceMode(workspaceMode)
+            .inferenceWorkspaceMode(workspaceMode)
+            .cacheMode(cacheMode)
             .graphBuilder();
 
 

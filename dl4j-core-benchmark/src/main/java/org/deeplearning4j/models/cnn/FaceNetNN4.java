@@ -30,11 +30,15 @@ public class FaceNetNN4 implements TestableModel {
     private long seed;
     private int iterations;
     private Activation transferFunction = Activation.RELU;
+    private WorkspaceMode workspaceMode;
+    private CacheMode cacheMode;
 
-    public FaceNetNN4(int numLabels, long seed, int iterations) {;
+    public FaceNetNN4(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode) {;
       this.numLabels = numLabels;
       this.seed = seed;
       this.iterations = iterations;
+      this.workspaceMode = workspaceMode;
+      this.cacheMode = cacheMode;
     }
 
     public ComputationGraphConfiguration conf() {
@@ -49,6 +53,9 @@ public class FaceNetNN4 implements TestableModel {
             .l2(5e-5)
             .miniBatch(true)
             .convolutionMode(ConvolutionMode.Same)
+            .inferenceWorkspaceMode(workspaceMode)
+            .trainingWorkspaceMode(workspaceMode)
+            .cacheMode(cacheMode)
             .graphBuilder();
 
 

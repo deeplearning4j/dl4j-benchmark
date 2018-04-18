@@ -23,11 +23,15 @@ public class VGG16 implements TestableModel {
     private int numLabels;
     private long seed;
     private int iterations;
+    private WorkspaceMode workspaceMode;
+    private CacheMode cacheMode;
 
-    public VGG16(int numLabels, long seed, int iterations) {
+    public VGG16(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode) {
         this.numLabels = numLabels;
         this.seed = seed;
         this.iterations = iterations;
+        this.workspaceMode = workspaceMode;
+        this.cacheMode = cacheMode;
     }
 
     public MultiLayerConfiguration conf() {
@@ -35,9 +39,9 @@ public class VGG16 implements TestableModel {
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                 .updater(Updater.NONE)
                 .activation(Activation.RELU)
-                .trainingWorkspaceMode(WorkspaceMode.SINGLE)
-                .inferenceWorkspaceMode(WorkspaceMode.SINGLE)
-                .cacheMode(CacheMode.DEVICE)
+                .trainingWorkspaceMode(workspaceMode)
+                .inferenceWorkspaceMode(workspaceMode)
+                .cacheMode(cacheMode)
                 .list()
                 .layer(0, new ConvolutionLayer.Builder().kernelSize(3, 3).stride(1, 1).padding(1, 1)
                         .nIn(inputShape[0])
