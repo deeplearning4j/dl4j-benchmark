@@ -5,9 +5,9 @@ import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.utils.StringUtils;
 import org.nd4j.linalg.api.buffer.DataBuffer;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.util.StringUtils;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
@@ -40,7 +40,7 @@ public class MemoryBenchmarkReport {
     private String cudnnVersion;
     private int numParams;
     private int numLayers;
-    private int[] minibatchSizes;
+    private List<Integer> minibatchSizes;
     private long bytesMaxBeforeInit;
     private long bytesMaxPostInit;
     private Map<Integer, Object> bytesForMinibatchInference;
@@ -140,7 +140,7 @@ public class MemoryBenchmarkReport {
         t.add(new String[]{"Total Layers", Integer.toString(numLayers)});
         t.add(new String[]{"Bytes before init", formatBytes(bytesMaxBeforeInit)});
         t.add(new String[]{"Bytes post init", formatBytes(bytesMaxPostInit)});
-        t.add(new String[]{"Tested minibatch sizes", Arrays.toString(minibatchSizes)});
+        t.add(new String[]{"Tested minibatch sizes", minibatchSizes.toString()});
         if(memoryTest == MemoryTest.INFERENCE){
             t.add(new String[]{"Memory use vs minibatch (inference)", ""});
             for(Map.Entry<Integer,Object> e : bytesForMinibatchInference.entrySet()){

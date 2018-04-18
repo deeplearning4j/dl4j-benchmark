@@ -30,11 +30,17 @@ public class FaceNetNN4 implements TestableModel {
     private long seed;
     private int iterations;
     private Activation transferFunction = Activation.RELU;
+    private WorkspaceMode workspaceMode;
+    private CacheMode cacheMode;
+    private Updater updater;
 
-    public FaceNetNN4(int numLabels, long seed, int iterations) {;
+    public FaceNetNN4(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode, Updater updater) {;
       this.numLabels = numLabels;
       this.seed = seed;
       this.iterations = iterations;
+      this.workspaceMode = workspaceMode;
+      this.cacheMode = cacheMode;
+      this.updater = updater;
     }
 
     public ComputationGraphConfiguration conf() {
@@ -44,11 +50,14 @@ public class FaceNetNN4 implements TestableModel {
             .seed(seed)
             .activation(Activation.IDENTITY)
             .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-            .updater(new Adam(0.1, 0.9, 0.999, 0.01))
+            .updater(updater)
             .weightInit(WeightInit.RELU)
             .l2(5e-5)
             .miniBatch(true)
             .convolutionMode(ConvolutionMode.Same)
+            .inferenceWorkspaceMode(workspaceMode)
+            .trainingWorkspaceMode(workspaceMode)
+            .cacheMode(cacheMode)
             .graphBuilder();
 
 

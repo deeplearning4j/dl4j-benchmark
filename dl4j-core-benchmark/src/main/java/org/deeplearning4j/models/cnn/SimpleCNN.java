@@ -6,10 +6,7 @@ import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
-import org.deeplearning4j.nn.conf.ConvolutionMode;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
-import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.WorkspaceMode;
+import org.deeplearning4j.nn.conf.*;
 import org.deeplearning4j.nn.conf.inputs.InputType;
 import org.deeplearning4j.nn.conf.layers.*;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -32,31 +29,33 @@ public class SimpleCNN implements TestableModel {
     private int iterations;
     private WorkspaceMode workspaceMode;
     private ConvolutionLayer.AlgoMode cudnnAlgoMode;
+    private CacheMode cacheMode;
+    private Updater updater;
 
-    public SimpleCNN(int numLabels, long seed, int iterations) {
-        this(numLabels, seed, iterations, WorkspaceMode.SINGLE);
-    }
-
-    public SimpleCNN(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode) {
+    public SimpleCNN(int numLabels, long seed, int iterations, WorkspaceMode workspaceMode, CacheMode cacheMode, Updater updater) {
         this.numLabels = numLabels;
         this.seed = seed;
         this.iterations = iterations;
         this.workspaceMode = workspaceMode;
         this.cudnnAlgoMode = workspaceMode == WorkspaceMode.SINGLE ? ConvolutionLayer.AlgoMode.PREFER_FASTEST
                         : ConvolutionLayer.AlgoMode.NO_WORKSPACE;
+        this.workspaceMode = workspaceMode;
+        this.cacheMode = cacheMode;
+        this.updater = updater;
     }
 
     public MultiLayerConfiguration conf() {
         MultiLayerConfiguration conf =
-                        new NeuralNetConfiguration.Builder().trainingWorkspaceMode(workspaceMode)
+                        new NeuralNetConfiguration.Builder()
                                 .seed(seed)
                                 .activation(Activation.IDENTITY)
                                 .weightInit(WeightInit.RELU)
                                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                                .updater(new AdaDelta())
+                                .updater(updater)
                                 .convolutionMode(ConvolutionMode.Same)
                                 .inferenceWorkspaceMode(workspaceMode)
                                 .trainingWorkspaceMode(workspaceMode)
+                                .cacheMode(cacheMode)
                                 .list()
                                 // block 1
                                 .layer(0, new ConvolutionLayer.Builder(new int[] {1,1}).name("image_array")

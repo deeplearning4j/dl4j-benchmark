@@ -23,6 +23,7 @@ import org.nd4j.linalg.profiler.OpProfiler;
 
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -62,7 +63,7 @@ public abstract class BaseMemoryBenchmark {
     }
 
     public void benchmark(String name, String description, ModelType modelType, TestableModel testableModel, MemoryTest memoryTest,
-                          int[] batchSizes, WorkspaceMode workspaceMode) throws Exception {
+                          List<Integer> batchSizes, WorkspaceMode workspaceMode) throws Exception {
 
         new Thread(new MemoryRunnable()).start();
 
@@ -106,17 +107,17 @@ public abstract class BaseMemoryBenchmark {
             Map<Integer,Object> memUseVsMinibatch = new LinkedHashMap<>();
             report.setBytesForMinibatchInference(memUseVsMinibatch);
 
-            for( int i=0; i<batchSizes.length; i++ ){
+            for( int i=0; i<batchSizes.size(); i++ ){
                 int[] inShape = new int[inputShape.length+1];
-                inShape[0] = batchSizes[i];
+                inShape[0] = batchSizes.get(i);
                 for(int j=0; j<inputShape.length; j++ ){
                     inShape[j+1] = inputShape[j];
                 }
 
-                log.info("Inference test: Starting minibatch size: {}", batchSizes[i]);
+                log.info("Inference test: Starting minibatch size: {}", batchSizes.get(i));
 
                 if(hitOOM){
-                    memUseVsMinibatch.put(batchSizes[i], "OOM");
+                    memUseVsMinibatch.put(batchSizes.get(i), "OOM");
                 } else {
                     try{
                         Nd4j.getWorkspaceManager().destroyAllWorkspacesForCurrentThread();
@@ -151,14 +152,18 @@ public abstract class BaseMemoryBenchmark {
                             Thread.sleep(2 * MEM_RUNNABLE_ITER_FREQ_MS);
                         }
 
-                        memUseVsMinibatch.put(batchSizes[i], maxMem.get());
-                    } catch (Exception e){
-                        log.warn("Hit exception for minibatch size: {}", batchSizes[i], e);
+                        memUseVsMinibatch.put(batchSizes.get(i), maxMem.get());
+                    } catch (Throwable e){
+                        log.warn("Hit exception for minibatch size: {}", batchSizes.get(i), e);
                         hitOOM = true;
+                        if(mln != null)
+                            mln.clear();
+                        if(cg != null)
+                            cg.clear();
                         Nd4j.getWorkspaceManager().destroyAllWorkspacesForCurrentThread();
                         System.gc();
 
-                        memUseVsMinibatch.put(batchSizes[i], "OOM");
+                        memUseVsMinibatch.put(batchSizes.get(i), "OOM");
                     }
                 }
             }
@@ -183,14 +188,14 @@ public abstract class BaseMemoryBenchmark {
             }
 
 
-            for( int i=0; i<batchSizes.length; i++ ){
-                inShape[0] = batchSizes[i];
-                outShape[0] = batchSizes[i];
+            for( int i=0; i<batchSizes.size(); i++ ){
+                inShape[0] = batchSizes.get(i);
+                outShape[0] = batchSizes.get(i);
 
-                log.info("Training test: Starting minibatch size: {}", batchSizes[i]);
+                log.info("Training test: Starting minibatch size: {}", batchSizes.get(i));
 
                 if(hitOOM){
-                    memUseVsMinibatch.put(batchSizes[i], "OOM");
+                    memUseVsMinibatch.put(batchSizes.get(i), "OOM");
                 } else {
                     try{
                         Nd4j.getWorkspaceManager().destroyAllWorkspacesForCurrentThread();
@@ -227,14 +232,14 @@ public abstract class BaseMemoryBenchmark {
                             Thread.sleep(2 * MEM_RUNNABLE_ITER_FREQ_MS);
                         }
 
-                        memUseVsMinibatch.put(batchSizes[i], maxMem.get());
-                    } catch (Exception e){
-                        log.warn("Hit exception for minibatch size: {}", batchSizes[i], e);
+                        memUseVsMinibatch.put(batchSizes.get(i), maxMem.get());
+                    } catch (Throwable e){
+                        log.warn("Hit exception for minibatch size: {}", batchSizes.get(i), e);
                         hitOOM = true;
                         Nd4j.getWorkspaceManager().destroyAllWorkspacesForCurrentThread();
                         System.gc();
 
-                        memUseVsMinibatch.put(batchSizes[i], "OOM");
+                        memUseVsMinibatch.put(batchSizes.get(i), "OOM");
                     }
                 }
             }

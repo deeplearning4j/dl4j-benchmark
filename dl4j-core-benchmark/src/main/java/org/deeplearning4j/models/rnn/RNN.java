@@ -5,9 +5,7 @@ import org.deeplearning4j.models.ModelMetaData;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.api.Model;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
-import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.Updater;
+import org.deeplearning4j.nn.conf.*;
 import org.deeplearning4j.nn.conf.layers.GravesLSTM;
 import org.deeplearning4j.nn.conf.layers.RnnOutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -26,6 +24,8 @@ public class RNN implements TestableModel {
     private int outputSize;
     private long seed;
     private Updater updater;
+    private WorkspaceMode workspaceMode;
+    private CacheMode cacheMode;
 
     public MultiLayerConfiguration conf(){
         NeuralNetConfiguration.ListBuilder builder = new NeuralNetConfiguration.Builder()
@@ -33,6 +33,9 @@ public class RNN implements TestableModel {
                 .updater(updater)
                 .seed(seed)
                 .activation(Activation.TANH)
+                .cacheMode(cacheMode)
+                .trainingWorkspaceMode(workspaceMode)
+                .inferenceWorkspaceMode(workspaceMode)
                 .list();
 
         for( int i=0; i<layerSizes.length; i++ ){

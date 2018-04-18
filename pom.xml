@@ -52,7 +52,7 @@
                 <dl4j.version>1.0.0-alpha</dl4j.version>
                 <nd4j.version>1.0.0-alpha</nd4j.version>
                 <datavec.version>1.0.0-alpha</datavec.version>
-                <version.specific.code.dir>v100</version.specific.code.dir>
+                <version.specific.code.dir>v100alpha</version.specific.code.dir>
             </properties>
         </profile>
 
@@ -62,7 +62,7 @@
                 <dl4j.version>1.0.0-SNAPSHOT</dl4j.version>
                 <nd4j.version>1.0.0-SNAPSHOT</nd4j.version>
                 <datavec.version>1.0.0-SNAPSHOT</datavec.version>
-                <version.specific.code.dir>v100</version.specific.code.dir>
+                <version.specific.code.dir>v100snapshot</version.specific.code.dir>
             </properties>
         </profile>
 
@@ -179,6 +179,12 @@
                 <artifactId>deeplearning4j-core-cuda-9.1</artifactId>
                 <version>${dl4j.version.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>20.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -206,6 +212,12 @@
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
             <version>3.4.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
         </dependency>
     </dependencies>
 
