@@ -3,31 +3,35 @@ package org.deeplearning4j.sets;
 import org.deeplearning4j.memory.BenchmarkCnnMemory;
 import org.deeplearning4j.memory.MemoryTest;
 import org.deeplearning4j.models.ModelType;
+import org.deeplearning4j.nn.conf.CacheMode;
+import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
 
 public class StandardMemBenchmarks {
 
     public static void main(String[] args) throws Exception {
 
-        int testNum = 7;
+        int testNum = 0;
 
         ModelType modelType;
         String batchSizes;
         MemoryTest memoryTest;
         WorkspaceMode workspaceMode;
+        CacheMode cacheMode = CacheMode.NONE;
+        Updater updater = Updater.ADAM;
 
         switch (testNum){
             //MultiLayerNetwork tests:
             case 0:
                 modelType = ModelType.ALEXNET;
                 memoryTest = MemoryTest.INFERENCE;
-                batchSizes = "1 2 4 8 16 32 64 128 256 512";
+                batchSizes = "1 2 4 8 16 32 64";
                 workspaceMode = WorkspaceMode.SINGLE;
                 break;
             case 1:
                 modelType = ModelType.ALEXNET;
                 memoryTest = MemoryTest.TRAINING;
-                batchSizes = "1 2 4 8 16 32 64 128 256";
+                batchSizes = "1 2 4 8 16 32 64";
                 workspaceMode = WorkspaceMode.SINGLE;
                 break;
             case 2:
@@ -79,7 +83,9 @@ public class StandardMemBenchmarks {
                 "--modelType", modelType.toString(),
                 "--batchSizes", batchSizes,
                 "--memoryTest", memoryTest.toString(),
-                "--workspaceMode", workspaceMode.toString()
+                "--workspaceMode", workspaceMode.toString(),
+                "--cacheMode", cacheMode.toString(),
+                "--updater", updater.toString()
         });
 
     }
