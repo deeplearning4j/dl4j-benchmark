@@ -61,7 +61,7 @@ public class BenchmarkReport {
                 Map dev = (Map) deviceIter.next();
                 devices.add(dev.get("cuda.deviceName") + " " + dev.get("cuda.deviceMajor") + " " + dev.get("cuda.deviceMinor") + " " + dev.get("cuda.totalMemory"));
             }
-        } catch(Exception e) {
+        } catch(Throwable e) {
             SystemInfo sys = new SystemInfo();
             devices.add(sys.getHardware().getProcessor().getName());
         }
@@ -71,7 +71,7 @@ public class BenchmarkReport {
             Field f = Class.forName( "org.bytedeco.javacpp.cuda" ).getField("__CUDA_API_VERSION");
             int version = f.getInt(null);
             this.cudaVersion = Integer.toString(version);
-        } catch( Exception e ) {
+        } catch( Throwable e ) {
             this.cudaVersion = "n/a";
         }
 
@@ -80,7 +80,7 @@ public class BenchmarkReport {
             Method m = Class.forName( "org.bytedeco.javacpp.cudnn" ).getDeclaredMethod("cudnnGetVersion");
             long version = (long) m.invoke(null);
             this.cudnnVersion = Long.toString(version);
-        } catch( Exception e ) {
+        } catch( Throwable e ) {
             this.cudnnVersion = "n/a";
         }
     }
