@@ -4,12 +4,111 @@ Benchmarks popular models and configurations on Deeplearning4j, and output perfo
 
 #### Core Benchmarks
 
-* BenchmarkCnn: simulates input like most benchmarking tools
-    * Comes with variety of convolutional models including VGG-16, LeNet, and AlexNet
-* BenchmarkCifar: uses the CIFAR-10 dataset to benchmark CNN models
-    * MLP: using simple, single layer feed forward with MNIST data 
-    * Lenet: using common LeNet CNN model with MNIST data
-* BenchmarkCustom: user-provided datasets for benchmarking CNN models
+Available benchmarks:
+* Performance benchmarks:
+    * CNN benchmarks: [Link](https://github.com/deeplearning4j/dl4j-benchmark/blob/master/dl4j-core-benchmark/src/main/java/org/deeplearning4j/benchmarks/BenchmarkCnn.java) - benchmarks for a
+    number of CNN models on random data.
+    * MLP/RNN Benchmarks [Link](https://github.com/deeplearning4j/dl4j-benchmark/blob/master/dl4j-core-benchmark/src/main/java/org/deeplearning4j/benchmarks/BenchmarkMlpRnn.java) - benchmarks
+    for some simple MLP and RNN models on random data.
+    * BenchmarkCustom: [Link](https://github.com/deeplearning4j/dl4j-benchmark/blob/master/dl4j-core-benchmark/src/main/java/org/deeplearning4j/benchmarks/BenchmarkCustom.java) - benchmarks
+    for CNN models with custom image data
+* Memory benchmarks:
+    * CNN memory benchmarks: [Link](https://github.com/deeplearning4j/dl4j-benchmark/blob/master/dl4j-core-benchmark/src/main/java/org/deeplearning4j/memory/BenchmarkCnnMemory.java) - used
+    to measure the memory requirements of CNN inference and training.
+
+
+
+## Running Benchmarks
+
+Multiple version of DL4J can be benchmarked in this repo using Maven profiles:
+
+* 0.9.1 (profile name: v091)
+* 1.0.0-alpha (profile name: v100alpha)
+* Master/snapshots (profile name: v100snapshot)
+
+Furthermore, multiple backends can be configured:
+* Native (profile name: native)
+* CUDA 8 (profile name: cuda8)
+* CUDA 9.1 (profile name: cuda91 - can only be used with 1.0.0-alpha and master/snapshots)
+* CUDA 8 with CUDNN (profile name: cudnn8)
+* CUDA 9.1 with CUDNN (profile name: cuda91 - can only be used with 1.0.0-alpha and master/snapshots)
+
+These Maven profiles allow any supported combinations of backends and DL4J versions to be run. These are specified
+at build time. You must build the repository before running benchmarks.
+
+For example, to build the benchmark repo with support for ND4J-native backend for v0.9.1, use:
+
+```mvn package -Pnative,v091 -DskipTests```
+
+Similarly, to build for v1.0.0-alpha with CUDA 9.1 + CUDNN, use:
+
+```mvn package -Pcudnn91,v100alpha -DskipTests```
+
+
+Finally, to run the benchmarks, use the following:
+```
+mvn package -Pcudnn91,v100alpha -DskipTests
+cd dl4j-core-benchmark
+dl4j-core-benchmark>java -cp dl4j-core-benchmark.jar org.deeplearning4j.benchmarks.BenchmarkCnn --modelType ALEXNET --batchSize 32
+```
+
+For the full list of configuration options, see the configuration section below. 
+
+
+
+
+### Running Benchmarks in IntelliJ
+
+In the same was as building/running through Maven, running  the benchmark repos through Intellij requires the selection
+of two Maven profiles (one for the backend, one for the version). Link: [Setting Maven Profiles](https://www.jetbrains.com/help/idea/13.0/activating-and-deactivating-maven-profiles.pdf)
+
+Additionally, IntelliJ does not properly handle the version-specific code configured using the Maven build  helper plugin.
+Consequently, you will need to exclude the irrelevant directories.
+
+For example, when running with profile ```v091``` you should exclude the ```v100alpha``` and ```v100snapshot``` directories.
+You can do this by finding the directory in the project window -> right click -> Mark Directory as -> Excluded.
+To switch between versions (after previously marking as excluded), switch the Maven profiles as before, then cancel the
+ exclusion on the source directory, and mark that same directory as a sources root (both using the same right click menu).
+
+
+## Configuring Benchmarks
+
+Benchmarks have a number of configuration options, with defaults for most values.
+
+Performance benchmarks:
+* [modelType](https://github.com/deeplearning4j/dl4j-benchmark/blob/master/dl4j-core-benchmark/src/main/java/org/deeplearning4j/models/ModelType.java):
+    - ALL
+    - CNN
+    - SIMPLECNN
+    - ALEXNET
+    - LENET
+    - GOOGLELENET
+    - VGG16
+    - INCEPTIONRESNETV1
+    - FACENETNN4
+    - RNN
+    - MLP_SMALL
+    - RNN_SMALL
+* numLabels: output size for the network
+* totalIterations: Number of iterations to perform
+* batchSize: Minibatch size (number of examples) for benchmarks
+* gcWindow: Garbage collection frequency/window
+* profile: If true, run ND4J op profiler and report results. Has considerable performance overhead, but provides a performance information on a per-operation basis
+* cacheMode: DL4J CacheMode to use
+* workspaceMode: DL4J WorkspaceMode to use
+* updater: Updater to use (for example, NONE, ADAM, NESTEROVS, SGD, etc)
+
+Memory benchmarks:
+* modelType: As per performance benchmarks
+* memoryTest: Type of test to run: ```TRAINING``` or ```INFERENCE```
+* numLabels: output size for the network
+* batchSizes: Minibatch sizes (note: multiple are possible) to benchmark. For multiple, use space separated: ```--batchSizes 8 16 32```
+* gcWindow: Garbage collection frequency/window
+* cacheMode: DL4J CacheMode to use
+* workspaceMode: DL4J WorkspaceMode to use
+* updater: Updater to use (for example, NONE, ADAM, NESTEROVS, SGD, etc)
+
+
 
 ## Top Benchmarks
 
@@ -175,13 +274,6 @@ Full versioning and statistics:
              Avg Batches/sec                                          5.38
 ```
 
-
-## Running Benchmarks
-
-Each core benchmark class uses specific parameters. You must build this repository before running benchmarks.
-
-* First build using `mvn package -DskipTests`.
-* Then run specific benchmark class such as `java -cp /path/to/the.jar BenchmarkCnn -batch 128 -model ALEXNET`.
 
 ## Contributing
 
