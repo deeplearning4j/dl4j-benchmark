@@ -31,7 +31,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
  *
  * Update 21/04/2018:
  * - Made changes to match: http://josephpcohen.com/w/wp-content/uploads/alexnet.pdf (from http://josephpcohen.com/w/visualizing-cnn-architectures-side-by-side-with-mxnet/)
- * - Convolution modes are not specified, but given the output sizes a combination of 
+ * - Convolution modes are not specified, but given the output sizes a combination of same and truncate padding modes are used
  *
  *
  */

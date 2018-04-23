@@ -31,6 +31,9 @@ public class BenchmarkReport {
     private String modelSummary;
     private String cudaVersion;
     private String cudnnVersion;
+    private boolean periodicGCEnabled;
+    private int periodicGCFreq;
+    private int occasionalGCFreq;
     private int numParams;
     private int numLayers;
     private long iterations;
@@ -129,28 +132,35 @@ public class BenchmarkReport {
         OperatingSystem os = sys.getOperatingSystem();
         HardwareAbstractionLayer hardware = sys.getHardware();
 
-        final Object[][] table = new String[18][];
-        table[0] = new String[] { "Name", name };
-        table[1] = new String[] { "Description", description };
-        table[2] = new String[] { "Operating System",
+
+        final Object[][] table = new String[21][];
+        int i=0;
+        table[i++] = new String[] { "Name", name };
+        table[i++] = new String[] { "Description", description };
+        table[i++] = new String[] { "Operating System",
                 os.getManufacturer()+" "+
                 os.getFamily()+" "+
                 os.getVersion().getVersion() };
-        table[3] = new String[] { "Devices", devices().get(0) };
-        table[4] = new String[] { "CPU Cores", cpuCores };
-        table[5] = new String[] { "Backend", backend };
-        table[6] = new String[] { "BLAS Vendor", blasVendor };
-        table[7] = new String[] { "CUDA Version", cudaVersion };
-        table[8] = new String[] { "CUDNN Version", cudnnVersion };
-        table[9] = new String[] { "Total Params", Integer.toString(numParams) };
-        table[10] = new String[] { "Total Layers", Integer.toString(numLayers) };
-        table[11] = new String[] { "Avg Feedforward (ms)", df.format(avgFeedForward) };
-        table[12] = new String[] { "Avg Backprop (ms)", df.format(avgBackprop) };
-        table[13] = new String[] { "Avg Fit (ms)", df.format(avgFit) };
-        table[14] = new String[] { "Avg Iteration (ms)", df.format(avgIterationTime()) };
-        table[15] = new String[] { "Avg Samples/sec", df.format(avgSamplesSec()) };
-        table[16] = new String[] { "Avg Batches/sec", df.format(avgBatchesSec()) };
-        table[17] = new String[] { "Batch size", Integer.toString(batchSize)};
+        table[i++] = new String[] { "Devices", devices().get(0) };
+        table[i++] = new String[] { "CPU Cores", cpuCores };
+        table[i++] = new String[] { "Backend", backend };
+        table[i++] = new String[] { "BLAS Vendor", blasVendor };
+        table[i++] = new String[] { "CUDA Version", cudaVersion };
+        table[i++] = new String[] { "CUDNN Version", cudnnVersion };
+        table[i++] = new String[] { "Periodic GC enabled", String.valueOf(periodicGCEnabled) };
+        if(periodicGCEnabled){
+            table[i++] = new String[] { "Periodic GC frequency", String.valueOf(periodicGCFreq) };
+        }
+        table[i++] = new String[] { "Occasional GC Freq", String.valueOf(occasionalGCFreq) };
+        table[i++] = new String[] { "Total Params", Integer.toString(numParams) };
+        table[i++] = new String[] { "Total Layers", Integer.toString(numLayers) };
+        table[i++] = new String[] { "Avg Feedforward (ms)", df.format(avgFeedForward) };
+        table[i++] = new String[] { "Avg Backprop (ms)", df.format(avgBackprop) };
+        table[i++] = new String[] { "Avg Fit (ms)", df.format(avgFit) };
+        table[i++] = new String[] { "Avg Iteration (ms)", df.format(avgIterationTime()) };
+        table[i++] = new String[] { "Avg Samples/sec", df.format(avgSamplesSec()) };
+        table[i++] = new String[] { "Avg Batches/sec", df.format(avgBatchesSec()) };
+        table[i++] = new String[] { "Batch size", Integer.toString(batchSize)};
 
         StringBuilder sb = new StringBuilder();
 

@@ -76,7 +76,7 @@ public class BenchmarkCnn extends BaseBenchmark {
             int[] iterShape = ArrayUtils.addAll(new int[]{batchSize}, inputShape[0]);
             DataSetIterator iter = new BenchmarkDataSetIterator(iterShape, numLabels, totalIterations);
 
-            benchmark(net, description, numLabels, batchSize, seed, datasetName, iter, modelType, profile);
+            benchmark(net, description, numLabels, batchSize, seed, datasetName, iter, modelType, profile, gcWindow, 0);
         }
 
         if(EXIT_ON_COMPLETION) {
@@ -90,11 +90,6 @@ public class BenchmarkCnn extends BaseBenchmark {
 //        CudaEnvironment.getInstance().getConfiguration()
 //                .setMaximumBlockSize(768)
 //                .setMinimumBlockSize(768);
-
-        Nd4j.create(1);
-        Nd4j.getMemoryManager().togglePeriodicGc(false);
-        Nd4j.getMemoryManager().setAutoGcWindow(gcWindow);
-        Nd4j.getMemoryManager().setOccasionalGcFrequency(0);
 
         new BenchmarkCnn().run(args);
     }

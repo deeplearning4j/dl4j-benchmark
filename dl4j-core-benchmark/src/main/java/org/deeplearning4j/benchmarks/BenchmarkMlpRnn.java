@@ -65,12 +65,6 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
             System.exit(1);
         }
 
-        // memory management optimizations
-        Nd4j.create(1);
-        Nd4j.getMemoryManager().togglePeriodicGc(true);
-        Nd4j.getMemoryManager().setAutoGcWindow(gcWindow);
-        Nd4j.getMemoryManager().setOccasionalGcFrequency(0);
-
         switch(modelType){
             case MLP_SMALL:
             case RNN_SMALL:
@@ -106,7 +100,7 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
 
         for (Map.Entry<ModelType, TestableModel> net : networks.entrySet()) {
             String description = net.getKey().toString()+" 1x"+inputDimension;
-            benchmark(net, description, outputDimension, trainBatchSize, seed, "random", iter, modelType, profile);
+            benchmark(net, description, outputDimension, trainBatchSize, seed, "random", iter, modelType, profile, gcWindow, 0);
         }
     }
 

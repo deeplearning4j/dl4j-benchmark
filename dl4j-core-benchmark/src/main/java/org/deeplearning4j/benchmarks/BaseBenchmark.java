@@ -34,7 +34,8 @@ public abstract class BaseBenchmark {
     protected boolean train = true;
 
     public void benchmark(Map.Entry<ModelType, TestableModel> net, String description, int numLabels, int batchSize, int seed, String datasetName,
-                          DataSetIterator iter, ModelType modelType, boolean profile) throws Exception {
+                          DataSetIterator iter, ModelType modelType, boolean profile, int gcWindow, int occasionalGCFreq) throws Exception {
+
 
         log.info("=======================================");
         log.info("===== Benchmarking selected model =====");
@@ -49,6 +50,11 @@ public abstract class BaseBenchmark {
         BenchmarkReport report = new BenchmarkReport(net.getKey().toString(), description);
         report.setModel(model);
         report.setBatchSize(batchSize);
+
+        Nd4j.create(1);
+        Nd4j.getMemoryManager().togglePeriodicGc(gcWindow > 0);
+        Nd4j.getMemoryManager().setAutoGcWindow(gcWindow);
+        Nd4j.getMemoryManager().setOccasionalGcFrequency(occasionalGCFreq);
 
         // ADSI
         AsyncDataSetIterator asyncIter = new AsyncDataSetIterator(iter, 2, true);

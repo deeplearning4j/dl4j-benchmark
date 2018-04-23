@@ -79,12 +79,6 @@ public class BenchmarkCnnMemory extends BaseMemoryBenchmark {
     }
 
     public static void main(String[] args) throws Exception {
-
-        Nd4j.create(1);
-        Nd4j.getMemoryManager().togglePeriodicGc(false);
-        Nd4j.getMemoryManager().setAutoGcWindow(gcWindow);
-        Nd4j.getMemoryManager().setOccasionalGcFrequency(0);
-
         new BenchmarkCnnMemory().run(args);
     }
 }
