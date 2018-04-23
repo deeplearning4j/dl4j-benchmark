@@ -2,26 +2,15 @@ package org.deeplearning4j.memory;
 
 import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.javacpp.Pointer;
-import org.deeplearning4j.datasets.iterator.AsyncDataSetIterator;
-import org.deeplearning4j.listeners.BenchmarkListener;
-import org.deeplearning4j.listeners.BenchmarkReport;
-import org.deeplearning4j.listeners.TrainingDiscriminationListener;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.optimize.listeners.PerformanceListener;
-import org.nd4j.linalg.api.memory.MemoryWorkspace;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.api.ops.executioner.OpExecutioner;
-import org.nd4j.linalg.dataset.api.DataSet;
-import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.profiler.OpProfiler;
 
-import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
