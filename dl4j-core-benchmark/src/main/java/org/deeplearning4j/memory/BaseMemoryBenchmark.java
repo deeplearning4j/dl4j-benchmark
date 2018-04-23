@@ -43,6 +43,7 @@ public abstract class BaseMemoryBenchmark {
         @Override
         public void run() {
             try{
+                Nd4j.create(1); //Workaround for unsatisfied link error
                 runHelper();
             } catch (Throwable t){
                 log.error("Memory measuring runnable died", t);

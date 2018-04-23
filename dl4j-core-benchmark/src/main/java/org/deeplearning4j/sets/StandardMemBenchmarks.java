@@ -1,17 +1,28 @@
 package org.deeplearning4j.sets;
 
+import lombok.extern.slf4j.Slf4j;
 import org.deeplearning4j.memory.BenchmarkCnnMemory;
 import org.deeplearning4j.memory.MemoryTest;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.nn.conf.CacheMode;
 import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
+import org.kohsuke.args4j.Option;
 
+@Slf4j
 public class StandardMemBenchmarks {
 
-    public static void main(String[] args) throws Exception {
+    @Option(name="--benchmark",usage="Benchmark number")
+    public static int testNum = 0;
 
-        int testNum = 0;
+
+    public static void main(String[] args) throws Exception {
+        new StandardMemBenchmarks().run(args);
+    }
+
+    public void run(String[] args) throws Exception {
+
+        log.info("Starting test: {}", testNum);
 
         ModelType modelType;
         String batchSizes;
