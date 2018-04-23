@@ -73,7 +73,7 @@ public class BenchmarkCnnMemory extends BaseMemoryBenchmark {
 
         log.info("Preparing memory benchmark: {}", description);
         String name = mt.toString();
-        benchmark(name, description, mt, net, memoryTest, batchSizes, workspaceMode);
+        benchmark(name, description, mt, net, memoryTest, batchSizes, workspaceMode, gcWindow, 0);
 
         System.exit(0);
     }

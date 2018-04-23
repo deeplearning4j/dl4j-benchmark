@@ -53,8 +53,14 @@ public abstract class BaseBenchmark {
 
         Nd4j.create(1);
         Nd4j.getMemoryManager().togglePeriodicGc(gcWindow > 0);
-        Nd4j.getMemoryManager().setAutoGcWindow(gcWindow);
+        if(gcWindow > 0) {
+            Nd4j.getMemoryManager().setAutoGcWindow(gcWindow);
+        }
         Nd4j.getMemoryManager().setOccasionalGcFrequency(occasionalGCFreq);
+
+        report.setPeriodicGCEnabled(gcWindow > 0);
+        report.setPeriodicGCFreq(gcWindow);
+        report.setOccasionalGCFreq(occasionalGCFreq);
 
         // ADSI
         AsyncDataSetIterator asyncIter = new AsyncDataSetIterator(iter, 2, true);

@@ -63,7 +63,7 @@ public abstract class BaseMemoryBenchmark {
     }
 
     public void benchmark(String name, String description, ModelType modelType, TestableModel testableModel, MemoryTest memoryTest,
-                          List<Integer> batchSizes, WorkspaceMode workspaceMode) throws Exception {
+                          List<Integer> batchSizes, WorkspaceMode workspaceMode, int gcWindow, int occasionalGCFreq) throws Exception {
 
         new Thread(new MemoryRunnable()).start();
 
@@ -73,6 +73,16 @@ public abstract class BaseMemoryBenchmark {
 
         MemoryBenchmarkReport report = new MemoryBenchmarkReport(name,description, memoryTest);
 
+        Nd4j.create(1);
+        Nd4j.getMemoryManager().togglePeriodicGc(gcWindow > 0);
+        if(gcWindow > 0) {
+            Nd4j.getMemoryManager().setAutoGcWindow(gcWindow);
+        }
+        Nd4j.getMemoryManager().setOccasionalGcFrequency(occasionalGCFreq);
+
+        report.setPeriodicGCEnabled(gcWindow > 0);
+        report.setPeriodicGCFreq(gcWindow);
+        report.setOccasionalGCFreq(occasionalGCFreq);
 
         Thread.sleep(1000);
         long memBefore = maxMem.get();

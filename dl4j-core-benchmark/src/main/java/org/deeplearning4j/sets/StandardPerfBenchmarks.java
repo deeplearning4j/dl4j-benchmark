@@ -15,7 +15,7 @@ public class StandardPerfBenchmarks {
 
         ModelType modelType;
         int[] batchSizes;
-        int gcWindow = 10000;
+        int gcWindow = 0;   //Disabled
         int totalIter = 100;
 
         switch (testNum){

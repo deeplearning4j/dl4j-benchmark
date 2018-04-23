@@ -19,6 +19,7 @@ public class StandardMemBenchmarks {
         WorkspaceMode workspaceMode;
         CacheMode cacheMode = CacheMode.NONE;
         Updater updater = Updater.ADAM;
+        int gcWindow = 5000;
 
         switch (testNum){
             //MultiLayerNetwork tests:
@@ -85,7 +86,8 @@ public class StandardMemBenchmarks {
                 "--memoryTest", memoryTest.toString(),
                 "--workspaceMode", workspaceMode.toString(),
                 "--cacheMode", cacheMode.toString(),
-                "--updater", updater.toString()
+                "--updater", updater.toString(),
+                "--gcWindow", String.valueOf(gcWindow)
         });
 
     }

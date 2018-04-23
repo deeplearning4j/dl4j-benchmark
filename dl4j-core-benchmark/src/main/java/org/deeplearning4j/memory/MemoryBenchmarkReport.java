@@ -38,6 +38,9 @@ public class MemoryBenchmarkReport {
     private String modelSummary;
     private String cudaVersion;
     private String cudnnVersion;
+    private boolean periodicGCEnabled;
+    private int periodicGCFreq;
+    private int occasionalGCFreq;
     private int numParams;
     private int numLayers;
     private List<Integer> minibatchSizes;
@@ -136,6 +139,11 @@ public class MemoryBenchmarkReport {
         t.add(new String[]{"BLAS Vendor", blasVendor});
         t.add(new String[]{"CUDA Version", cudaVersion});
         t.add(new String[]{"CUDNN Version", cudnnVersion});
+        t.add(new String[] { "Periodic GC enabled", String.valueOf(periodicGCEnabled) });
+        if(periodicGCEnabled){
+            t.add(new String[] { "Periodic GC frequency", String.valueOf(periodicGCFreq) });
+        }
+        t.add(new String[] { "Occasional GC Freq", String.valueOf(occasionalGCFreq) });
         t.add(new String[]{"Total Params", Integer.toString(numParams)});
         t.add(new String[]{"Total Layers", Integer.toString(numLayers)});
         t.add(new String[]{"Bytes before init", formatBytes(bytesMaxBeforeInit)});
