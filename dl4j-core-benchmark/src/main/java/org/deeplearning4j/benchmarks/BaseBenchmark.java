@@ -21,6 +21,7 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.profiler.OpProfiler;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -98,6 +99,8 @@ public abstract class BaseBenchmark {
             https://github.com/jcjohnson/cnn-benchmarks/blob/master/cnn_benchmark.lua
          */
         iter.reset();
+
+        model.setListeners(Collections.emptyList());
 
         long totalForward = 0;
         long totalBackward = 0;
