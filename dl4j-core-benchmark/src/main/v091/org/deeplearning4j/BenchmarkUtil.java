@@ -1,7 +1,12 @@
 package org.deeplearning4j;
 
 import org.deeplearning4j.benchmarks.BenchmarkOp;
+import org.deeplearning4j.nn.api.Model;
+import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
+import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
+import org.deeplearning4j.nn.conf.graph.GraphVertex;
+import org.deeplearning4j.nn.conf.graph.LayerVertex;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.optimize.api.IterationListener;
@@ -11,8 +16,30 @@ import org.nd4j.linalg.factory.Nd4j;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
 
 public class BenchmarkUtil {
+
+    public static void enableRegularization(Model model){
+        if(model instanceof MultiLayerNetwork) {
+            MultiLayerNetwork net = (MultiLayerNetwork)model;
+            //Only applies for 0.9.1
+            MultiLayerConfiguration conf = net.getLayerWiseConfigurations();
+            List<NeuralNetConfiguration> list = conf.getConfs();
+            for (NeuralNetConfiguration nnc : list) {
+                nnc.setUseRegularization(true);
+            }
+        } else {
+            ComputationGraph net = (ComputationGraph)model;
+            Map<String,GraphVertex> map = net.getConfiguration().getVertices();
+            for(GraphVertex gv : map.values()){
+                if(gv instanceof LayerVertex){
+                    ((LayerVertex) gv).getLayerConf().setUseRegularization(true);
+                }
+            }
+        }
+    }
 
     public static long benchmark(BenchmarkOp op, INDArray input, INDArray labels, MultiLayerNetwork net) throws Exception {
         

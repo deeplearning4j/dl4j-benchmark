@@ -48,6 +48,8 @@ public abstract class BaseBenchmark {
         if(model == null){
             throw new IllegalStateException("Null model");
         }
+        BenchmarkUtil.enableRegularization(model);
+
         BenchmarkReport report = new BenchmarkReport(net.getKey().toString(), description);
         report.setModel(model);
         report.setBatchSize(batchSize);
