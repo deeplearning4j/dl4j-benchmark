@@ -108,7 +108,7 @@ public class BenchmarkUtil {
             long start = System.nanoTime();
             net.outputSingle(input);
             Nd4j.getExecutioner().commit();
-            long time = System.nanoTime();
+            long time = System.nanoTime() - start;
             return time;
         } else if(op == BenchmarkOp.BACKWARD){
             //Prepare network for backprop benchmark:

@@ -148,14 +148,17 @@ public abstract class BaseBenchmark {
                 // forward
                 long forwardTime = BenchmarkUtil.benchmark(BenchmarkOp.FORWARD, input, labels, g);
                 totalForward += (forwardTime / 1e6);
+                System.gc();
 
                 //Backward
                 long backwardTime = BenchmarkUtil.benchmark(BenchmarkOp.BACKWARD, input, labels, g);
                 totalBackward += (backwardTime / 1e6);
+                System.gc();
 
                 //Fit
                 long fitTime = BenchmarkUtil.benchmark(BenchmarkOp.FIT, input, labels, g);
                 totalFit += (fitTime / 1e6);
+                System.gc();
 
                 nIterations++;
                 if (nIterations % 100 == 0) log.info("Completed " + nIterations + " iterations");
