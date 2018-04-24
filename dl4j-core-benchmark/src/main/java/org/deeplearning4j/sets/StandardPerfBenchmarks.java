@@ -25,33 +25,16 @@ public class StandardPerfBenchmarks {
                 batchSizes = new int[]{16, 32, 64};
                 break;
             case 1:
-                modelType = ModelType.ALEXNET;
+                modelType = ModelType.VGG16;
                 batchSizes = new int[]{16, 32, 64};
                 break;
+
+            //ComputationGraph tests:
             case 2:
-                modelType = ModelType.VGG16;
+                modelType = ModelType.GOOGLELENET;
                 batchSizes = new int[]{16, 32, 64};
                 break;
             case 3:
-                modelType = ModelType.VGG16;
-                batchSizes = new int[]{16, 32, 64};
-                break;
-
-
-            //ComputationGraph tests:
-            case 4:
-                modelType = ModelType.GOOGLELENET;
-                batchSizes = new int[]{16, 32, 64};
-                break;
-            case 5:
-                modelType = ModelType.GOOGLELENET;
-                batchSizes = new int[]{16, 32, 64};
-                break;
-            case 6:
-                modelType = ModelType.INCEPTIONRESNETV1;
-                batchSizes = new int[]{16, 32, 64};
-                break;
-            case 7:
                 modelType = ModelType.INCEPTIONRESNETV1;
                 batchSizes = new int[]{16, 32, 64};
                 break;
