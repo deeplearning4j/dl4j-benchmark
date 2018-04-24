@@ -146,9 +146,11 @@ public class BenchmarkUtil {
 
         if(op == BenchmarkOp.FORWARD){
             long start = System.nanoTime();
-            net.outputSingle(input);
+            INDArray out = net.outputSingle(input);
             Nd4j.getExecutioner().commit();
-            long time = System.nanoTime();
+            long time = System.nanoTime() - start;
+            out.data().destroy();
+            System.gc();
             return time;
         } else if(op == BenchmarkOp.BACKWARD){
 
