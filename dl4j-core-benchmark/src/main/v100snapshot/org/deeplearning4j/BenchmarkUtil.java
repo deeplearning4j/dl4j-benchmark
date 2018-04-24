@@ -2,6 +2,7 @@ package org.deeplearning4j;
 
 import org.deeplearning4j.benchmarks.BenchmarkOp;
 import org.deeplearning4j.nn.api.FwdPassType;
+import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -79,6 +80,9 @@ public class BenchmarkUtil {
             .policyAllocation(AllocationPolicy.OVERALLOCATE).policySpill(SpillPolicy.REALLOCATE)
             .policyLearning(LearningPolicy.FIRST_LOOP).build();
 
+    public static void enableRegularization(Model model){
+        //No op for 1.0.0-alpha
+    }
 
     public static long benchmark(BenchmarkOp op, INDArray input, INDArray labels, MultiLayerNetwork net) throws Exception {
         
@@ -142,9 +146,11 @@ public class BenchmarkUtil {
 
         if(op == BenchmarkOp.FORWARD){
             long start = System.nanoTime();
-            net.outputSingle(input);
+            INDArray out = net.outputSingle(input);
             Nd4j.getExecutioner().commit();
-            long time = System.nanoTime();
+            long time = System.nanoTime() - start;
+            out.data().destroy();
+            System.gc();
             return time;
         } else if(op == BenchmarkOp.BACKWARD){
 

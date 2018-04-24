@@ -48,6 +48,8 @@ public abstract class BaseBenchmark {
         if(model == null){
             throw new IllegalStateException("Null model");
         }
+        BenchmarkUtil.enableRegularization(model);
+
         BenchmarkReport report = new BenchmarkReport(net.getKey().toString(), description);
         report.setModel(model);
         report.setBatchSize(batchSize);
@@ -111,21 +113,23 @@ public abstract class BaseBenchmark {
             profileStart(profile);
             while (iter.hasNext()) {
                 DataSet ds = iter.next();
-                ds.migrate();
                 INDArray input = ds.getFeatures();
                 INDArray labels = ds.getLabels();
 
                 // forward
                 long forwardTime = BenchmarkUtil.benchmark(BenchmarkOp.FORWARD, input, labels, m);
                 totalForward += (forwardTime / 1e6);
+                System.gc();
 
                 //Backward
                 long backwardTime = BenchmarkUtil.benchmark(BenchmarkOp.BACKWARD, input, labels, m);
                 totalBackward += (backwardTime / 1e6);
+                System.gc();
 
                 //Fit
                 long fitTime = BenchmarkUtil.benchmark(BenchmarkOp.FIT, input, labels, m);
                 totalFit += (fitTime / 1e6);
+                System.gc();
 
                 nIterations++;
                 if (nIterations % 100 == 0) log.info("Completed " + nIterations + " iterations");
@@ -144,14 +148,17 @@ public abstract class BaseBenchmark {
                 // forward
                 long forwardTime = BenchmarkUtil.benchmark(BenchmarkOp.FORWARD, input, labels, g);
                 totalForward += (forwardTime / 1e6);
+                System.gc();
 
                 //Backward
                 long backwardTime = BenchmarkUtil.benchmark(BenchmarkOp.BACKWARD, input, labels, g);
                 totalBackward += (backwardTime / 1e6);
+                System.gc();
 
                 //Fit
                 long fitTime = BenchmarkUtil.benchmark(BenchmarkOp.FIT, input, labels, g);
                 totalFit += (fitTime / 1e6);
+                System.gc();
 
                 nIterations++;
                 if (nIterations % 100 == 0) log.info("Completed " + nIterations + " iterations");

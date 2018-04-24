@@ -1,6 +1,7 @@
 package org.deeplearning4j;
 
 import org.deeplearning4j.benchmarks.BenchmarkOp;
+import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -11,6 +12,10 @@ import org.nd4j.linalg.factory.Nd4j;
 import java.lang.reflect.Method;
 
 public class BenchmarkUtil {
+
+    public static void enableRegularization(Model model){
+        //No op for 1.0.0-alpha
+    }
 
     public static long benchmark(BenchmarkOp op, INDArray input, INDArray labels, MultiLayerNetwork net) throws Exception {
         if(op == BenchmarkOp.FORWARD){
@@ -77,7 +82,7 @@ public class BenchmarkUtil {
             long start = System.nanoTime();
             net.outputSingle(input);
             Nd4j.getExecutioner().commit();
-            long time = System.nanoTime();
+            long time = System.nanoTime() - start;
             return time;
         } else if(op == BenchmarkOp.BACKWARD){
             //Prepare network for backprop benchmark:
