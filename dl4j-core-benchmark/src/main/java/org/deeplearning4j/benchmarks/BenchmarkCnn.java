@@ -41,11 +41,11 @@ public class BenchmarkCnn extends BaseBenchmark {
     @Option(name="--profile",usage="Run profiler and print results",aliases = "-profile")
     public static boolean profile = false;
     @Option(name="--cacheMode",usage="Cache mode setting for net")
-    public static CacheMode cacheMode = CacheMode.NONE;
+    public static CacheMode cacheMode = CacheMode.DEVICE;
     @Option(name="--workspaceMode", usage="Workspace mode for net")
-    public static WorkspaceMode workspaceMode = WorkspaceMode.SINGLE;
+    public static WorkspaceMode workspaceMode = WorkspaceMode.ENABLED;
     @Option(name="--updater", usage="Updater for net")
-    public static Updater updater = Updater.ADAM;
+    public static Updater updater = Updater.NONE;
 
     private String datasetName  = "SIMULATEDCNN";
     private int seed = 42;

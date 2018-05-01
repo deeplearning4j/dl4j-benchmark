@@ -8,7 +8,6 @@ import org.deeplearning4j.models.rnn.RNN;
 import org.deeplearning4j.nn.conf.CacheMode;
 import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
-import org.deeplearning4j.zoo.model.GoogLeNet;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,10 +50,6 @@ public class ModelSelector {
                 break;
             case MLP_SMALL:
                 netmap.put(ModelType.MLP_SMALL, new MLP(inputShape[0], new int[]{512,512,512},numLabels, seed, updater, workspaceMode, cacheMode));
-                break;
-
-            case GOOGLELENET:
-                netmap.put(ModelType.GOOGLELENET, new GoogleLeNet(numLabels, seed, iterations, workspaceMode, cacheMode, updater));
                 break;
 
             // RNN models

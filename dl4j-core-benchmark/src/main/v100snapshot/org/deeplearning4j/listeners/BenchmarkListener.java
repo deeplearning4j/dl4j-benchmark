@@ -7,6 +7,7 @@ package org.deeplearning4j.listeners;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.optimize.api.IterationListener;
+import org.deeplearning4j.optimize.api.TrainingListener;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.api.shape.Shape;
 import org.nd4j.linalg.factory.Nd4j;
@@ -14,6 +15,8 @@ import org.nd4j.linalg.util.ArrayUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -21,7 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @author Justin Long (@crockpotveggies)
  */
-public class BenchmarkListener implements IterationListener {
+public class BenchmarkListener implements TrainingListener {
     private final int frequency;
     private static final Logger logger = LoggerFactory.getLogger(org.deeplearning4j.optimize.listeners.PerformanceListener.class);
     private ThreadLocal<Double> samplesPerSec = new ThreadLocal<>();
@@ -89,5 +92,35 @@ public class BenchmarkListener implements IterationListener {
         }
 
         lastTime.set(System.currentTimeMillis());
+    }
+
+    @Override
+    public void onEpochStart(Model model) {
+
+    }
+
+    @Override
+    public void onEpochEnd(Model model) {
+
+    }
+
+    @Override
+    public void onForwardPass(Model model, List<INDArray> activations) {
+
+    }
+
+    @Override
+    public void onForwardPass(Model model, Map<String, INDArray> activations) {
+
+    }
+
+    @Override
+    public void onGradientCalculation(Model model) {
+
+    }
+
+    @Override
+    public void onBackwardPass(Model model) {
+
     }
 }
