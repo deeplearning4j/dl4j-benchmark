@@ -11,6 +11,20 @@
 
     <artifactId>dl4j-core-benchmark</artifactId>
 
+    <repositories>
+        <repository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!--kohsuke-->
         <dependency>
@@ -23,7 +37,6 @@
             <artifactId>deeplearning4j-parallel-wrapper_${scala.binary.version}</artifactId>
             <version>${dl4j.version}</version>
         </dependency>
-
     </dependencies>
     <build>
         <finalName>dl4j-core-benchmark</finalName>
