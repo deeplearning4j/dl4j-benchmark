@@ -55,7 +55,7 @@ java -cp dl4j-core-benchmark-v100beta_native.jar org.deeplearning4j.benchmarks.B
 
 For the full list of configuration options, see the configuration section below. 
 
-
+*** NOTE: There is also a benchmark script to compare backends: see scripts/benchmark.sh ***
 
 
 ### Running Benchmarks in IntelliJ

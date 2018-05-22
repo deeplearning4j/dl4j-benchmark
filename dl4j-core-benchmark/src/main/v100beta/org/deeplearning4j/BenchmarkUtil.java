@@ -119,10 +119,11 @@ public class BenchmarkUtil {
 
                 //calcBackpropGradients(null, true, false)
                 //calcBackpropGradients(INDArray epsilon, boolean withOutputLayer, boolean tbptt) {
-                m = MultiLayerNetwork.class.getDeclaredMethod("calcBackpropGradients", INDArray.class, boolean.class, boolean.class);
+                //calcBackpropGradients(INDArray epsilon, boolean withOutputLayer, boolean tbptt, boolean returnInputActGrad)
+                m = MultiLayerNetwork.class.getDeclaredMethod("calcBackpropGradients", INDArray.class, boolean.class, boolean.class, boolean.class);
                 m.setAccessible(true);
                 long start = System.nanoTime();
-                m.invoke(net, null, true, false);
+                m.invoke(net, null, true, false, false);
                 return System.nanoTime() - start;
             }
         } else {
