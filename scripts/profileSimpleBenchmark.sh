@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-# This script: launches the benchmark, but does NOT automatically capture the snapshot!
-# That is apparently possible, however: https://www.yourkit.com/docs/java/help/command_line_tool.jsp
+# This script: launches the simple benchmark and captures the snapshots automatically
 
 cd ..
-mvn package -DskipTests -Pv091,cudnn8
-mvn package -DskipTests -Pv100beta,cudnn8
+mvn clean package -DskipTests -Pv091,cudnn8
+mvn clean package -DskipTests -Pv100beta,cudnn8
 cd dl4j-core-benchmark
 mkdir -p ../scripts/SimpleBenchmark
 
