@@ -66,6 +66,7 @@
                 <version>1.6</version>
                 <configuration>
                     <createDependencyReducedPom>true</createDependencyReducedPom>
+                    <shadedClassifierName>${artifact.version.name}_${artifact.backend.name}</shadedClassifierName>
                     <filters>
                         <filter>
                             <artifact>*:*</artifact>
