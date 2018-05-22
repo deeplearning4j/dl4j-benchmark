@@ -57,12 +57,22 @@
         </profile>
 
         <profile>
+            <id>v100beta</id>
+            <properties>
+                <dl4j.version>1.0.0-beta</dl4j.version>
+                <nd4j.version>1.0.0-beta</nd4j.version>
+                <datavec.version>1.0.0-beta</datavec.version>
+                <version.specific.code.dir>v100beta</version.specific.code.dir>
+            </properties>
+        </profile>
+
+        <profile>
             <id>v100snapshot</id>
             <properties>
                 <dl4j.version>1.0.0-SNAPSHOT</dl4j.version>
                 <nd4j.version>1.0.0-SNAPSHOT</nd4j.version>
                 <datavec.version>1.0.0-SNAPSHOT</datavec.version>
-                <version.specific.code.dir>v100snapshot</version.specific.code.dir>
+                <version.specific.code.dir>v100beta</version.specific.code.dir>
             </properties>
         </profile>
 
