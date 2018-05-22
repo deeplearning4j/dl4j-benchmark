@@ -49,8 +49,9 @@ Finally, to run the benchmarks, use the following:
 ```
 mvn package -Pcudnn91,v100alpha -DskipTests
 cd dl4j-core-benchmark
-java -cp dl4j-core-benchmark.jar org.deeplearning4j.benchmarks.BenchmarkCnn --modelType ALEXNET --batchSize 32
+java -cp dl4j-core-benchmark-v100beta_native.jar org.deeplearning4j.benchmarks.BenchmarkCnn --modelType ALEXNET --batchSize 32
 ```
+*** NOTE: The JAR file name encodes which profiles (version + backend) were used when building ***
 
 For the full list of configuration options, see the configuration section below. 
 

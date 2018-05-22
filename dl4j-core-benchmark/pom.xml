@@ -66,6 +66,7 @@
                 <version>1.6</version>
                 <configuration>
                     <createDependencyReducedPom>true</createDependencyReducedPom>
+                    <outputFile>dl4j-core-benchmark-${artifact.version.name}_${artifact.backend.name}.jar</outputFile>
                     <shadedClassifierName>${artifact.version.name}_${artifact.backend.name}</shadedClassifierName>
                     <filters>
                         <filter>
