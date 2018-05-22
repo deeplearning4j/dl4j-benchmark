@@ -17,14 +17,17 @@ import java.util.Map;
 
 public class SimpleBenchmark {
 
-    @Option(name = "--forward", usage = "Run forward pass in loop", aliases = "-fwd")
+    @Option(name = "--forward", usage = "Run forward pass in loop")
     public static boolean forward = false;
 
-    @Option(name = "--fit", usage = "Run fit in loop", aliases = "-fwd")
+    @Option(name = "--fit", usage = "Run fit in loop")
     public static boolean fit = true;
 
     @Option(name = "--minibatch", usage = "minibatch size")
     public static int minibatch = 16;
+
+    @Option(name = "--nIter", usage = "Number of iterations to run")
+    public static int nIter=100;
 
     public static void main(String[] args) throws Exception {
         new SimpleBenchmark().run(args);
@@ -44,6 +47,7 @@ public class SimpleBenchmark {
 
         System.out.println("Starting test: forward=" + forward + ", fit=" + fit + ", minibatch=" + minibatch);
 
+        //                            networks = ModelSelector.select(modelType, null, numLabels, seed, iterations, workspaceMode, cacheMode, updater);
         Map<ModelType, TestableModel> networks = ModelSelector.select(ModelType.ALEXNET, null, 1000, 12345, 1, WorkspaceMode.SINGLE, CacheMode.NONE, Updater.ADAM);
 
         for (Map.Entry<ModelType, TestableModel> m : networks.entrySet()) {
@@ -53,8 +57,6 @@ public class SimpleBenchmark {
             int[] labelShape = new int[]{minibatch, 1000};
             INDArray input = Nd4j.create(inputShape);
             INDArray labels = Nd4j.create(labelShape);
-
-            int nIter = 100;
 
             long start = System.currentTimeMillis();
             if (forward) {
@@ -79,6 +81,7 @@ public class SimpleBenchmark {
             if (fit) {
                 System.out.println("Average fit duration: " + avgFitMs);
             }
+
             System.out.println("--- DONE ---");
         }
 
