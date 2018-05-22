@@ -4,13 +4,12 @@
 # That is apparently possible, however: https://www.yourkit.com/docs/java/help/command_line_tool.jsp
 
 cd ..
-#mvn package -DskipTests -Pv091,cudnn8
-#mvn package -DskipTests -Pv100beta,cudnn8
+mvn package -DskipTests -Pv091,cudnn8
+mvn package -DskipTests -Pv100beta,cudnn8
 cd dl4j-core-benchmark
 mkdir -p ../scripts/SimpleBenchmark
 
-#declare -a versionBackend=("v091_cuda8-cudnn" "v100beta_cuda8-cudnn")
-declare -a versionBackend=("v100beta_cuda8-cudnn")
+declare -a versionBackend=("v091_cuda8-cudnn" "v100beta_cuda8-cudnn")
 declare -a batchSize=("32")
 
 # Launching with profiling:
