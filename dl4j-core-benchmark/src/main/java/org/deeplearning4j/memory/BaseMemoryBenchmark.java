@@ -180,7 +180,7 @@ public abstract class BaseMemoryBenchmark {
             }
 
             //Work out output size:
-            int[] outShape;
+            long[] outShape;
             if(mln != null){
                 outShape = mln.output(Nd4j.create(inShape)).shape();
             } else {
