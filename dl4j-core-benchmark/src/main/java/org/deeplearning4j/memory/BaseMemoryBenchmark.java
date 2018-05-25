@@ -10,6 +10,7 @@ import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.util.ArrayUtil;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -180,12 +181,17 @@ public abstract class BaseMemoryBenchmark {
             }
 
             //Work out output size:
-            long[] outShape;
+            INDArray outTemp;
             if(mln != null){
-                outShape = mln.output(Nd4j.create(inShape)).shape();
+                outTemp = mln.output(Nd4j.create(inShape));
             } else {
-                outShape = cg.outputSingle(Nd4j.create(inShape)).shape();
+                outTemp = cg.outputSingle(Nd4j.create(inShape));
             }
+            long[] outShape = new long[outTemp.rank()];
+            for( int i=0; i<outTemp.rank(); i++ ){
+                outShape[i] = outTemp.size(i);
+            }
+            outTemp = null;
 
 
             for( int i=0; i<batchSizes.size(); i++ ){
@@ -208,7 +214,7 @@ public abstract class BaseMemoryBenchmark {
                         //Do warm-up iterations to initialize workspaces etc
                         for( int iter=0; iter<WARMUP_ITERS; iter++){
                             INDArray input = Nd4j.create(inShape, 'c');
-                            INDArray output = Nd4j.create(outShape, 'c');
+                            INDArray output = Nd4j.create(ArrayUtil.toInts(outShape), 'c');
                             if(mln != null){
                                 mln.fit(input, output);
                             } else {
@@ -222,7 +228,7 @@ public abstract class BaseMemoryBenchmark {
 
                         for( int iter=0; iter<MEASURE_ITERS; iter++){
                             INDArray input = Nd4j.create(inShape, 'c');
-                            INDArray output = Nd4j.create(outShape, 'c');
+                            INDArray output = Nd4j.create(ArrayUtil.toInts(outShape), 'c');
                             if(mln != null){
                                 mln.fit(input, output);
                             } else {
