@@ -16,6 +16,8 @@ declare -a batchSize=("32")
 # https://www.yourkit.com/docs/java/help/startup_options.jsp
 yourkitPath=/home/alex/Downloads/YourKit-JavaProfiler-2017.02/bin/linux-x86-64/libyjpagent.so
 yourkitJar=/home/alex/Downloads/YourKit-JavaProfiler-2017.02/lib/yjp-controller-api-redist.jar
+#yourkitPath="C:/Program Files/YourKit Java Profiler 2017.02-b63/bin/win64/yjpagent.dll"
+#yourkitJar="C:/Program Files/YourKit Java Profiler 2017.02-b63/lib/yjp-controller-api-redist.jar"
 
 for i in "${versionBackend[@]}"
 do
@@ -24,7 +26,7 @@ do
       export SNAPSHOT_DIR=../scripts/SimpleBenchmark/snapshot-$i-$j/
       mkdir -p $SNAPSHOT_DIR
       echo "Running test: $i, batch size $j"
-      echo java -agentpath:$yourkitPath=tracing,port=10001,dir=$SNAPSHOT_DIR -cp dl4j-core-benchmark-$i.jar org.deeplearning4j.simple.SimpleBenchmark --nIter 100 --fit --minibatch $j > ../scripts/SimpleBenchmark/output_"$i"_"$j".txt
+      echo java -agentpath:"$yourkitPath"=tracing,port=10001,dir=$SNAPSHOT_DIR -cp dl4j-core-benchmark-$i.jar org.deeplearning4j.simple.SimpleBenchmark --nIter 100 --fit --minibatch $j > ../scripts/SimpleBenchmark/output_"$i"_"$j".txt
       java -agentpath:$yourkitPath=tracing,dir=$SNAPSHOT_DIR -cp dl4j-core-benchmark-$i.jar org.deeplearning4j.simple.SimpleBenchmark --nIter 100 --fit --minibatch $j >> ../scripts/SimpleBenchmark/output_"$i"_"$j".txt & export APP_PID=$!
 
       #Note: snapshot recording will automatically occur when JVM shuts down

@@ -29,6 +29,9 @@ public class SimpleBenchmark {
     @Option(name = "--nIter", usage = "Number of iterations to run")
     public static int nIter=100;
 
+    @Option(name="--updater", usage="Updater for net")
+    public static Updater updater = Updater.ADAM;
+
     public static void main(String[] args) throws Exception {
         new SimpleBenchmark().run(args);
     }
@@ -48,7 +51,7 @@ public class SimpleBenchmark {
         System.out.println("Starting test: forward=" + forward + ", fit=" + fit + ", minibatch=" + minibatch);
 
         //                            networks = ModelSelector.select(modelType, null, numLabels, seed, iterations, workspaceMode, cacheMode, updater);
-        Map<ModelType, TestableModel> networks = ModelSelector.select(ModelType.ALEXNET, null, 1000, 12345, 1, WorkspaceMode.SINGLE, CacheMode.NONE, Updater.ADAM);
+        Map<ModelType, TestableModel> networks = ModelSelector.select(ModelType.ALEXNET, null, 1000, 12345, 1, WorkspaceMode.SINGLE, CacheMode.NONE, updater);
 
         for (Map.Entry<ModelType, TestableModel> m : networks.entrySet()) {
 
