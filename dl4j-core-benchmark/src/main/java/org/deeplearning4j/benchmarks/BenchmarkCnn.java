@@ -43,7 +43,7 @@ public class BenchmarkCnn extends BaseBenchmark {
     @Option(name="--cacheMode",usage="Cache mode setting for net")
     public static CacheMode cacheMode = CacheMode.DEVICE;
     @Option(name="--workspaceMode", usage="Workspace mode for net")
-    public static WorkspaceMode workspaceMode = WorkspaceMode.SINGLE;
+    public static WorkspaceMode workspaceMode = WorkspaceMode.SINGLE;   //Single == ENABLED in 1.0.0-beta
     @Option(name="--updater", usage="Updater for net")
     public static Updater updater = Updater.NONE;
     @Option(name="--usePW", usage="Use parallel wrapper")
