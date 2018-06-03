@@ -28,7 +28,7 @@ public class BenchmarkCnn extends BaseBenchmark {
     public static boolean EXIT_ON_COMPLETION = true;
 
     // values to pass in from command line when compiled, esp running remotely
-    @Option(name = "--modelType", usage = "Model type (e.g. ALEXNET, VGG16, or CNN).", aliases = "-model")
+    @Option(name = "--modelType", usage = "Model type (e.g. ALEXNET, VGG16, RESNET50, or CNN).", aliases = "-model")
     public static ModelType modelType = ModelType.VGG16;
     @Option(name="--numLabels",usage="Train batch size.",aliases = "-labels")
     public static int numLabels = 1000;
