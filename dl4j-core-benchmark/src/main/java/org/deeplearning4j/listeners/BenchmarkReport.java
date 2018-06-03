@@ -144,7 +144,7 @@ public class BenchmarkReport {
      * sec for all executors, use {@link #avgSamplesPerSecCombined()}
      */
     public double avgSamplesSecPerExecutor() {
-        return avgOverThreads(totalIterationTimePerThread, iterationsPerThread);
+        return avgOverThreadsD(totalSamplesSecPerThread, iterationsPerThread);
     }
 
     /**
@@ -266,8 +266,10 @@ public class BenchmarkReport {
             table.add(new String[]{"Avg Samples/sec", df.format(avgSamplesSecPerExecutor())});
             table.add(new String[]{"Avg Batches/sec", df.format(avgBatchesSecPerExecutor())});
         } else {
-            table.add(new String[]{"Avg Samples/sec (per executor)", df.format(avgSamplesSecPerExecutor())});
-            table.add(new String[]{"Avg Samples/sec (total)", df.format(avgSamplesPerSecCombined())});
+            double spsPE = avgSamplesSecPerExecutor();
+            double spsC = avgSamplesPerSecCombined();
+            table.add(new String[]{"Avg Samples/sec (per executor)", df.format(spsPE)});
+            table.add(new String[]{"Avg Samples/sec (total)", df.format(spsC)});
             table.add(new String[]{"Avg Batches/sec (per executor)", df.format(avgBatchesSecPerExecutor())});
             table.add(new String[]{"Avg Batches/sec (total)", df.format(avgBatchesPerSecCombined())});
         }
@@ -276,7 +278,7 @@ public class BenchmarkReport {
         StringBuilder sb = new StringBuilder();
 
         for (final Object[] row : table) {
-            sb.append(String.format("%28s %45s\n", row));
+            sb.append(String.format("%-35s %-45s\n", row));
         }
 
         return sb.toString();
