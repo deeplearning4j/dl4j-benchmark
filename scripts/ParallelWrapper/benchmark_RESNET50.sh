@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd ..
+cd ../..
 mvn package -DskipTests -Pv100beta,cudnn91
 cd dl4j-core-benchmark
 declare -a versionBackend=("v100beta_cuda91-cudnn")

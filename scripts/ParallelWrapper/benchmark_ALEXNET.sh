@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-cd ..
+cd ../..
 mvn package -DskipTests -Pv100beta,cudnn91
 cd dl4j-core-benchmark
 declare -a versionBackend=("v100beta_cuda91-cudnn")
-declare -a batchSize=("16" "32")
+declare -a batchSize=("16","32")
 modelType=ALEXNET
 mkdir -p ../scripts/$modelType
 ## now loop through the above array
