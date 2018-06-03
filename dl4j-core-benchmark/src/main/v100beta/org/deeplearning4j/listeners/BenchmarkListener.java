@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Justin Long (@crockpotveggies)
  */
 public class BenchmarkListener implements TrainingListener {
-    private final int frequency;
     private static final Logger logger = LoggerFactory.getLogger(org.deeplearning4j.optimize.listeners.PerformanceListener.class);
     private ThreadLocal<Double> samplesPerSec = new ThreadLocal<>();
     private ThreadLocal<Double> batchesPerSec = new ThreadLocal<>();
@@ -38,15 +37,17 @@ public class BenchmarkListener implements TrainingListener {
 
     public BenchmarkListener(BenchmarkReport benchmarkReport) {
         this.benchmarkReport = benchmarkReport;
-        this.frequency = 1;
     }
 
     @Override
     public void iterationDone(Model model, int iteration, int epoch) {
         // we update lastTime on every iteration
         // just to simplify things
-        if (lastTime.get() == null)
+        boolean isFirstIter = false;
+        if (lastTime.get() == null) {
             lastTime.set(System.currentTimeMillis());
+            isFirstIter = true;
+        }
 
         if (samplesPerSec.get() == null)
             samplesPerSec.set(0.0);
@@ -57,10 +58,8 @@ public class BenchmarkListener implements TrainingListener {
         if (iterationCount.get() == null)
             iterationCount.set(new AtomicLong(0));
 
-        if(iterationCount.get().get() <= 3*frequency)
-            lastTime.set(System.currentTimeMillis());
+        if(!isFirstIter) {
 
-        if (iterationCount.get().getAndIncrement() % frequency == 0 && iterationCount.get().get() > 3*frequency) {
             long currentTime = System.currentTimeMillis();
 
             long timeSpent = currentTime - lastTime.get();
@@ -85,10 +84,15 @@ public class BenchmarkListener implements TrainingListener {
             samplesPerSec.set((double) (numSamples / timeSec));
             batchesPerSec.set((double) (1 / timeSec));
 
-            benchmarkReport.setIterations(iterationCount.get().get());
-            benchmarkReport.addIterationTime(timeSpent);
-            if(!Double.isInfinite(samplesPerSec.get())) benchmarkReport.addSamplesSec(samplesPerSec.get());
-            if(!Double.isInfinite(batchesPerSec.get())) benchmarkReport.addBatchesSec(batchesPerSec.get());
+            long tId = Thread.currentThread().getId();
+            benchmarkReport.addIterations(tId, 1);
+            benchmarkReport.addIterationTime(tId, timeSpent);
+            if (!Double.isInfinite(samplesPerSec.get())) {
+                benchmarkReport.addSamplesSec(tId, samplesPerSec.get());
+            }
+            if (!Double.isInfinite(batchesPerSec.get())) {
+                benchmarkReport.addBatchesSec(tId, batchesPerSec.get());
+            }
         }
 
         lastTime.set(System.currentTimeMillis());

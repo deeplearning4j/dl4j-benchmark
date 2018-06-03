@@ -15,5 +15,6 @@ public enum ModelType {
     FACENETNN4,
     RNN,
     MLP_SMALL,
-    RNN_SMALL
+    RNN_SMALL,
+    RESNET50
 }

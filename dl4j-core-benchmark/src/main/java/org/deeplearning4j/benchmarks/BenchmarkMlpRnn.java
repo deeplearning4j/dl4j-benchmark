@@ -50,6 +50,14 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
     public static WorkspaceMode workspaceMode = WorkspaceMode.SINGLE;
     @Option(name="--updater", usage="Updater for net")
     public static Updater updater = Updater.ADAM;
+    @Option(name="--usePW", usage="Use parallel wrapper")
+    public static boolean usePW = false;
+    @Option(name="--pwNumThreads", usage="Number of ParallelWrappe threads. If set to -1, use number of GPUs")
+    public static int pwNumThreads = -1;
+    @Option(name="--pwAvgFreq", usage="Parallel Wrapper averaging frequency")
+    public static int pwAvgFreq = 5;
+    @Option(name="--pwPrefetchBuffer", usage="Parallel Wrapper averaging frequency")
+    public static int pwPrefetchBuffer = 2;
 
     private int seed = 42;
 
@@ -100,7 +108,25 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
 
         for (Map.Entry<ModelType, TestableModel> net : networks.entrySet()) {
             String description = net.getKey().toString()+" 1x"+inputDimension;
-            benchmark(net, description, outputDimension, trainBatchSize, seed, "random", iter, modelType, profile, gcWindow, 0);
+//            benchmark(net, description, outputDimension, trainBatchSize, seed, "random", iter, modelType, profile, gcWindow, 0);
+
+            new BaseBenchmark.Benchmark()
+                    .net(net)
+                    .description(description)
+                    .numLabels(outputDimension)
+                    .batchSize(trainBatchSize)
+                    .seed(seed)
+                    .datasetName("random")
+                    .iter(iter)
+                    .modelType(modelType)
+                    .profile(profile)
+                    .gcWindow(gcWindow)
+                    .occasionalGCFreq(0)
+                    .usePW(usePW)
+                    .pwNumThreads(pwNumThreads)
+                    .pwAvgFreq(pwAvgFreq)
+                    .pwPrefetchBuffer(pwPrefetchBuffer)
+                    .execute();
         }
     }
 

@@ -51,6 +51,9 @@ public class ModelSelector {
             case MLP_SMALL:
                 netmap.put(ModelType.MLP_SMALL, new MLP(inputShape[0], new int[]{512,512,512},numLabels, seed, updater, workspaceMode, cacheMode));
                 break;
+            case RESNET50:
+                netmap.put(ModelType.RESNET50, new ResNet50(numLabels, seed, iterations, workspaceMode, cacheMode, updater));
+                break;
 
             // RNN models
             case RNN:
