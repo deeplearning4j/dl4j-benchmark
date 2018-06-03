@@ -107,7 +107,7 @@ public abstract class BaseBenchmark {
         }
         iter.reset();
 
-        List<TrainingListener> listeners = Arrays.asList(new PerformanceListener(1), new BenchmarkListener(report), new TrainingDiscriminationListener());
+        List<TrainingListener> listeners = Arrays.asList(new PerformanceListener(1), new BenchmarkListener(report));
         if(!usePW){
             model.setListeners(listeners);
         } else {
