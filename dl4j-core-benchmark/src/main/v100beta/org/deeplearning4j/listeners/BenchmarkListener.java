@@ -43,8 +43,11 @@ public class BenchmarkListener implements TrainingListener {
     public void iterationDone(Model model, int iteration, int epoch) {
         // we update lastTime on every iteration
         // just to simplify things
-        if (lastTime.get() == null)
+        boolean isFirstIter = false;
+        if (lastTime.get() == null) {
             lastTime.set(System.currentTimeMillis());
+            isFirstIter = true;
+        }
 
         if (samplesPerSec.get() == null)
             samplesPerSec.set(0.0);
@@ -55,38 +58,41 @@ public class BenchmarkListener implements TrainingListener {
         if (iterationCount.get() == null)
             iterationCount.set(new AtomicLong(0));
 
-        long currentTime = System.currentTimeMillis();
+        if(!isFirstIter) {
 
-        long timeSpent = currentTime - lastTime.get();
-        float timeSec = timeSpent / 1000f;
+            long currentTime = System.currentTimeMillis();
 
-        INDArray input;
-        if (model instanceof ComputationGraph) {
-            // for comp graph (with multidataset
-            ComputationGraph cg = (ComputationGraph) model;
-            INDArray[] inputs = cg.getInputs();
+            long timeSpent = currentTime - lastTime.get();
+            float timeSec = timeSpent / 1000f;
 
-            if (inputs != null && inputs.length > 0)
-                input = inputs[0];
-            else
+            INDArray input;
+            if (model instanceof ComputationGraph) {
+                // for comp graph (with multidataset
+                ComputationGraph cg = (ComputationGraph) model;
+                INDArray[] inputs = cg.getInputs();
+
+                if (inputs != null && inputs.length > 0)
+                    input = inputs[0];
+                else
+                    input = model.input();
+            } else {
                 input = model.input();
-        } else {
-            input = model.input();
-        }
+            }
 
-        long numSamples = input.size(0);
+            long numSamples = input.size(0);
 
-        samplesPerSec.set((double) (numSamples / timeSec));
-        batchesPerSec.set((double) (1 / timeSec));
+            samplesPerSec.set((double) (numSamples / timeSec));
+            batchesPerSec.set((double) (1 / timeSec));
 
-        long tId = Thread.currentThread().getId();
-        benchmarkReport.addIterations(tId, 1);
-        benchmarkReport.addIterationTime(tId, timeSpent);
-        if(!Double.isInfinite(samplesPerSec.get())){
-            benchmarkReport.addSamplesSec(tId, samplesPerSec.get());
-        }
-        if(!Double.isInfinite(batchesPerSec.get())){
-            benchmarkReport.addBatchesSec(tId, batchesPerSec.get());
+            long tId = Thread.currentThread().getId();
+            benchmarkReport.addIterations(tId, 1);
+            benchmarkReport.addIterationTime(tId, timeSpent);
+            if (!Double.isInfinite(samplesPerSec.get())) {
+                benchmarkReport.addSamplesSec(tId, samplesPerSec.get());
+            }
+            if (!Double.isInfinite(batchesPerSec.get())) {
+                benchmarkReport.addBatchesSec(tId, batchesPerSec.get());
+            }
         }
 
         lastTime.set(System.currentTimeMillis());
