@@ -94,6 +94,7 @@ public abstract class BaseBenchmark {
         }
 
         //Warm-up
+        log.info("===== Warming up =====");
         if(!usePW) {
             DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 10);
             if (model instanceof MultiLayerNetwork) {
