@@ -1,6 +1,7 @@
 package org.deeplearning4j.models.cnn;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.deeplearning4j.models.ModelMetaData;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
@@ -22,6 +23,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
  *
  * References: TODO
  */
+@Slf4j
 public class ResNet50  implements TestableModel {
     private int[] inputShape = new int[] { 3, 224, 224 };
     private int numLabels = 1000;
@@ -189,8 +191,12 @@ public class ResNet50  implements TestableModel {
     }
 
     public ComputationGraph init(){
+        log.info("Get ready...");
         ComputationGraphConfiguration.GraphBuilder conf = graphBuilder();
         ComputationGraph network = new ComputationGraph(conf.build());
+
+        log.info("Going to init...");
+
         network.init();
         return network;
     }
