@@ -53,6 +53,9 @@ public abstract class BaseBenchmark {
         if(model == null){
             throw new IllegalStateException("Null model");
         }
+
+        log.info("===== Model initialized =====");
+
         BenchmarkUtil.enableRegularization(model);
 
         if(usePW && pwNumThreads < 0){
