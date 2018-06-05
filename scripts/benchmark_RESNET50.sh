@@ -8,7 +8,7 @@ cd dl4j-core-benchmark
 #declare -a versionBackend=("v091_cuda8-cudnn" "v100alpha_cuda8-cudnn" "v100beta_cuda8-cudnn")
 declare -a versionBackend=("v100beta_cuda91-cudnn")
 declare -a batchSize=("16" "32")
-modelType=ALEXNET
+modelType=RESNET50
 xmx=12G
 javacpp=12G
 mkdir -p ../scripts/$modelType
@@ -19,6 +19,6 @@ do
    do
       echo "Running test: $i, batch size $j"
       echo java -cp dl4j-core-benchmark-$i.jar -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.benchmarks.BenchmarkCnn --modelType $modelType --batchSize $j --cacheMode NONE > ../scripts/$modelType/output_"$i"_"$j".txt
-      java -cp dl4j-core-benchmark-$i.jar org.deeplearning4j.benchmarks.BenchmarkCnn --modelType $modelType --batchSize $j --cacheMode NONE >> ../scripts/$modelType/output_"$i"_"$j".txt
+      java -cp dl4j-core-benchmark-$i.jar -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.benchmarks.BenchmarkCnn --modelType $modelType --batchSize $j --cacheMode NONE >> ../scripts/$modelType/output_"$i"_"$j".txt
    done
 done

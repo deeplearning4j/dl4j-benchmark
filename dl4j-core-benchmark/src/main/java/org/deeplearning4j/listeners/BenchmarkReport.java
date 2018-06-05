@@ -1,11 +1,15 @@
 package org.deeplearning4j.listeners;
 
 import lombok.Data;
+import org.bytedeco.javacpp.Pointer;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.utils.StringUtils;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.primitives.AtomicDouble;
+import org.nd4j.versioncheck.VersionCheck;
+import org.nd4j.versioncheck.VersionInfo;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
@@ -226,15 +230,38 @@ public class BenchmarkReport {
     }
 
 
+    public static String inferVersion(){
+        List<VersionInfo> vi = VersionCheck.getVersionInfos();
+
+        for(VersionInfo v : vi){
+            if("org.deeplearning4j".equals(v.getGroupId()) && "deeplearning4j-core".equals(v.getArtifactId())){
+                String version = v.getBuildVersion();
+                if(version.contains("SNAPSHOT")){
+                    return version + " (" + v.getCommitIdAbbrev() + ")";
+                }
+                return version;
+            }
+        }
+
+        return " (could not infer version)";
+    }
+
     public String toString() {
+
+
         DecimalFormat df = new DecimalFormat("#.##");
 
         SystemInfo sys = new SystemInfo();
         OperatingSystem os = sys.getOperatingSystem();
         HardwareAbstractionLayer hardware = sys.getHardware();
+        String procName = sys.getHardware().getProcessor().getName();
+        long totalMem = sys.getHardware().getMemory().getTotal();
 
+        long xmx = Runtime.getRuntime().maxMemory();
+        long javacppMaxPhys = Pointer.maxPhysicalBytes();
 
         List<String[]> table = new ArrayList<>();
+        table.add(new String[]{"Version", inferVersion()});
         table.add(new String[]{"Name", name});
         table.add(new String[]{"Description", description});
         table.add(new String[]{"Operating System",
@@ -243,6 +270,10 @@ public class BenchmarkReport {
                         os.getVersion().getVersion()});
         table.add(new String[]{"Devices", devices().get(0)});
         table.add(new String[]{"CPU Cores", cpuCores});
+        table.add(new String[]{"CPU", procName});
+        table.add(new String[]{"System Memory", formatBytes(totalMem)});
+        table.add(new String[]{"Memory Config - XMX", formatBytes(xmx)});
+        table.add(new String[]{"Memory Config - JavaCPP MaxPhysicalBytes", formatBytes(javacppMaxPhys)});
         table.add(new String[]{"Backend", backend});
         table.add(new String[]{"BLAS Vendor", blasVendor});
         table.add(new String[]{"CUDA Version", cudaVersion});
@@ -278,10 +309,13 @@ public class BenchmarkReport {
         StringBuilder sb = new StringBuilder();
 
         for (final Object[] row : table) {
-            sb.append(String.format("%-35s %-45s\n", row));
+            sb.append(String.format("%-42s %-45s\n", row));
         }
 
         return sb.toString();
     }
 
+    private static String formatBytes(long bytes){
+        return bytes + " - " + StringUtils.TraditionalBinaryPrefix.long2String(bytes, null, 2);
+    }
 }
