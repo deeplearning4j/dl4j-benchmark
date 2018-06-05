@@ -1,6 +1,7 @@
 package org.deeplearning4j.models;
 
 import com.beust.jcommander.ParameterException;
+import org.deeplearning4j.VersionSpecificModels;
 import org.deeplearning4j.models.cnn.*;
 import org.deeplearning4j.models.cnn.VGG16;
 import org.deeplearning4j.models.mlp.MLP;
@@ -54,7 +55,9 @@ public class ModelSelector {
             case RESNET50:
                 netmap.put(ModelType.RESNET50, new ResNet50(numLabels, seed, iterations, workspaceMode, cacheMode, updater));
                 break;
-
+            case RESNET50PRE:
+                netmap.put(ModelType.RESNET50PRE, new ResNet50Pretrained(workspaceMode, cacheMode, updater));
+                break;
             // RNN models
             case RNN:
             case RNN_SMALL:
