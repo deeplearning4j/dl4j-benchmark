@@ -16,6 +16,8 @@ declare -a batchSize=("32")
 
 #model=ALEXNET
 model=RESNET50PRE
+xmx=12G
+javacpp=12G
 
 # Launching with profiling:
 # https://www.yourkit.com/docs/java/help/agent.jsp
@@ -32,8 +34,8 @@ do
       export SNAPSHOT_DIR=../scripts/SimpleBenchmark/$model/snapshot-$i-$j/
       mkdir -p $SNAPSHOT_DIR
       echo "Running test: $i, batch size $j"
-      echo java -agentpath:"$yourkitPath"=tracing,port=10001,dir=$SNAPSHOT_DIR -cp dl4j-core-benchmark-$i.jar org.deeplearning4j.simple.SimpleBenchmark --nIter 100 --fit --minibatch $j --model $model > ../scripts/SimpleBenchmark/$model/output_"$i"_"$j".txt
-      java -agentpath:"$yourkitPath"=tracing,port=10001,dir=$SNAPSHOT_DIR -cp dl4j-core-benchmark-$i.jar org.deeplearning4j.simple.SimpleBenchmark --nIter 100 --fit --minibatch $j --model $model > ../scripts/SimpleBenchmark/$model/output_"$i"_"$j".txt
+      echo java -agentpath:"$yourkitPath"=tracing,port=10001,dir=$SNAPSHOT_DIR -cp dl4j-core-benchmark-$i.jar  -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.simple.SimpleBenchmark --nIter 100 --fit --minibatch $j --model $model > ../scripts/SimpleBenchmark/$model/output_"$i"_"$j".txt
+      java -agentpath:"$yourkitPath"=tracing,port=10001,dir=$SNAPSHOT_DIR -cp dl4j-core-benchmark-$i.jar  -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.simple.SimpleBenchmark --nIter 100 --fit --minibatch $j --model $model >> ../scripts/SimpleBenchmark/$model/output_"$i"_"$j".txt
 
       #Note: snapshot recording will automatically occur when JVM shuts down
    done
