@@ -39,6 +39,9 @@ public class SimpleBenchmark {
     @Option(name="--model", usage="Model to test")
     public static ModelType modelType = ModelType.ALEXNET;
 
+    @Option(name="--debugMode", usage="Enables debug mode")
+    public static boolean debugMode = false;
+
     public static void main(String[] args) throws Exception {
         new SimpleBenchmark().run(args);
     }
@@ -55,7 +58,11 @@ public class SimpleBenchmark {
             System.exit(1);
         }
 
-        System.out.println("Starting test: model=" + modelType + ", forward=" + forward + ", fit=" + fit + ", minibatch=" + minibatch);
+        System.out.println("Starting test: model=" + modelType + ", forward=" + forward + ", fit=" + fit + ", minibatch=" + minibatch + ", debugMode=" + debugMode);
+
+        if(debugMode){
+            Nd4j.getExecutioner().enableDebugMode(true);
+        }
 
         Map<ModelType, TestableModel> networks = ModelSelector.select(modelType, null, 1000, 12345, 1, WorkspaceMode.SINGLE, CacheMode.NONE, updater);
 
