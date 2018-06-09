@@ -1,6 +1,6 @@
 package org.deeplearning4j.simple;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.deeplearning4j.benchmarks.BaseBenchmark;
 import org.deeplearning4j.models.ModelSelector;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
@@ -39,8 +39,11 @@ public class SimpleBenchmark {
     @Option(name="--model", usage="Model to test")
     public static ModelType modelType = ModelType.ALEXNET;
 
-    @Option(name="--debugMode", usage="Enables debug mode")
+    @Option(name="--debugMode", usage="Enables ND4J debug mode")
     public static boolean debugMode = false;
+
+    @Option(name="--profile", usage="Enables ND4J op profiler, and print results once done")
+    public static boolean profile = false;
 
     public static void main(String[] args) throws Exception {
         new SimpleBenchmark().run(args);
@@ -58,7 +61,8 @@ public class SimpleBenchmark {
             System.exit(1);
         }
 
-        System.out.println("Starting test: model=" + modelType + ", forward=" + forward + ", fit=" + fit + ", minibatch=" + minibatch + ", debugMode=" + debugMode);
+        System.out.println("Starting test: model=" + modelType + ", forward=" + forward + ", fit=" + fit + ", minibatch=" + minibatch +
+                ", debugMode=" + debugMode + ", profile=" + profile);
 
         if(debugMode){
             Nd4j.getExecutioner().enableDebugMode(true);
@@ -84,18 +88,21 @@ public class SimpleBenchmark {
 
             long start = System.currentTimeMillis();
             if (forward) {
+                BaseBenchmark.profileStart(profile);
                 for (int i = 0; i < nIter; i++) {
                     if(isMln){
                         mln.output(input);
                     } else {
                         cg.outputSingle(input);
                     }
-
                 }
+
+                BaseBenchmark.profileEnd("Forward Pass", profile);
             }
             long endOutput = System.currentTimeMillis();
 
             if (fit) {
+                BaseBenchmark.profileStart(profile);
                 for (int i = 0; i < nIter; i++) {
                     if(isMln){
                         mln.fit(input, labels);
@@ -103,6 +110,7 @@ public class SimpleBenchmark {
                         cg.fit(new DataSet(input, labels));
                     }
                 }
+                BaseBenchmark.profileEnd("Fit", profile);
             }
             long endFit = System.currentTimeMillis();
 

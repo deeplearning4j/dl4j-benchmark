@@ -218,17 +218,18 @@ public abstract class BaseBenchmark {
         System.out.println(report.toString());
     }
 
-    private static void profileStart(boolean enabled) {
+    public static void profileStart(boolean enabled) {
         if (enabled) {
             Nd4j.getExecutioner().setProfilingMode(OpExecutioner.ProfilingMode.ALL);
             OpProfiler.getInstance().reset();
         }
     }
 
-    private static void profileEnd(String label, boolean enabled) {
+    public static void profileEnd(String label, boolean enabled) {
         if (enabled) {
             log.info("==== " + label + " - OpProfiler Results ====");
             OpProfiler.getInstance().printOutDashboard();
+            OpProfiler.getInstance().reset();
         }
     }
 }

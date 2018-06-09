@@ -29,13 +29,13 @@ public class BenchmarkCnn extends BaseBenchmark {
 
     // values to pass in from command line when compiled, esp running remotely
     @Option(name = "--modelType", usage = "Model type (e.g. ALEXNET, VGG16, RESNET50, or CNN).", aliases = "-model")
-    public static ModelType modelType = ModelType.VGG16;
+    public static ModelType modelType = ModelType.RESNET50PRE;
     @Option(name="--numLabels",usage="Train batch size.",aliases = "-labels")
     public static int numLabels = 1000;
     @Option(name="--totalIterations",usage="Train batch size.",aliases = "-iterations")
     public static int totalIterations = 200;
     @Option(name="--batchSize",usage="Train batch size.",aliases = "-batch")
-    public static int batchSize = 128;
+    public static int batchSize = 32;
     @Option(name="--gcWindow",usage="Set Garbage Collection window in milliseconds.",aliases = "-gcwindow")
     public static int gcWindow = 5000;
     @Option(name="--profile",usage="Run profiler and print results",aliases = "-profile")
