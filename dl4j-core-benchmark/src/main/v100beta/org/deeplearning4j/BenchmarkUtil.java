@@ -184,7 +184,7 @@ public class BenchmarkUtil {
                 Method m1 = ComputationGraph.class.getDeclaredMethod("ffToLayerActivationsInWS", boolean.class, int.class, int[].class,
                     FwdPassType.class, boolean.class, INDArray[].class, INDArray[].class, INDArray[].class, boolean.class);
                 m1.setAccessible(true);
-                m1.invoke(net, true, -1, indices, FwdPassType.STANDARD, true, new INDArray[]{input}, null, null, null, false);
+                m1.invoke(net, true, -1, indices, FwdPassType.STANDARD, true, new INDArray[]{input}, null, null, false);
 
                 Method m = ComputationGraph.class.getDeclaredMethod("calcBackpropGradients", boolean.class, boolean.class, INDArray[].class);
                 m.setAccessible(true);
