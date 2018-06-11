@@ -179,9 +179,10 @@ public class BenchmarkUtil {
                 m0.setAccessible(true);
                 int[] indices = (int[])m0.invoke(net);
 
-                //ffToLayerActivationsInWS(boolean train, int layerIndex, int[] excludeIdxs, FwdPassType fwdPassType, boolean storeLastForTBPTT, INDArray[] input, INDArray[] fMask, INDArray[] lMask, boolean clearInputs) {
+                //ffToLayerActivationsInWS(boolean train, int layerIndex, int[] excludeIdxs, FwdPassType fwdPassType,
+                //    boolean storeLastForTBPTT, INDArray[] input, INDArray[] fMask, INDArray[] lMask, boolean clearInputs) {
                 Method m1 = ComputationGraph.class.getDeclaredMethod("ffToLayerActivationsInWS", boolean.class, int.class, int[].class,
-                    FwdPassType.class, boolean.class, INDArray[].class, INDArray[].class, INDArray[].class, INDArray[].class, boolean.class);
+                    FwdPassType.class, boolean.class, INDArray[].class, INDArray[].class, INDArray[].class, boolean.class);
                 m1.setAccessible(true);
                 m1.invoke(net, true, -1, indices, FwdPassType.STANDARD, true, new INDArray[]{input}, null, null, null, false);
 
