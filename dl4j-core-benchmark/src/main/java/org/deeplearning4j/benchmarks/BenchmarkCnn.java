@@ -13,6 +13,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 //import org.nd4j.jita.conf.CudaEnvironment;
+import org.nd4j.linalg.api.buffer.DataBuffer;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import sun.misc.Cache;
@@ -54,6 +55,8 @@ public class BenchmarkCnn extends BaseBenchmark {
     public static int pwAvgFreq = 5;
     @Option(name="--pwPrefetchBuffer", usage="Parallel Wrapper averaging frequency")
     public static int pwPrefetchBuffer = 2;
+    @Option(name="--datatype", usage="ND4J DataType - FLOAT, DOUBLE, HALF")
+    public static DataBuffer.Type datatype = DataBuffer.Type.FLOAT;
 
     private String datasetName  = "SIMULATEDCNN";
     private int seed = 42;
@@ -69,6 +72,9 @@ public class BenchmarkCnn extends BaseBenchmark {
             parser.printUsage(System.err);
             System.exit(1);
         }
+
+        log.info("Using DataType {}", datatype);
+        Nd4j.setDataType(datatype);
 
         log.info("Building models for "+modelType+"....");
         networks = ModelSelector.select(modelType, null, numLabels, seed, iterations, workspaceMode, cacheMode, updater);

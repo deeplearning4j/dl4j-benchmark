@@ -8,11 +8,13 @@ import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.conf.CacheMode;
 import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
+import org.deeplearning4j.nn.conf.layers.ConvolutionLayer;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+import org.nd4j.linalg.api.buffer.DataBuffer;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
@@ -45,6 +47,12 @@ public class SimpleBenchmark {
     @Option(name="--profile", usage="Enables ND4J op profiler, and print results once done")
     public static boolean profile = false;
 
+//    @Option(name="--cudnnMode", usage="Algorithm mode for CuDNN")
+//    public static ConvolutionLayer.AlgoMode cudnnMode = ConvolutionLayer.AlgoMode.PREFER_FASTEST;
+
+    @Option(name="--datatype", usage="ND4J DataType - FLOAT, DOUBLE, HALF")
+    public static DataBuffer.Type datatype = DataBuffer.Type.FLOAT;
+
     public static void main(String[] args) throws Exception {
         new SimpleBenchmark().run(args);
     }
@@ -61,8 +69,10 @@ public class SimpleBenchmark {
             System.exit(1);
         }
 
-        System.out.println("Starting test: model=" + modelType + ", forward=" + forward + ", fit=" + fit + ", minibatch=" + minibatch +
-                ", debugMode=" + debugMode + ", profile=" + profile);
+        System.out.println("Starting test: model=" + modelType + ", dataType=" + datatype + ", forward=" + forward
+                + ", fit=" + fit + ", minibatch=" + minibatch + ", debugMode=" + debugMode + ", profile=" + profile);
+
+        Nd4j.setDataType(datatype);
 
         if(debugMode){
             Nd4j.getExecutioner().enableDebugMode(true);
