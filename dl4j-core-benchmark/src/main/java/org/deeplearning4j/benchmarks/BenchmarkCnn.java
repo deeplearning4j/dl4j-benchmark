@@ -57,6 +57,8 @@ public class BenchmarkCnn extends BaseBenchmark {
     public static int pwPrefetchBuffer = 2;
     @Option(name="--datatype", usage="ND4J DataType - FLOAT, DOUBLE, HALF")
     public static DataBuffer.Type datatype = DataBuffer.Type.FLOAT;
+    @Option(name="--memoryListener", usage="Add MemoryReportingListener")
+    public static boolean memoryListener = false;
 
     private String datasetName  = "SIMULATEDCNN";
     private int seed = 42;
@@ -106,6 +108,7 @@ public class BenchmarkCnn extends BaseBenchmark {
                     .pwNumThreads(pwNumThreads)
                     .pwAvgFreq(pwAvgFreq)
                     .pwPrefetchBuffer(pwPrefetchBuffer)
+                    .memoryListener(memoryListener)
                     .execute();
         }
 

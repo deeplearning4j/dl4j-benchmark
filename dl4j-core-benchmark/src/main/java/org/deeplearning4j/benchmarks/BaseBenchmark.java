@@ -8,6 +8,7 @@ import org.deeplearning4j.datasets.iterator.EarlyTerminationDataSetIterator;
 import org.deeplearning4j.listeners.BenchmarkListener;
 import org.deeplearning4j.listeners.BenchmarkReport;
 import org.deeplearning4j.listeners.TrainingDiscriminationListener;
+import org.deeplearning4j.memory.listener.MemoryReportingListener;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.api.Model;
@@ -40,7 +41,7 @@ public abstract class BaseBenchmark {
     @Builder(builderClassName = "Benchmark", buildMethodName = "execute")
     public void benchmark(Map.Entry<ModelType, TestableModel> net, String description, int numLabels, int batchSize, int seed, String datasetName,
                           DataSetIterator iter, ModelType modelType, boolean profile, int gcWindow, int occasionalGCFreq,
-                          boolean usePW, int pwNumThreads, int pwAvgFreq, int pwPrefetchBuffer) throws Exception {
+                          boolean usePW, int pwNumThreads, int pwAvgFreq, int pwPrefetchBuffer, boolean memoryListener) throws Exception {
 
 
         log.info("=======================================");
@@ -108,7 +109,8 @@ public abstract class BaseBenchmark {
         }
         iter.reset();
 
-        List<TrainingListener> listeners = Arrays.asList(new PerformanceListener(1), new BenchmarkListener(report));
+        List<TrainingListener> listeners = Arrays.asList(
+                (memoryListener ? new MemoryReportingListener() : new PerformanceListener(1)), new BenchmarkListener(report));
         if(!usePW){
             model.setListeners(listeners);
         } else {
