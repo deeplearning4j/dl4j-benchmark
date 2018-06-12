@@ -6,11 +6,13 @@ package org.deeplearning4j.listeners;
 
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.graph.ComputationGraph;
-import org.deeplearning4j.optimize.api.IterationListener;
+import org.deeplearning4j.optimize.api.TrainingListener;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -18,8 +20,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * @author Justin Long (@crockpotveggies)
  */
-public class BenchmarkListener implements IterationListener {
-    private final int frequency;
+public class BenchmarkListener implements TrainingListener {
     private static final Logger logger = LoggerFactory.getLogger(org.deeplearning4j.optimize.listeners.PerformanceListener.class);
     private ThreadLocal<Double> samplesPerSec = new ThreadLocal<>();
     private ThreadLocal<Double> batchesPerSec = new ThreadLocal<>();
@@ -32,7 +33,6 @@ public class BenchmarkListener implements IterationListener {
 
     public BenchmarkListener(BenchmarkReport benchmarkReport) {
         this.benchmarkReport = benchmarkReport;
-        this.frequency = 1;
     }
 
     @Override
@@ -49,8 +49,11 @@ public class BenchmarkListener implements IterationListener {
     public void iterationDone(Model model, int iteration) {
         // we update lastTime on every iteration
         // just to simplify things
-        if (lastTime.get() == null)
+        boolean isFirstIter = false;
+        if (lastTime.get() == null) {
             lastTime.set(System.currentTimeMillis());
+            isFirstIter = true;
+        }
 
         if (samplesPerSec.get() == null)
             samplesPerSec.set(0.0);
@@ -61,10 +64,8 @@ public class BenchmarkListener implements IterationListener {
         if (iterationCount.get() == null)
             iterationCount.set(new AtomicLong(0));
 
-        if(iterationCount.get().get() <= 3*frequency)
-            lastTime.set(System.currentTimeMillis());
+        if(!isFirstIter) {
 
-        if (iterationCount.get().getAndIncrement() % frequency == 0 && iterationCount.get().get() > 3*frequency) {
             long currentTime = System.currentTimeMillis();
 
             long timeSpent = currentTime - lastTime.get();
@@ -89,12 +90,47 @@ public class BenchmarkListener implements IterationListener {
             samplesPerSec.set((double) (numSamples / timeSec));
             batchesPerSec.set((double) (1 / timeSec));
 
-            benchmarkReport.setIterations(iterationCount.get().get());
-            benchmarkReport.addIterationTime(timeSpent);
-            if(!Double.isInfinite(samplesPerSec.get())) benchmarkReport.addSamplesSec(samplesPerSec.get());
-            if(!Double.isInfinite(batchesPerSec.get())) benchmarkReport.addBatchesSec(batchesPerSec.get());
+            long tId = Thread.currentThread().getId();
+            benchmarkReport.addIterations(tId, 1);
+            benchmarkReport.addIterationTime(tId, timeSpent);
+            if (!Double.isInfinite(samplesPerSec.get())) {
+                benchmarkReport.addSamplesSec(tId, samplesPerSec.get());
+            }
+            if (!Double.isInfinite(batchesPerSec.get())) {
+                benchmarkReport.addBatchesSec(tId, batchesPerSec.get());
+            }
         }
 
         lastTime.set(System.currentTimeMillis());
+    }
+
+    @Override
+    public void onEpochStart(Model model) {
+
+    }
+
+    @Override
+    public void onEpochEnd(Model model) {
+
+    }
+
+    @Override
+    public void onForwardPass(Model model, List<INDArray> activations) {
+
+    }
+
+    @Override
+    public void onForwardPass(Model model, Map<String, INDArray> activations) {
+
+    }
+
+    @Override
+    public void onGradientCalculation(Model model) {
+
+    }
+
+    @Override
+    public void onBackwardPass(Model model) {
+
     }
 }

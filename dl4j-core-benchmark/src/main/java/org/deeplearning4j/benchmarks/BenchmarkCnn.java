@@ -13,6 +13,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 //import org.nd4j.jita.conf.CudaEnvironment;
+import org.nd4j.linalg.api.buffer.DataBuffer;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import sun.misc.Cache;
@@ -29,13 +30,13 @@ public class BenchmarkCnn extends BaseBenchmark {
 
     // values to pass in from command line when compiled, esp running remotely
     @Option(name = "--modelType", usage = "Model type (e.g. ALEXNET, VGG16, RESNET50, or CNN).", aliases = "-model")
-    public static ModelType modelType = ModelType.VGG16;
+    public static ModelType modelType = ModelType.RESNET50PRE;
     @Option(name="--numLabels",usage="Train batch size.",aliases = "-labels")
     public static int numLabels = 1000;
     @Option(name="--totalIterations",usage="Train batch size.",aliases = "-iterations")
     public static int totalIterations = 200;
     @Option(name="--batchSize",usage="Train batch size.",aliases = "-batch")
-    public static int batchSize = 128;
+    public static int batchSize = 32;
     @Option(name="--gcWindow",usage="Set Garbage Collection window in milliseconds.",aliases = "-gcwindow")
     public static int gcWindow = 5000;
     @Option(name="--profile",usage="Run profiler and print results",aliases = "-profile")
@@ -54,6 +55,10 @@ public class BenchmarkCnn extends BaseBenchmark {
     public static int pwAvgFreq = 5;
     @Option(name="--pwPrefetchBuffer", usage="Parallel Wrapper averaging frequency")
     public static int pwPrefetchBuffer = 2;
+    @Option(name="--datatype", usage="ND4J DataType - FLOAT, DOUBLE, HALF")
+    public static DataBuffer.Type datatype = DataBuffer.Type.FLOAT;
+    @Option(name="--memoryListener", usage="Add MemoryReportingListener")
+    public static boolean memoryListener = false;
 
     private String datasetName  = "SIMULATEDCNN";
     private int seed = 42;
@@ -69,6 +74,9 @@ public class BenchmarkCnn extends BaseBenchmark {
             parser.printUsage(System.err);
             System.exit(1);
         }
+
+        log.info("Using DataType {}", datatype);
+        Nd4j.setDataType(datatype);
 
         log.info("Building models for "+modelType+"....");
         networks = ModelSelector.select(modelType, null, numLabels, seed, iterations, workspaceMode, cacheMode, updater);
@@ -100,6 +108,7 @@ public class BenchmarkCnn extends BaseBenchmark {
                     .pwNumThreads(pwNumThreads)
                     .pwAvgFreq(pwAvgFreq)
                     .pwPrefetchBuffer(pwPrefetchBuffer)
+                    .memoryListener(memoryListener)
                     .execute();
         }
 

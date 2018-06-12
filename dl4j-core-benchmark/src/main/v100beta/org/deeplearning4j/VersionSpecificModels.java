@@ -46,7 +46,8 @@ public class VersionSpecificModels {
         cg.getLayer("fc1000").getParam("W").assign(outW);
         cg.getLayer("fc1000").getParam("b").assign(outB);
 
-        if(BenchmarkReport.inferVersion().contains("1.0.0-beta")){
+        String version = BenchmarkReport.inferVersion();
+        if(version.contains("1.0.0-beta")){
             //workaround for workspace issue on 1.0.0-beta
             PreprocessorVertex pv = (PreprocessorVertex) cg.getVertex("flatten_1");
             try {

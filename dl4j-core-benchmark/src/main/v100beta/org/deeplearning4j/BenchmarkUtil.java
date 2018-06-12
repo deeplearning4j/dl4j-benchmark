@@ -19,10 +19,15 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class BenchmarkUtil {
+
+    public static void enableND4JDebug(boolean enable){
+        Nd4j.getExecutioner().enableDebugMode(enable);
+    }
 
     /**
      * Workspace for working memory for a single layer: forward pass and backward pass
@@ -170,31 +175,28 @@ public class BenchmarkUtil {
                         .build();
             }
 
-            //Prepare network for backprop benchmark:
-            //We need to do forward pass, and
-            // (a) keep input activation arrays set on the layer input field
-            // (b) ensure input activation arrays are not defined in workspaces
-            //To do this, we'll temporarily disable workspaces, then use the FF method that doesn't clear input arrays
+            try (MemoryWorkspace ws = mgr.notifyScopeEntered(ArrayType.ACTIVATIONS)) {
 
-            WorkspaceMode wsmTrain = net.getConfiguration().getTrainingWorkspaceMode();
-            WorkspaceMode wsmTest = net.getConfiguration().getInferenceWorkspaceMode();
+                //Prepare network for backprop benchmark:
+                //Need to call method to generate activations in WS, ready for backprop
+                Method m0 = ComputationGraph.class.getDeclaredMethod("getOutputLayerIndices");
+                m0.setAccessible(true);
+                int[] indices = (int[])m0.invoke(net);
 
-            net.getConfiguration().setTrainingWorkspaceMode(WorkspaceMode.NONE);
-            net.getConfiguration().setInferenceWorkspaceMode(WorkspaceMode.NONE);
-            net.feedForward(new INDArray[]{input}, true, false);
-            net.getConfiguration().setTrainingWorkspaceMode(wsmTrain);
-            net.getConfiguration().setInferenceWorkspaceMode(wsmTest);
+                //ffToLayerActivationsInWS(boolean train, int layerIndex, int[] excludeIdxs, FwdPassType fwdPassType,
+                //    boolean storeLastForTBPTT, INDArray[] input, INDArray[] fMask, INDArray[] lMask, boolean clearInputs) {
+                Method m1 = ComputationGraph.class.getDeclaredMethod("ffToLayerActivationsInWS", boolean.class, int.class, int[].class,
+                    FwdPassType.class, boolean.class, INDArray[].class, INDArray[].class, INDArray[].class, boolean.class);
+                m1.setAccessible(true);
+                m1.invoke(net, true, -1, indices, FwdPassType.STANDARD, true, new INDArray[]{input}, null, null, false);
 
+                Method m = ComputationGraph.class.getDeclaredMethod("calcBackpropGradients", boolean.class, boolean.class, INDArray[].class);
+                m.setAccessible(true);
 
-            Method m = ComputationGraph.class.getDeclaredMethod("calcBackpropGradients", boolean.class, boolean.class, INDArray[].class);
-            m.setAccessible(true);
-
-            //Slight hack around validation:
-            try(MemoryWorkspace ws = mgr.notifyScopeEntered(ArrayType.ACTIVATIONS)){
                 long start = System.nanoTime();
                 m.invoke(net, true, false, null);
                 long end = System.nanoTime();
-                return end - start;
+                return end-start;
             }
         } else {
             long start = System.nanoTime();
