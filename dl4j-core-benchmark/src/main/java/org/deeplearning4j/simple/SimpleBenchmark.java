@@ -1,5 +1,6 @@
 package org.deeplearning4j.simple;
 
+import org.deeplearning4j.BenchmarkUtil;
 import org.deeplearning4j.benchmarks.BaseBenchmark;
 import org.deeplearning4j.models.ModelSelector;
 import org.deeplearning4j.models.ModelType;
@@ -39,7 +40,7 @@ public class SimpleBenchmark {
     public static Updater updater = Updater.ADAM;
 
     @Option(name="--model", usage="Model to test")
-    public static ModelType modelType = ModelType.ALEXNET;
+    public static ModelType modelType = ModelType.RESNET50PRE;
 
     @Option(name="--debugMode", usage="Enables ND4J debug mode")
     public static boolean debugMode = false;
@@ -51,7 +52,7 @@ public class SimpleBenchmark {
 //    public static ConvolutionLayer.AlgoMode cudnnMode = ConvolutionLayer.AlgoMode.PREFER_FASTEST;
 
     @Option(name="--datatype", usage="ND4J DataType - FLOAT, DOUBLE, HALF")
-    public static DataBuffer.Type datatype = DataBuffer.Type.FLOAT;
+    public static DataBuffer.Type datatype = DataBuffer.Type.HALF;
 
     public static void main(String[] args) throws Exception {
         new SimpleBenchmark().run(args);
@@ -75,7 +76,7 @@ public class SimpleBenchmark {
         Nd4j.setDataType(datatype);
 
         if(debugMode){
-            Nd4j.getExecutioner().enableDebugMode(true);
+            BenchmarkUtil.enableND4JDebug(true);
         }
 
         Map<ModelType, TestableModel> networks = ModelSelector.select(modelType, null, 1000, 12345, 1, WorkspaceMode.SINGLE, CacheMode.NONE, updater);

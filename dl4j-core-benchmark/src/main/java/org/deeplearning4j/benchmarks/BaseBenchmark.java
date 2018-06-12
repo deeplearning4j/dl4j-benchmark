@@ -2,17 +2,15 @@ package org.deeplearning4j.benchmarks;
 
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.deeplearning4j.BenchmarkUtil;
-import org.deeplearning4j.datasets.iterator.AsyncDataSetIterator;
 import org.deeplearning4j.datasets.iterator.EarlyTerminationDataSetIterator;
 import org.deeplearning4j.listeners.BenchmarkListener;
 import org.deeplearning4j.listeners.BenchmarkReport;
-import org.deeplearning4j.listeners.TrainingDiscriminationListener;
-import org.deeplearning4j.memory.listener.MemoryReportingListener;
+import org.deeplearning4j.listeners.MemoryReportingListener;
 import org.deeplearning4j.models.ModelType;
 import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.api.Model;
-import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.optimize.api.TrainingListener;
@@ -25,7 +23,6 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.profiler.OpProfiler;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -109,7 +106,7 @@ public abstract class BaseBenchmark {
         }
         iter.reset();
 
-        List<TrainingListener> listeners = Arrays.asList(
+        val listeners = Arrays.asList(
                 (memoryListener ? new MemoryReportingListener() : new PerformanceListener(1)), new BenchmarkListener(report));
         if(!usePW){
             model.setListeners(listeners);

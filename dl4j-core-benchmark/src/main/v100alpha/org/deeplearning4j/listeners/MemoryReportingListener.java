@@ -1,4 +1,4 @@
-package org.deeplearning4j.memory.listener;
+package org.deeplearning4j.listeners;
 
 import lombok.extern.slf4j.Slf4j;
 import org.bytedeco.javacpp.Pointer;

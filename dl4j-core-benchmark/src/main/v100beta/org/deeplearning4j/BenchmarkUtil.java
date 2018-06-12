@@ -25,6 +25,10 @@ import java.lang.reflect.Method;
 
 public class BenchmarkUtil {
 
+    public static void enableND4JDebug(boolean enable){
+        Nd4j.getExecutioner().enableDebugMode(enable);
+    }
+
     /**
      * Workspace for working memory for a single layer: forward pass and backward pass
      * Note that this is opened/closed once per op (activate/backpropGradient call)

@@ -21,6 +21,10 @@ import java.util.Map;
 
 public class BenchmarkUtil {
 
+    public static void enableND4JDebug(boolean enable){
+        throw new UnsupportedOperationException("Not supported in 0.9.1");
+    }
+
     public static void enableRegularization(Model model){
         if(model instanceof MultiLayerNetwork) {
             MultiLayerNetwork net = (MultiLayerNetwork)model;
