@@ -180,13 +180,15 @@ public class BenchmarkUtil {
                 //Prepare network for backprop benchmark:
                 //Need to call method to generate activations in WS, ready for backprop
                 Method m0 = ComputationGraph.class.getDeclaredMethod("getOutputLayerIndices");
+                m0.setAccessible(true);
                 int[] indices = (int[])m0.invoke(net);
 
-                //ffToLayerActivationsInWS(boolean train, int layerIndex, int[] excludeIdxs, FwdPassType fwdPassType, boolean storeLastForTBPTT, INDArray[] input, INDArray[] fMask, INDArray[] lMask, boolean clearInputs) {
+                //ffToLayerActivationsInWS(boolean train, int layerIndex, int[] excludeIdxs, FwdPassType fwdPassType,
+                //    boolean storeLastForTBPTT, INDArray[] input, INDArray[] fMask, INDArray[] lMask, boolean clearInputs) {
                 Method m1 = ComputationGraph.class.getDeclaredMethod("ffToLayerActivationsInWS", boolean.class, int.class, int[].class,
-                    FwdPassType.class, boolean.class, INDArray[].class, INDArray[].class, INDArray[].class, INDArray[].class, boolean.class);
-
-                m1.invoke(net, true, -1, indices, FwdPassType.STANDARD, true, new INDArray[]{input}, null, null, null, false);
+                    FwdPassType.class, boolean.class, INDArray[].class, INDArray[].class, INDArray[].class, boolean.class);
+                m1.setAccessible(true);
+                m1.invoke(net, true, -1, indices, FwdPassType.STANDARD, true, new INDArray[]{input}, null, null, false);
 
                 Method m = ComputationGraph.class.getDeclaredMethod("calcBackpropGradients", boolean.class, boolean.class, INDArray[].class);
                 m.setAccessible(true);
