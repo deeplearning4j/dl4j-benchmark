@@ -1,6 +1,8 @@
 package org.deeplearning4j.utils;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.api.rng.DefaultRandom;
+import org.nd4j.linalg.api.rng.Random;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
 
@@ -16,7 +18,8 @@ public class GenerateDataSets {
         new File("/tmp/bmd").mkdirs();
 
         for (int i = 0; i < 200; i++) {
-            INDArray features = Nd4j.rand(119, 128, 3, 224, 224);
+            Random rng = new DefaultRandom(119);
+            INDArray features = Nd4j.rand(new int[] { 128, 3, 224, 224}, rng);
             INDArray labels = Nd4j.zeros(128, 8644).getColumn(0).assign(1.0f);
 
             DataSet ds = new DataSet(features, labels);
