@@ -116,7 +116,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <nd4j.backend>nd4j-native-platform</nd4j.backend>
+                <nd4j.backend>nd4j-native</nd4j.backend>
                 <artifact.backend.name>native</artifact.backend.name>
             </properties>
         </profile>
