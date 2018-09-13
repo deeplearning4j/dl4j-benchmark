@@ -24,14 +24,18 @@ Multiple version of DL4J can be benchmarked in this repo using Maven profiles:
 
 * 0.9.1 (profile name: v091)
 * 1.0.0-alpha (profile name: v100alpha)
+* 1.0.0-beta (profile name: v100beta)
+* 1.0.0-beta2 (profile name: v100beta2)
 * Master/snapshots (profile name: v100snapshot)
 
 Furthermore, multiple backends can be configured:
 * Native (profile name: native)
 * CUDA 8 (profile name: cuda8)
-* CUDA 9.1 (profile name: cuda91 - can only be used with 1.0.0-alpha and master/snapshots)
+* CUDA 9.1 (profile name: cuda91 - can only be used with 1.0.0-alpha/beta and master/snapshots)
+* CUDA 9.2 (profile name: cuda92 - can only be used with 1.0.0-beta2 and master/snapshots)
 * CUDA 8 with CUDNN (profile name: cudnn8)
-* CUDA 9.1 with CUDNN (profile name: cuda91 - can only be used with 1.0.0-alpha and master/snapshots)
+* CUDA 9.1 with CUDNN (profile name: cudnn91 - can only be used with 1.0.0-alpha/beta and master/snapshots)
+* CUDA 9.2 with CUDNN (profile name: cudnn92 - can only be used with 1.0.0-beta2 and master/snapshots)
 
 These Maven profiles allow any supported combinations of backends and DL4J versions to be run. These are specified
 at build time. You must build the repository before running benchmarks.
@@ -40,17 +44,18 @@ For example, to build the benchmark repo with support for ND4J-native backend fo
 
 ```mvn package -Pnative,v091 -DskipTests```
 
-Similarly, to build for v1.0.0-alpha with CUDA 9.1 + CUDNN, use:
+Similarly, to build for v1.0.0-beta2 with CUDA 9.2 + CUDNN, use:
 
-```mvn package -Pcudnn91,v100alpha -DskipTests```
+```mvn package -Pcudnn92,v100beta2 -DskipTests```
 
 
 Finally, to run the benchmarks, use the following:
 ```
-mvn package -Pcudnn91,v100alpha -DskipTests
+mvn package -Pcudnn92,v100beta2 -DskipTests
 cd dl4j-core-benchmark
-java -cp dl4j-core-benchmark-v100beta_native.jar org.deeplearning4j.benchmarks.BenchmarkCnn --modelType ALEXNET --batchSize 32
+java -cp dl4j-core-benchmark-v100beta2_cuda92-cudnn.jar org.deeplearning4j.benchmarks.BenchmarkCnn --modelType ALEXNET --batchSize 32
 ```
+
 *** NOTE: The JAR file name encodes which profiles (version + backend) were used when building ***
 
 For the full list of configuration options, see the configuration section below. 
