@@ -87,6 +87,17 @@
         </profile>
 
         <profile>
+            <id>v100beta2</id>
+            <properties>
+                <dl4j.version>1.0.0-beta2</dl4j.version>
+                <nd4j.version>1.0.0-beta2</nd4j.version>
+                <datavec.version>1.0.0-beta2</datavec.version>
+                <version.specific.code.dir>v100beta2</version.specific.code.dir>
+                <artifact.version.name>v100beta2</artifact.version.name>
+            </properties>
+        </profile>
+
+        <profile>
             <id>v100snapshot</id>
             <properties>
                 <dl4j.version>1.0.0-SNAPSHOT</dl4j.version>
@@ -160,6 +171,34 @@
                 <dependency>
                     <groupId>org.deeplearning4j</groupId>
                     <artifactId>deeplearning4j-cuda-9.1</artifactId>
+                    <version>${dl4j.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>cuda92</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <nd4j.backend>nd4j-cuda-9.2</nd4j.backend>
+                <artifact.backend.name>cuda92</artifact.backend.name>
+            </properties>
+        </profile>
+        <profile>
+            <id>cudnn92</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <nd4j.backend>nd4j-cuda-9.2</nd4j.backend>
+                <artifact.backend.name>cuda92-cudnn</artifact.backend.name>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.deeplearning4j</groupId>
+                    <artifactId>deeplearning4j-cuda-9.2</artifactId>
                     <version>${dl4j.version}</version>
                 </dependency>
             </dependencies>
@@ -250,11 +289,16 @@
             <artifactId>oshi-core</artifactId>
             <version>${oshi.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
