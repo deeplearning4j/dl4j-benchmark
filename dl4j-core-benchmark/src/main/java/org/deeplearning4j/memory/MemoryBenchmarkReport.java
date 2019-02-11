@@ -29,7 +29,7 @@ public class MemoryBenchmarkReport {
     private String name;
     private String description;
     private MemoryTest memoryTest;
-    private DataBuffer.Type dType;
+    private String dType;
     private WorkspaceMode workspaceMode;
     private List<String> devices = new ArrayList<>();
     private String backend;
@@ -53,7 +53,7 @@ public class MemoryBenchmarkReport {
         this.name = name;
         this.description = description;
         this.memoryTest = memoryTest;
-        dType = Nd4j.dataType();
+        dType = Nd4j.dataType().toString();
 
         Properties env = Nd4j.getExecutioner().getEnvironmentInformation();
         backend = env.get("backend").toString();
