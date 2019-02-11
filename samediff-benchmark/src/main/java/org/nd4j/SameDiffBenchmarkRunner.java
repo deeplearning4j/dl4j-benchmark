@@ -154,6 +154,9 @@ public class SameDiffBenchmarkRunner {
         }
 
         log.info("Testing complete");
+
+        String s = r.toString();
+        System.out.println(s);
     }
 
 

@@ -12,6 +12,7 @@ import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.deeplearning4j.nn.conf.layers.ConvolutionLayer;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.utils.DTypeUtils;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -52,7 +53,7 @@ public class SimpleBenchmark {
 //    public static ConvolutionLayer.AlgoMode cudnnMode = ConvolutionLayer.AlgoMode.PREFER_FASTEST;
 
     @Option(name="--datatype", usage="ND4J DataType - FLOAT, DOUBLE, HALF")
-    public static DataBuffer.Type datatype = DataBuffer.Type.HALF;
+    public static String datatype = "HALF";
 
     public static void main(String[] args) throws Exception {
         new SimpleBenchmark().run(args);
@@ -73,7 +74,7 @@ public class SimpleBenchmark {
         System.out.println("Starting test: model=" + modelType + ", dataType=" + datatype + ", forward=" + forward
                 + ", fit=" + fit + ", minibatch=" + minibatch + ", debugMode=" + debugMode + ", profile=" + profile);
 
-        Nd4j.setDataType(datatype);
+        DTypeUtils.setDataType(datatype);
 
         if(debugMode){
             BenchmarkUtil.enableND4JDebug(true);
