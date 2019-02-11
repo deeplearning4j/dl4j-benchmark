@@ -1,9 +1,7 @@
 package org.deeplearning4j.models;
 
 import com.beust.jcommander.ParameterException;
-import org.deeplearning4j.VersionSpecificModels;
 import org.deeplearning4j.models.cnn.*;
-import org.deeplearning4j.models.cnn.VGG16;
 import org.deeplearning4j.models.mlp.MLP;
 import org.deeplearning4j.models.rnn.RNN;
 import org.deeplearning4j.nn.conf.CacheMode;

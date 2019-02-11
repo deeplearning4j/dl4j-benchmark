@@ -6,6 +6,7 @@
     </prerequisites>
     <modules>
         <module>dl4j-core-benchmark</module>
+        <module>samediff-benchmark</module>
         <!--<module>dl4j-spark-benchmark</module>-->
     </modules>
 
@@ -98,7 +99,7 @@
                 <nd4j.version>1.0.0-beta3</nd4j.version>
                 <datavec.version>1.0.0-beta3</datavec.version>
                 <version.specific.code.dir>v100beta</version.specific.code.dir>
-                <artifact.version.name>v100beta</artifact.version.name>
+                <artifact.version.name>v100beta3</artifact.version.name>
                 <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper</dl4j.parallelwrapper.artifact>
             </properties>
         </profile>

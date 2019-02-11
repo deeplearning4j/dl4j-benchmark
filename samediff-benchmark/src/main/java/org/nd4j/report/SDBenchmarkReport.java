@@ -1,0 +1,308 @@
+package org.nd4j.report;
+
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import lombok.Data;
+import org.bytedeco.javacpp.Pointer;
+import org.deeplearning4j.nn.api.Model;
+import org.deeplearning4j.nn.graph.ComputationGraph;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.primitives.AtomicDouble;
+import org.nd4j.util.StringUtils;
+import org.nd4j.versioncheck.VersionCheck;
+import org.nd4j.versioncheck.VersionInfo;
+import oshi.SystemInfo;
+import oshi.hardware.HardwareAbstractionLayer;
+import oshi.software.os.OperatingSystem;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.text.DecimalFormat;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
+/**
+ * Reporting for BenchmarkListener.
+ *
+ * @author Justin Long (@crockpotveggies)
+ */
+@Data
+public class SDBenchmarkReport {
+
+    private String name;
+    private String description;
+    private List<String> devices = new ArrayList<>();
+    private String backend;
+    private String cpuCores;
+    private String blasVendor;
+    private String modelSummary;
+    private String cudaVersion;
+    private String cudnnVersion;
+    private boolean periodicGCEnabled;
+    private int periodicGCFreq;
+    private int occasionalGCFreq;
+    private boolean isParallelWrapper;
+    private int parallelWrapperNumThreads;
+    private long numParams;
+    private int numLayers;
+    private int batchSize;
+    //Benchmark stats
+    private LongArrayList fwdPassTimes = new LongArrayList();
+    private LongArrayList gradCalcTimes = new LongArrayList();
+    private LongArrayList fitTimes = new LongArrayList();
+
+
+
+    public SDBenchmarkReport(String name, String description) {
+        this.name = name;
+        this.description = description;
+
+        Properties env = Nd4j.getExecutioner().getEnvironmentInformation();
+
+        backend = env.get("backend").toString();
+        cpuCores = env.get("cores").toString();
+        blasVendor = env.get("blas.vendor").toString();
+
+        // if CUDA is present, add GPU information
+        try {
+            List devicesList = (List) env.get("cuda.devicesInformation");
+            Iterator deviceIter = devicesList.iterator();
+            while (deviceIter.hasNext()) {
+                Map dev = (Map) deviceIter.next();
+                devices.add(dev.get("cuda.deviceName") + " " + dev.get("cuda.deviceMajor") + " " + dev.get("cuda.deviceMinor") + " " + dev.get("cuda.totalMemory"));
+            }
+        } catch (Throwable e) {
+            SystemInfo sys = new SystemInfo();
+            devices.add(sys.getHardware().getProcessor().getName());
+        }
+
+        // also get CUDA version
+        try {
+            Field f = Class.forName("org.bytedeco.javacpp.cuda").getField("__CUDA_API_VERSION");
+            int version = f.getInt(null);
+            this.cudaVersion = Integer.toString(version);
+        } catch (Throwable e) {
+            this.cudaVersion = "n/a";
+        }
+
+        // if cuDNN is present, let's get that info
+        try {
+            Method m = Class.forName("org.bytedeco.javacpp.cudnn").getDeclaredMethod("cudnnGetVersion");
+            long version = (long) m.invoke(null);
+            this.cudnnVersion = Long.toString(version);
+        } catch (Throwable e) {
+            this.cudnnVersion = "n/a";
+        }
+    }
+
+    public void setModel(Model model) {
+        this.numParams = model.numParams();
+
+        if (model instanceof MultiLayerNetwork) {
+            this.modelSummary = ((MultiLayerNetwork) model).summary();
+            this.numLayers = ((MultiLayerNetwork) model).getnLayers();
+        }
+        if (model instanceof ComputationGraph) {
+            this.modelSummary = ((ComputationGraph) model).summary();
+            this.numLayers = ((ComputationGraph) model).getNumLayers();
+        }
+    }
+
+    public void addForwardTimeMs(long fwd){
+        fwdPassTimes.add(fwd);
+    }
+
+    public void addGradientCalcTime(long fwd){
+        gradCalcTimes.add(fwd);
+    }
+
+    public List<String> devices() {
+        return devices;
+    }
+
+    /**
+     * @return Average iteration time per batch for a single executor - averaged over all threads
+     */
+    public double avgIterationTime() {
+        return avgOverThreads(totalIterationTimePerThread, iterationsPerThread);
+    }
+
+    /**
+     * @return Average samples per second - on a *per executor* basis. To get the combined number of batches per
+     * sec for all executors, use {@link #avgSamplesPerSecCombined()}
+     */
+    public double avgSamplesSecPerExecutor() {
+        return avgOverThreadsD(totalSamplesSecPerThread, iterationsPerThread);
+    }
+
+    /**
+     * sum_threads (avg samples per sec for each thread)
+     *
+     * @return Average combined samples per sec
+     */
+    public double avgSamplesPerSecCombined() {
+        //NOTE: THIS ASSUMES ALL THREADS WERE RUNNING CONCURRENTLY.
+        //If some threads were shut down, and new threads added later - this would overestimate the total throughput!
+        return sumOverThreadsD(totalSamplesSecPerThread, iterationsPerThread);
+    }
+
+    public double avgBatchesSecPerExecutor() {
+        return avgOverThreadsD(totalBatchesSecPerThread, iterationsPerThread);
+    }
+
+    public double avgBatchesPerSecCombined() {
+        return sumOverThreadsD(totalBatchesSecPerThread, iterationsPerThread);
+    }
+
+    public double avgFeedForward() {
+        return avgFeedForward;
+    }
+
+    public double avgBackprop() {
+        return avgBackprop;
+    }
+
+    public String getModelSummary() {
+        return modelSummary;
+    }
+
+    private long sumAllThreads(Map<Long, AtomicLong> map) {
+        long result = 0;
+        for (AtomicLong entry : map.values()) {
+            result += entry.get();
+        }
+        return result;
+    }
+
+    private double sumAllThreadsD(Map<Long, AtomicDouble> map) {
+        double result = 0.0;
+        for (AtomicDouble entry : map.values()) {
+            result += entry.get();
+        }
+        return result;
+    }
+
+    /**
+     * Returns: sum_threads (numerator.get(threadId) / denominator.get(threadId))
+     */
+    private double sumOverThreadsD(Map<Long, AtomicDouble> numerator, Map<Long, AtomicLong> denominator) {
+        double sumOverThreads = 0.0;
+        for (Map.Entry<Long, AtomicLong> e : denominator.entrySet()) {
+            long denominatorThisThread = e.getValue().get();
+            double numeratorThisThread = numerator.get(e.getKey()).get();
+            sumOverThreads += numeratorThisThread / (double) denominatorThisThread;
+        }
+        return sumOverThreads;
+    }
+
+    /**
+     * Returns: sum_threads(numerator.get(threadId)) / sum_threads(denominator.get(threadId))
+     */
+    private double avgOverThreadsD(Map<Long, AtomicDouble> numerator, Map<Long, AtomicLong> denominator) {
+        double sumNumerator = sumAllThreadsD(numerator);
+        long sumDenominator = sumAllThreads(denominator);
+        return sumNumerator / sumDenominator;
+    }
+
+    /**
+     * Returns: sum_threads(numerator.get(threadId)) / sum_threads(denominator.get(threadId))
+     */
+    private double avgOverThreads(Map<Long, AtomicLong> numerator, Map<Long, AtomicLong> denominator) {
+        long sumNumerator = sumAllThreads(numerator);
+        long sumDenominator = sumAllThreads(denominator);
+        return sumNumerator / (double) sumDenominator;
+    }
+
+
+    public static String inferVersion(){
+        List<VersionInfo> vi = VersionCheck.getVersionInfos();
+
+        for(VersionInfo v : vi){
+            if("org.deeplearning4j".equals(v.getGroupId()) && "deeplearning4j-core".equals(v.getArtifactId())){
+                String version = v.getBuildVersion();
+                if(version.contains("SNAPSHOT")){
+                    return version + " (" + v.getCommitIdAbbrev() + ")";
+                }
+                return version;
+            }
+        }
+
+        return " (could not infer version)";
+    }
+
+    public String toString() {
+
+
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        SystemInfo sys = new SystemInfo();
+        OperatingSystem os = sys.getOperatingSystem();
+        HardwareAbstractionLayer hardware = sys.getHardware();
+        String procName = sys.getHardware().getProcessor().getName();
+        long totalMem = sys.getHardware().getMemory().getTotal();
+
+        long xmx = Runtime.getRuntime().maxMemory();
+        long javacppMaxPhys = Pointer.maxPhysicalBytes();
+
+        List<String[]> table = new ArrayList<>();
+        table.add(new String[]{"Version", inferVersion()});
+        table.add(new String[]{"Name", name});
+        table.add(new String[]{"Description", description});
+        table.add(new String[]{"Operating System",
+                os.getManufacturer() + " " +
+                        os.getFamily() + " " +
+                        os.getVersion().getVersion()});
+        table.add(new String[]{"Devices", devices().get(0)});
+        table.add(new String[]{"CPU Cores", cpuCores});
+        table.add(new String[]{"CPU", procName});
+        table.add(new String[]{"System Memory", formatBytes(totalMem)});
+        table.add(new String[]{"Memory Config - XMX", formatBytes(xmx)});
+        table.add(new String[]{"Memory Config - JavaCPP MaxPhysicalBytes", formatBytes(javacppMaxPhys)});
+        table.add(new String[]{"Backend", backend});
+        table.add(new String[]{"ND4J DataType", Nd4j.dataType().toString()});
+        table.add(new String[]{"BLAS Vendor", blasVendor});
+        table.add(new String[]{"CUDA Version", cudaVersion});
+        table.add(new String[]{"CUDNN Version", cudnnVersion});
+        table.add(new String[]{"Periodic GC enabled", String.valueOf(periodicGCEnabled)});
+        if (periodicGCEnabled) {
+            table.add(new String[]{"Periodic GC frequency", String.valueOf(periodicGCFreq)});
+        }
+        table.add(new String[]{"Occasional GC Freq", String.valueOf(occasionalGCFreq)});
+        table.add(new String[]{"Parallel Wrapper", String.valueOf(isParallelWrapper)});
+        if(isParallelWrapper){
+            table.add(new String[]{"Parallel Wrapper # threads", String.valueOf(parallelWrapperNumThreads)});
+        }
+        table.add(new String[]{"Total Params", "" + numParams});
+        table.add(new String[]{"Total Layers", Integer.toString(numLayers)});
+        if(!isParallelWrapper) {
+            table.add(new String[]{"Avg Feedforward (ms)", df.format(avgFeedForward)});
+            table.add(new String[]{"Avg Backprop (ms)", df.format(avgBackprop)});
+            table.add(new String[]{"Avg Fit (ms)", df.format(avgFit)});
+            table.add(new String[]{"Avg Iteration (ms)", df.format(avgIterationTime())});
+            table.add(new String[]{"Avg Samples/sec", df.format(avgSamplesSecPerExecutor())});
+            table.add(new String[]{"Avg Batches/sec", df.format(avgBatchesSecPerExecutor())});
+        } else {
+            double spsPE = avgSamplesSecPerExecutor();
+            double spsC = avgSamplesPerSecCombined();
+            table.add(new String[]{"Avg Samples/sec (per executor)", df.format(spsPE)});
+            table.add(new String[]{"Avg Samples/sec (total)", df.format(spsC)});
+            table.add(new String[]{"Avg Batches/sec (per executor)", df.format(avgBatchesSecPerExecutor())});
+            table.add(new String[]{"Avg Batches/sec (total)", df.format(avgBatchesPerSecCombined())});
+        }
+        table.add(new String[]{"Batch size", Integer.toString(batchSize)});
+
+        StringBuilder sb = new StringBuilder();
+
+        for (final Object[] row : table) {
+            sb.append(String.format("%-42s %-45s\n", row));
+        }
+
+        return sb.toString();
+    }
+
+    private static String formatBytes(long bytes){
+        return bytes + " - " + StringUtils.TraditionalBinaryPrefix.long2String(bytes, null, 2);
+    }
+}
