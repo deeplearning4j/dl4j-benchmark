@@ -114,6 +114,10 @@ public class SameDiffBenchmarkRunner {
             System.gc();
         }
 
+        /*
+        No point testing pretrained *frozen* models until this is fixed:
+        https://github.com/deeplearning4j/deeplearning4j/issues/7142
+
         //Backprop timing
         log.info("Starting backprop timing...");
             //Warmup
@@ -152,7 +156,7 @@ public class SameDiffBenchmarkRunner {
             r.addForwardTimeMs(end-start);
             System.gc();
         }
-
+        */
         log.info("Testing complete");
 
         String s = r.toString();

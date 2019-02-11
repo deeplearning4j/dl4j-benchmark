@@ -12,6 +12,7 @@ import org.deeplearning4j.nn.conf.layers.*;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.NoOp;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
@@ -60,8 +61,7 @@ public class AlexNet implements TestableModel {
 
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(seed)
-                .weightInit(WeightInit.DISTRIBUTION)
-                .dist(new NormalDistribution(0.0, 0.01))
+                .weightInit(new NormalDistribution(0.0, 0.01))
                 .activation(Activation.RELU)
                 .updater(updater)
                 .convolutionMode(ConvolutionMode.Same)
@@ -126,13 +126,13 @@ public class AlexNet implements TestableModel {
                         .name("ffn1")
                         .nIn(256*6*6)
                         .nOut(4096)
-                        .dist(new GaussianDistribution(0, 0.005))
+                        .weightInit(new GaussianDistribution(0, 0.005))
                         .biasInit(nonZeroBias)
                         .build())
                 .layer(11, new DenseLayer.Builder()
                         .name("ffn2")
                         .nOut(4096)
-                        .weightInit(WeightInit.DISTRIBUTION).dist(new GaussianDistribution(0, 0.005))
+                        .weightInit(new GaussianDistribution(0, 0.005))
                         .biasInit(nonZeroBias)
                         .dropOut(0.5)
                         .build())
@@ -140,11 +140,9 @@ public class AlexNet implements TestableModel {
                         .name("output")
                         .nOut(numLabels)
                         .activation(Activation.SOFTMAX)
-                        .weightInit(WeightInit.DISTRIBUTION).dist(new GaussianDistribution(0, 0.005))
+                        .weightInit(new GaussianDistribution(0, 0.005))
                         .biasInit(0.1)
                         .build())
-                .backprop(true)
-                .pretrain(false)
                 .setInputType(InputType.convolutional(inputShape[2],inputShape[1],inputShape[0]))
                 .build();
 

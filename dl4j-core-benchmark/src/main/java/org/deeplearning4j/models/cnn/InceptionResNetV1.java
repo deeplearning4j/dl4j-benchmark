@@ -60,8 +60,7 @@ public class InceptionResNetV1 implements TestableModel {
                 .nIn(embeddingSize)
                 .nOut(numClasses)
             .build(), "embeddings")
-            .setOutputs("outputLayer")
-            .backprop(true).pretrain(false);
+            .setOutputs("outputLayer");
 
         ComputationGraphConfiguration conf = graph.build();
         ComputationGraph model = new ComputationGraph(conf);
@@ -78,7 +77,7 @@ public class InceptionResNetV1 implements TestableModel {
             .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
             .updater(updater)
             .weightInit(WeightInit.DISTRIBUTION)
-            .dist(new NormalDistribution(0.0, 0.5))
+            .weightInit(new NormalDistribution(0.0, 0.5))
             .l2(5e-5)
             .miniBatch(true)
             .convolutionMode(ConvolutionMode.Truncate)

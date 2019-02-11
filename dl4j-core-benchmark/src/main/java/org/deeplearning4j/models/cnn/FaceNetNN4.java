@@ -204,8 +204,6 @@ public class FaceNetNN4 implements TestableModel {
                     .gradientNormalization(GradientNormalization.RenormalizeL2PerLayer)
                     .build(), "embeddings")
             .setOutputs("lossLayer")
-            .backprop(true)
-            .pretrain(false)
             .setInputTypes(InputType.convolutional(inputShape[2], inputShape[1], inputShape[0]));
 
         return graph.build();

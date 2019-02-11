@@ -83,7 +83,7 @@ public class LeNet implements TestableModel {
                         .activation(Activation.SOFTMAX) // radial basis function required
                         .build())
                 .setInputType(InputType.convolutionalFlat(inputShape[2],inputShape[1],inputShape[0]))
-                .backprop(true).pretrain(false).build();
+                .build();
 
         return conf;
     }

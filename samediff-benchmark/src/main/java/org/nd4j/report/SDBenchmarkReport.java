@@ -138,6 +138,9 @@ public class SDBenchmarkReport {
 
     protected double average(LongArrayList arrayList){
         long[] arr = arrayList.toLongArray();
+        if(arr == null || arr.length == 0){
+            return Double.NaN;
+        }
         double sum = 0.0;
         for(long l : arr){
             sum += l;
@@ -147,6 +150,9 @@ public class SDBenchmarkReport {
 
     protected double std(LongArrayList arrayList){
         long[] arr = arrayList.toLongArray();
+        if(arr == null || arr.length == 0){
+            return Double.NaN;
+        }
         double std = Nd4j.createFromArray(arr).castTo(DataType.DOUBLE).stdNumber().doubleValue();
         return std;
     }

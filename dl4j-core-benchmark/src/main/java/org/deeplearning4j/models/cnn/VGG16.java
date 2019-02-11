@@ -121,8 +121,6 @@ public class VGG16 implements TestableModel {
                         .nOut(numLabels)
                         .activation(Activation.SOFTMAX) // radial basis function required
                         .build())
-                .backprop(true)
-                .pretrain(false)
                 .setInputType(InputType.convolutionalFlat(inputShape[2],inputShape[1],inputShape[0]))
                 .build();
 

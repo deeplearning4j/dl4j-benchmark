@@ -129,8 +129,7 @@ public class ResNet50  implements TestableModel {
                 .activation(Activation.IDENTITY)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                 .updater(updater)
-                .weightInit(WeightInit.DISTRIBUTION)
-                .dist(new TruncatedNormalDistribution(0.0, 0.5))
+                .weightInit(new TruncatedNormalDistribution(0.0, 0.5))
                 .l1(1e-7)
                 .l2(5e-5)
                 .miniBatch(true)
@@ -183,7 +182,7 @@ public class ResNet50  implements TestableModel {
                         new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
                                 .nOut(numLabels).activation(Activation.SOFTMAX).build(),
                         "avgpool")
-                .setOutputs("output").backprop(true).pretrain(false);
+                .setOutputs("output");
 
         return graph;
     }
