@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>org.deeplearning4j</groupId>
-            <artifactId>deeplearning4j-parallel-wrapper_${scala.binary.version}</artifactId>
+            <artifactId>${dl4j.parallelwrapper.artifact}</artifactId>
             <version>${dl4j.version}</version>
         </dependency>
     </dependencies>

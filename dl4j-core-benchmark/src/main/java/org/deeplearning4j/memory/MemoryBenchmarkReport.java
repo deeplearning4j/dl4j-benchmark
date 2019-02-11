@@ -41,7 +41,7 @@ public class MemoryBenchmarkReport {
     private boolean periodicGCEnabled;
     private int periodicGCFreq;
     private int occasionalGCFreq;
-    private int numParams;
+    private long numParams;
     private int numLayers;
     private List<Integer> minibatchSizes;
     private long bytesMaxBeforeInit;
@@ -144,7 +144,7 @@ public class MemoryBenchmarkReport {
             t.add(new String[] { "Periodic GC frequency", String.valueOf(periodicGCFreq) });
         }
         t.add(new String[] { "Occasional GC Freq", String.valueOf(occasionalGCFreq) });
-        t.add(new String[]{"Total Params", Integer.toString(numParams)});
+        t.add(new String[]{"Total Params", "" + numParams});
         t.add(new String[]{"Total Layers", Integer.toString(numLayers)});
         t.add(new String[]{"Bytes before init", formatBytes(bytesMaxBeforeInit)});
         t.add(new String[]{"Bytes post init", formatBytes(bytesMaxPostInit)});

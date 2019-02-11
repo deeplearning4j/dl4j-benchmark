@@ -43,7 +43,7 @@ public class BenchmarkReport {
     private int occasionalGCFreq;
     private boolean isParallelWrapper;
     private int parallelWrapperNumThreads;
-    private int numParams;
+    private long numParams;
     private int numLayers;
     //Next 4: updated by benchmark listener (possibly by multiple threads with PW)
     private Map<Long, AtomicLong> iterationsPerThread = new ConcurrentHashMap<>();
@@ -288,7 +288,7 @@ public class BenchmarkReport {
         if(isParallelWrapper){
             table.add(new String[]{"Parallel Wrapper # threads", String.valueOf(parallelWrapperNumThreads)});
         }
-        table.add(new String[]{"Total Params", Integer.toString(numParams)});
+        table.add(new String[]{"Total Params", "" + numParams});
         table.add(new String[]{"Total Layers", Integer.toString(numLayers)});
         if(!isParallelWrapper) {
             table.add(new String[]{"Avg Feedforward (ms)", df.format(avgFeedForward)});
