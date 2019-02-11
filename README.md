@@ -24,14 +24,18 @@ Multiple version of DL4J can be benchmarked in this repo using Maven profiles:
 
 * 0.9.1 (profile name: v091)
 * 1.0.0-alpha (profile name: v100alpha)
+* 1.0.0-beta (profile name: v100beta)
+* 1.0.0-beta3 (profile name: v100beta3)
 * Master/snapshots (profile name: v100snapshot)
 
 Furthermore, multiple backends can be configured:
 * Native (profile name: native)
 * CUDA 8 (profile name: cuda8)
-* CUDA 9.1 (profile name: cuda91 - can only be used with 1.0.0-alpha and master/snapshots)
-* CUDA 8 with CUDNN (profile name: cudnn8)
-* CUDA 9.1 with CUDNN (profile name: cuda91 - can only be used with 1.0.0-alpha and master/snapshots)
+* CUDA 9.1 (profile name: cuda91 - can only be used with 1.0.0-alpha/beta and master/snapshots)
+* CUDA 10.0 (profile name: cuda10 - can only be used with 1.0.0-beta3 and master/snapshots )
+* CUDA 8 with cuDNN (profile name: cudnn8)
+* CUDA 9.1 with cuDNN (profile name: cudnn91 - can only be used with 1.0.0-alpha/beta)
+* CUDA 10.0 with (profile name: cudnn10 - can only be used with 1.0.0-beta3 and master/snapshots)
 
 These Maven profiles allow any supported combinations of backends and DL4J versions to be run. These are specified
 at build time. You must build the repository before running benchmarks.
@@ -40,16 +44,16 @@ For example, to build the benchmark repo with support for ND4J-native backend fo
 
 ```mvn package -Pnative,v091 -DskipTests```
 
-Similarly, to build for v1.0.0-alpha with CUDA 9.1 + CUDNN, use:
+Similarly, to build for v1.0.0-beta3 with CUDA 10.0 + cuDNN, use:
 
-```mvn package -Pcudnn91,v100alpha -DskipTests```
+```mvn package -Pcudnn10,v100beta3 -DskipTests```
 
 
 Finally, to run the benchmarks, use the following:
 ```
-mvn package -Pcudnn91,v100alpha -DskipTests
+mvn package -Pcudnn10,v100beta3 -DskipTests
 cd dl4j-core-benchmark
-java -cp dl4j-core-benchmark-v100beta_native.jar org.deeplearning4j.benchmarks.BenchmarkCnn --modelType ALEXNET --batchSize 32
+java -cp dl4j-core-benchmark-v100beta3_cuda10-cudnn.jar org.deeplearning4j.benchmarks.BenchmarkCnn --modelType ALEXNET --batchSize 32
 ```
 *** NOTE: The JAR file name encodes which profiles (version + backend) were used when building ***
 
@@ -142,7 +146,7 @@ Full versioning and statistics:
                      Backend                                          CUDA
                  BLAS Vendor                                        CUBLAS
                 CUDA Version                                          8000
-               CUDNN Version                                          6020
+               cuDNN Version                                          6020
                 Total Params                                      24400680
                 Total Layers                                            11
         Avg Feedforward (ms)                                             2
@@ -175,7 +179,7 @@ Full versioning and statistics:
                      Backend                                          CUDA
                  BLAS Vendor                                        CUBLAS
                 CUDA Version                                          8000
-               CUDNN Version                                          6020
+               cuDNN Version                                          6020
                 Total Params                                      24400680
                 Total Layers                                            11
         Avg Feedforward (ms)                                            10
@@ -204,7 +208,7 @@ Full versioning and statistics:
                      Backend                                          CUDA
                  BLAS Vendor                                        CUBLAS
                 CUDA Version                                          8000
-               CUDNN Version                                          6020
+               cuDNN Version                                          6020
                 Total Params                                      70753070
                 Total Layers                                             6
         Avg Feedforward (ms)                                             5
@@ -233,7 +237,7 @@ Full versioning and statistics:
                      Backend                                          CUDA
                  BLAS Vendor                                        CUBLAS
                 CUDA Version                                          8000
-               CUDNN Version                                          6020
+               cuDNN Version                                          6020
                 Total Params                                      70753070
                 Total Layers                                             6
         Avg Feedforward (ms)                                         28.13
@@ -265,7 +269,7 @@ Full versioning and statistics:
                      Backend                                          CUDA
                  BLAS Vendor                                        CUBLAS
                 CUDA Version                                          8000
-               CUDNN Version                                          6020
+               cuDNN Version                                          6020
                 Total Params                                      39803688
                 Total Layers                                            19
         Avg Feedforward (ms)                                         44.24

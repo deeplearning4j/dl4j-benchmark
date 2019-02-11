@@ -29,6 +29,7 @@
         <exec-maven-plugin.version>1.4.0</exec-maven-plugin.version>
         <dl4j.spark.version>0.9.2_spark_1-SNAPSHOT</dl4j.spark.version>
         <oshi.version>3.4.2</oshi.version>
+        <dl4j.parallelwrapper.artifact></dl4j.parallelwrapper.artifact>
         <artifact.version.name></artifact.version.name>
         <artifact.backend.name></artifact.backend.name>
     </properties>
@@ -61,6 +62,7 @@
                 <datavec.version>0.9.1</datavec.version>
                 <version.specific.code.dir>v091</version.specific.code.dir>
                 <artifact.version.name>v091</artifact.version.name>
+                <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper_${scala.binary.version}</dl4j.parallelwrapper.artifact>
             </properties>
         </profile>
 
@@ -72,6 +74,7 @@
                 <datavec.version>1.0.0-alpha</datavec.version>
                 <version.specific.code.dir>v100alpha</version.specific.code.dir>
                 <artifact.version.name>v100alpha</artifact.version.name>
+                <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper_${scala.binary.version}</dl4j.parallelwrapper.artifact>
             </properties>
         </profile>
 
@@ -83,6 +86,19 @@
                 <datavec.version>1.0.0-beta</datavec.version>
                 <version.specific.code.dir>v100beta</version.specific.code.dir>
                 <artifact.version.name>v100beta</artifact.version.name>
+                <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper_${scala.binary.version}</dl4j.parallelwrapper.artifact>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>v100beta3</id>
+            <properties>
+                <dl4j.version>1.0.0-beta3</dl4j.version>
+                <nd4j.version>1.0.0-beta3</nd4j.version>
+                <datavec.version>1.0.0-beta3</datavec.version>
+                <version.specific.code.dir>v100beta</version.specific.code.dir>
+                <artifact.version.name>v100beta</artifact.version.name>
+                <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper</dl4j.parallelwrapper.artifact>
             </properties>
         </profile>
 
@@ -94,6 +110,7 @@
                 <datavec.version>1.0.0-SNAPSHOT</datavec.version>
                 <version.specific.code.dir>v100beta</version.specific.code.dir>
                 <artifact.version.name>v100snapshot</artifact.version.name>
+                <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper</dl4j.parallelwrapper.artifact>
             </properties>
         </profile>
 
@@ -164,7 +181,38 @@
                 </dependency>
             </dependencies>
         </profile>
+
+
+        <profile>
+            <id>cuda10</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <nd4j.backend>nd4j-cuda-10.0</nd4j.backend>
+                <artifact.backend.name>cuda10</artifact.backend.name>
+            </properties>
+        </profile>
+        <profile>
+            <id>cudnn10</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <nd4j.backend>nd4j-cuda-1.0</nd4j.backend>
+                <artifact.backend.name>cuda10-cudnn</artifact.backend.name>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.deeplearning4j</groupId>
+                    <artifactId>deeplearning4j-cuda-10.0</artifactId>
+                    <version>${dl4j.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
+
+
     <distributionManagement>
         <snapshotRepository>
             <id>sonatype-nexus-snapshots</id>
@@ -216,6 +264,11 @@
                 <artifactId>deeplearning4j-core-cuda-9.1</artifactId>
                 <version>${dl4j.version.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.deeplearning4j</groupId>
+                <artifactId>deeplearning4j-core-cuda-10.0</artifactId>
+                <version>${dl4j.version.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -235,6 +288,12 @@
             <artifactId>deeplearning4j-ui_${scala.binary.version}</artifactId>
             <version>${dl4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>${dl4j.parallelwrapper.artifact}</artifactId>
+            <version>${dl4j.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-zoo</artifactId>
@@ -335,7 +394,9 @@
                     <execution>
                         <id>add-source</id>
                         <phase>generate-sources</phase>
-                        <goals><goal>add-source</goal></goals>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
                         <configuration>
                             <sources>
                                 <source>src/main/${version.specific.code.dir}</source>
