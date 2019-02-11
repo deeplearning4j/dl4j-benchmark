@@ -44,11 +44,9 @@ public class SDBenchmarkReport {
     private boolean periodicGCEnabled;
     private int periodicGCFreq;
     private int occasionalGCFreq;
-    private boolean isParallelWrapper;
-    private int parallelWrapperNumThreads;
     private long numParams;
-    private int numLayers;
     private int batchSize;
+    private Map<String,Object> config = new LinkedHashMap<>();
     //Benchmark stats
     private LongArrayList fwdPassTimes = new LongArrayList();
     private LongArrayList gradCalcTimes = new LongArrayList();
@@ -95,19 +93,6 @@ public class SDBenchmarkReport {
             this.cudnnVersion = Long.toString(version);
         } catch (Throwable e) {
             this.cudnnVersion = "n/a";
-        }
-    }
-
-    public void setModel(Model model) {
-        this.numParams = model.numParams();
-
-        if (model instanceof MultiLayerNetwork) {
-            this.modelSummary = ((MultiLayerNetwork) model).summary();
-            this.numLayers = ((MultiLayerNetwork) model).getnLayers();
-        }
-        if (model instanceof ComputationGraph) {
-            this.modelSummary = ((ComputationGraph) model).summary();
-            this.numLayers = ((ComputationGraph) model).getNumLayers();
         }
     }
 
@@ -171,7 +156,7 @@ public class SDBenchmarkReport {
         List<VersionInfo> vi = VersionCheck.getVersionInfos();
 
         for(VersionInfo v : vi){
-            if("org.deeplearning4j".equals(v.getGroupId()) && "deeplearning4j-core".equals(v.getArtifactId())){
+            if("org.nd4j".equals(v.getGroupId()) && "nd4j-api".equals(v.getArtifactId())){
                 String version = v.getBuildVersion();
                 if(version.contains("SNAPSHOT")){
                     return version + " (" + v.getCommitIdAbbrev() + ")";
@@ -181,6 +166,10 @@ public class SDBenchmarkReport {
         }
 
         return " (could not infer version)";
+    }
+
+    public void addTestConfig(String name, Object value){
+        config.put(name, value);
     }
 
     public String toString() {
@@ -221,13 +210,11 @@ public class SDBenchmarkReport {
             table.add(new String[]{"Periodic GC frequency", String.valueOf(periodicGCFreq)});
         }
         table.add(new String[]{"Occasional GC Freq", String.valueOf(occasionalGCFreq)});
-        table.add(new String[]{"Parallel Wrapper", String.valueOf(isParallelWrapper)});
-        if(isParallelWrapper){
-            table.add(new String[]{"Parallel Wrapper # threads", String.valueOf(parallelWrapperNumThreads)});
-        }
         table.add(new String[]{"Total Params", "" + numParams});
-        table.add(new String[]{"Total Layers", Integer.toString(numLayers)});
         table.add(new String[]{"Batch size", Integer.toString(batchSize)});
+        for(Map.Entry<String,Object> e : config.entrySet()){
+            table.add(new String[]{e.getKey(), String.valueOf(e.getValue())});
+        }
 
         //Fit
         double fitMs = avgFitTime();

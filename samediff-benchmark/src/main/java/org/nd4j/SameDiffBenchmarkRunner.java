@@ -1,6 +1,7 @@
 package org.nd4j;
 
 import com.google.common.base.Preconditions;
+import com.google.common.io.Files;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -19,7 +20,9 @@ import org.nd4j.linalg.learning.regularization.Regularization;
 import org.nd4j.linalg.learning.regularization.WeightDecay;
 import org.nd4j.models.SameDiffModel;
 import org.nd4j.report.SDBenchmarkReport;
+import org.nd4j.util.RemoteCachingLoader;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,6 +49,10 @@ public class SameDiffBenchmarkRunner {
     @Option(name="--wd", usage="Weight decay regularization coefficient for training")
     public static double wd = 0.0;
 
+    public static void main(String... args) throws Exception {
+        new SameDiffBenchmarkRunner().run(args);
+    }
+
     public void run(String[] args) throws Exception {
         CmdLineParser parser = new CmdLineParser(this);
         try { parser.parseArgument(args); } catch (CmdLineException e) {
@@ -55,6 +62,8 @@ public class SameDiffBenchmarkRunner {
         }
 
         Nd4j.getMemoryManager().togglePeriodicGc(false);
+        RemoteCachingLoader.currentTestDir = Files.createTempDir();
+        RemoteCachingLoader.currentTestDir.deleteOnExit();
 
         //Load model
         Preconditions.checkState(modelClass != null, "Model class was not specified");
@@ -78,6 +87,13 @@ public class SameDiffBenchmarkRunner {
         List<String> outputs = sd.outputs();
 
         SDBenchmarkReport r = new SDBenchmarkReport(modelClass, null);
+        r.setBatchSize(batchSize);
+        r.addTestConfig("# Iterations", numIter);
+        r.addTestConfig("# Iterations (warmup)", numIterWarmup);
+        r.addTestConfig("Updater", updater);
+        r.addTestConfig("L1 Regularization", l1);
+        r.addTestConfig("L2 Regularization", l2);
+        r.addTestConfig("WD Regularization", wd);
 
         //Inference timing
         log.info("Starting inference timing...");
@@ -136,6 +152,8 @@ public class SameDiffBenchmarkRunner {
             r.addForwardTimeMs(end-start);
             System.gc();
         }
+
+        log.info("Testing complete");
     }
 
 

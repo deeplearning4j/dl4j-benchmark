@@ -11,6 +11,7 @@
 
     <artifactId>dl4j-core-benchmark</artifactId>
 
+    <!--
     <repositories>
         <repository>
             <id>snapshots-repo</id>
@@ -24,6 +25,7 @@
             </snapshots>
         </repository>
     </repositories>
+    -->
 
     <dependencies>
         <!--kohsuke-->

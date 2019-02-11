@@ -36,6 +36,7 @@
         <artifact.backend.name></artifact.backend.name>
     </properties>
 
+    <!--
     <repositories>
         <repository>
             <id>snapshots-repo</id>
@@ -49,6 +50,7 @@
             </snapshots>
         </repository>
     </repositories>
+    -->
 
 
     <profiles>
