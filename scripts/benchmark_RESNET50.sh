@@ -13,13 +13,12 @@ cd dl4j-core-benchmark
 #declare -a versionBackend=("v100beta3_native" "v100snapshot_native" "v100beta3_cuda10" "v100snapshot_cuda10" "v100beta3_cuda10-cudnn" "v100snapshot_cuda10-cudnn")
 declare -a versionBackend=("v100snapshot_native")
 declare -a batchSize=("32")
-#declare -a dataTypes=("FLOAT" "HALF")
 declare -a dataTypes=("FLOAT")
 modelType=RESNET50
 xmx=16G
 javacpp=16G
 totalIterations=30
-mkdir -p ../scripts/$modelType
+mkdir -p ../scripts/${modelType}_${totalIterations}_iter
 ## now loop through the above array
 for i in "${versionBackend[@]}"
 do

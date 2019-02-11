@@ -12,9 +12,7 @@ import org.deeplearning4j.nn.conf.WorkspaceMode;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
-//import org.nd4j.jita.conf.CudaEnvironment;
 import org.nd4j.base.Preconditions;
-import org.nd4j.linalg.api.buffer.DataBuffer;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import sun.misc.Cache;
@@ -82,12 +80,12 @@ public class BenchmarkCnn extends BaseBenchmark {
         try{
             //Snashots
             c = Class.forName("org.nd4j.linalg.api.buffer.DataBuffer.Type");
-        } catch (Exception e){ }
+        } catch (Throwable e){ }
         if(c == null) {
             try {
                 //1.0.0-beta3 and earlier
                 c = Class.forName("org.nd4j.linalg.api.buffer.DataType");
-            } catch (Exception e) { }
+            } catch (Throwable e) { }
         }
         Preconditions.checkNotNull(c);
         Method m = Nd4j.class.getMethod("setDataType", c);
