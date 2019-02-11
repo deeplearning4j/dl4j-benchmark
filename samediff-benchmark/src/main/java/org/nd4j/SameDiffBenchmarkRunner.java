@@ -1,6 +1,7 @@
 package org.nd4j;
 
 import com.google.common.base.Preconditions;
+import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -24,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class SameDiffBenchmarkRunner {
 
     // values to pass in from command line when compiled, esp running remotely
@@ -78,13 +80,16 @@ public class SameDiffBenchmarkRunner {
         SDBenchmarkReport r = new SDBenchmarkReport(modelClass, null);
 
         //Inference timing
+        log.info("Starting inference timing...");
             //Warmup
+        log.info("Warmup: {} iterations", numIterWarmup);
         for( int i=0; i<numIterWarmup; i++ ){
             Map<String,INDArray> out = sd.exec(phData, outputs);
         }
 
             //Testing
         System.gc();
+        log.info("Testing: {} iterations", numIter);
         for( int i=0; i<numIter; i++ ){
             long start = System.currentTimeMillis();
             Map<String,INDArray> out = sd.exec(phData, outputs);
@@ -94,13 +99,16 @@ public class SameDiffBenchmarkRunner {
         }
 
         //Backprop timing
+        log.info("Starting backprop timing...");
             //Warmup
+        log.info("Warmup: {} iterations", numIterWarmup);
         for( int i=0; i<numIterWarmup; i++ ){
             sd.execBackwards(phData);
         }
 
             //Testing
         System.gc();
+        log.info("Testing: {} iterations", numIter);
         for( int i=0; i<numIter; i++ ){
             long start = System.currentTimeMillis();
             sd.execBackwards(phData);
@@ -113,12 +121,14 @@ public class SameDiffBenchmarkRunner {
         MultiDataSet mds = createMds(model, phData);
         MultiDataSetIterator iter = new SingletonMultiDataSetIterator(mds);
             //Warmup
+        log.info("Warmup: {} iterations", numIterWarmup);
         for( int i=0; i<numIterWarmup; i++ ){
             sd.fit(iter, 1);
         }
 
             //Testing
         System.gc();
+        log.info("Testing: {} iterations", numIter);
         for( int i=0; i<numIter; i++ ){
             long start = System.currentTimeMillis();
             sd.fit(iter, 1);

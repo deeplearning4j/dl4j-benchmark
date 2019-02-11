@@ -6,6 +6,7 @@ import org.bytedeco.javacpp.Pointer;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.primitives.AtomicDouble;
 import org.nd4j.util.StringUtils;
@@ -110,109 +111,59 @@ public class SDBenchmarkReport {
         }
     }
 
-    public void addForwardTimeMs(long fwd){
-        fwdPassTimes.add(fwd);
+    public void addForwardTimeMs(long fwdMS){
+        fwdPassTimes.add(fwdMS);
     }
 
-    public void addGradientCalcTime(long fwd){
-        gradCalcTimes.add(fwd);
+    public void addGradientCalcTime(long bwdMS){
+        gradCalcTimes.add(bwdMS);
+    }
+
+    public void addGradientFitTime(long fitMS){
+        fitTimes.add(fitMS);
     }
 
     public List<String> devices() {
         return devices;
     }
 
-    /**
-     * @return Average iteration time per batch for a single executor - averaged over all threads
-     */
-    public double avgIterationTime() {
-        return avgOverThreads(totalIterationTimePerThread, iterationsPerThread);
+    public double avgForwardTime(){
+        return average(fwdPassTimes);
     }
 
-    /**
-     * @return Average samples per second - on a *per executor* basis. To get the combined number of batches per
-     * sec for all executors, use {@link #avgSamplesPerSecCombined()}
-     */
-    public double avgSamplesSecPerExecutor() {
-        return avgOverThreadsD(totalSamplesSecPerThread, iterationsPerThread);
+    public double stdForwardTime(){
+        return std(fwdPassTimes);
     }
 
-    /**
-     * sum_threads (avg samples per sec for each thread)
-     *
-     * @return Average combined samples per sec
-     */
-    public double avgSamplesPerSecCombined() {
-        //NOTE: THIS ASSUMES ALL THREADS WERE RUNNING CONCURRENTLY.
-        //If some threads were shut down, and new threads added later - this would overestimate the total throughput!
-        return sumOverThreadsD(totalSamplesSecPerThread, iterationsPerThread);
+    public double avgBackpropTime(){
+        return average(gradCalcTimes);
     }
 
-    public double avgBatchesSecPerExecutor() {
-        return avgOverThreadsD(totalBatchesSecPerThread, iterationsPerThread);
+    public double stdBackpropTime(){
+        return std(gradCalcTimes);
     }
 
-    public double avgBatchesPerSecCombined() {
-        return sumOverThreadsD(totalBatchesSecPerThread, iterationsPerThread);
+    public double avgFitTime(){
+        return average(fitTimes);
     }
 
-    public double avgFeedForward() {
-        return avgFeedForward;
+    public double stdFitTime(){
+        return std(fitTimes);
     }
 
-    public double avgBackprop() {
-        return avgBackprop;
-    }
-
-    public String getModelSummary() {
-        return modelSummary;
-    }
-
-    private long sumAllThreads(Map<Long, AtomicLong> map) {
-        long result = 0;
-        for (AtomicLong entry : map.values()) {
-            result += entry.get();
+    protected double average(LongArrayList arrayList){
+        long[] arr = arrayList.toLongArray();
+        double sum = 0.0;
+        for(long l : arr){
+            sum += l;
         }
-        return result;
+        return sum / arr.length;
     }
 
-    private double sumAllThreadsD(Map<Long, AtomicDouble> map) {
-        double result = 0.0;
-        for (AtomicDouble entry : map.values()) {
-            result += entry.get();
-        }
-        return result;
-    }
-
-    /**
-     * Returns: sum_threads (numerator.get(threadId) / denominator.get(threadId))
-     */
-    private double sumOverThreadsD(Map<Long, AtomicDouble> numerator, Map<Long, AtomicLong> denominator) {
-        double sumOverThreads = 0.0;
-        for (Map.Entry<Long, AtomicLong> e : denominator.entrySet()) {
-            long denominatorThisThread = e.getValue().get();
-            double numeratorThisThread = numerator.get(e.getKey()).get();
-            sumOverThreads += numeratorThisThread / (double) denominatorThisThread;
-        }
-        return sumOverThreads;
-    }
-
-    /**
-     * Returns: sum_threads(numerator.get(threadId)) / sum_threads(denominator.get(threadId))
-     */
-    private double avgOverThreadsD(Map<Long, AtomicDouble> numerator, Map<Long, AtomicLong> denominator) {
-        double sumNumerator = sumAllThreadsD(numerator);
-        long sumDenominator = sumAllThreads(denominator);
-        return sumNumerator / sumDenominator;
-    }
-
-    /**
-     * Returns: sum_threads(numerator.get(threadId)) / sum_threads(denominator.get(threadId))
-     */
-    private double avgOverThreads(Map<Long, AtomicLong> numerator, Map<Long, AtomicLong> denominator) {
-        long sumNumerator = sumAllThreads(numerator);
-        long sumDenominator = sumAllThreads(denominator);
-        return sumNumerator / (double) sumDenominator;
+    protected double std(LongArrayList arrayList){
+        long[] arr = arrayList.toLongArray();
+        double std = Nd4j.createFromArray(arr).castTo(DataType.DOUBLE).stdNumber().doubleValue();
+        return std;
     }
 
 
@@ -276,22 +227,37 @@ public class SDBenchmarkReport {
         }
         table.add(new String[]{"Total Params", "" + numParams});
         table.add(new String[]{"Total Layers", Integer.toString(numLayers)});
-        if(!isParallelWrapper) {
-            table.add(new String[]{"Avg Feedforward (ms)", df.format(avgFeedForward)});
-            table.add(new String[]{"Avg Backprop (ms)", df.format(avgBackprop)});
-            table.add(new String[]{"Avg Fit (ms)", df.format(avgFit)});
-            table.add(new String[]{"Avg Iteration (ms)", df.format(avgIterationTime())});
-            table.add(new String[]{"Avg Samples/sec", df.format(avgSamplesSecPerExecutor())});
-            table.add(new String[]{"Avg Batches/sec", df.format(avgBatchesSecPerExecutor())});
-        } else {
-            double spsPE = avgSamplesSecPerExecutor();
-            double spsC = avgSamplesPerSecCombined();
-            table.add(new String[]{"Avg Samples/sec (per executor)", df.format(spsPE)});
-            table.add(new String[]{"Avg Samples/sec (total)", df.format(spsC)});
-            table.add(new String[]{"Avg Batches/sec (per executor)", df.format(avgBatchesSecPerExecutor())});
-            table.add(new String[]{"Avg Batches/sec (total)", df.format(avgBatchesPerSecCombined())});
-        }
         table.add(new String[]{"Batch size", Integer.toString(batchSize)});
+
+        //Fit
+        double fitMs = avgFitTime();
+        double fitStd = stdFitTime();
+        double fitBatchesPerSec = 1000.0 / fitMs;
+        double fitExamplesPerSec = fitBatchesPerSec * batchSize;
+        table.add(new String[]{"Fit time (ms): ", df.format(fitMs)});
+        table.add(new String[]{"Fit time stdev (ms): ", df.format(fitStd)});
+        table.add(new String[]{"Fit batches/sec: ", df.format(fitBatchesPerSec)});
+        table.add(new String[]{"Fit examples/sec: ", df.format(fitExamplesPerSec)});
+
+        //Forward
+        double fwdMs = avgForwardTime();
+        double fwdStd = stdForwardTime();
+        double fwdBatchesPerSec = 1000.0 / fwdMs;
+        double fwdExamplesPerSec = fwdBatchesPerSec * batchSize;
+        table.add(new String[]{"Forward time (ms): ", df.format(fwdMs)});
+        table.add(new String[]{"Forward time stdev (ms): ", df.format(fwdStd)});
+        table.add(new String[]{"Forward batches/sec: ", df.format(fwdBatchesPerSec)});
+        table.add(new String[]{"Forward examples/sec: ", df.format(fwdExamplesPerSec)});
+
+        //Backward
+        double bwdMs = avgBackpropTime();
+        double bwdStd = stdBackpropTime();
+        double bwdBatchesPerSec = 1000.0 / bwdMs;
+        double bwdExamplesPerSec = bwdBatchesPerSec * batchSize;
+        table.add(new String[]{"Backward time (ms): ", df.format(bwdMs)});
+        table.add(new String[]{"Backward time stdev (ms): ", df.format(bwdStd)});
+        table.add(new String[]{"Backward batches/sec: ", df.format(bwdBatchesPerSec)});
+        table.add(new String[]{"Backward examples/sec: ", df.format(bwdExamplesPerSec)});
 
         StringBuilder sb = new StringBuilder();
 
