@@ -29,6 +29,7 @@
         <exec-maven-plugin.version>1.4.0</exec-maven-plugin.version>
         <dl4j.spark.version>0.9.2_spark_1-SNAPSHOT</dl4j.spark.version>
         <oshi.version>3.4.2</oshi.version>
+        <lombok.version>1.18.4</lombok.version>
         <dl4j.parallelwrapper.artifact></dl4j.parallelwrapper.artifact>
         <artifact.version.name></artifact.version.name>
         <artifact.backend.name></artifact.backend.name>
@@ -199,7 +200,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <nd4j.backend>nd4j-cuda-1.0</nd4j.backend>
+                <nd4j.backend>nd4j-cuda-10.0</nd4j.backend>
                 <artifact.backend.name>cuda10-cudnn</artifact.backend.name>
             </properties>
             <dependencies>
@@ -290,12 +291,6 @@
         </dependency>
         <dependency>
             <groupId>org.deeplearning4j</groupId>
-            <artifactId>${dl4j.parallelwrapper.artifact}</artifactId>
-            <version>${dl4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-zoo</artifactId>
             <version>${dl4j.version}</version>
         </dependency>
@@ -314,6 +309,12 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>20.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
         </dependency>
     </dependencies>
 
