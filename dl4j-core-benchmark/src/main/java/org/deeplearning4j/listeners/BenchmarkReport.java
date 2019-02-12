@@ -275,7 +275,7 @@ public class BenchmarkReport {
         table.add(new String[]{"Memory Config - XMX", formatBytes(xmx)});
         table.add(new String[]{"Memory Config - JavaCPP MaxPhysicalBytes", formatBytes(javacppMaxPhys)});
         table.add(new String[]{"Backend", backend});
-        table.add(new String[]{"ND4J DataType", Nd4j.dataType().toString()});
+        table.add(new String[]{"ND4J DataType", String.valueOf(Nd4j.dataType())});
         table.add(new String[]{"BLAS Vendor", blasVendor});
         table.add(new String[]{"CUDA Version", cudaVersion});
         table.add(new String[]{"CUDNN Version", cudnnVersion});
