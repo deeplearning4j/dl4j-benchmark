@@ -18,7 +18,7 @@ public class DTypeUtils {
         if(c == null) {
             try {
                 //1.0.0-beta3 and earlier
-                c = Class.forName("org.nd4j.linalg.api.buffer.DataBuffer.Type");
+                c = Class.forName("org.nd4j.linalg.api.buffer.DataBuffer$Type");
             } catch (Throwable e) { }
         }
         Preconditions.checkNotNull(c);
