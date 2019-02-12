@@ -36,10 +36,10 @@ do
       for k in "${dataTypes[@]}"
       do
          echo "Running test: $i, batch size $j, data type $k"
-		 export SNAPSHOT_DIR=../scripts/${modelType}_${totalIterations}_iter/
+		 export SNAPSHOT_DIR=../scripts/${modelType}_${totalIterations}_iter/profileOutput_"$i"_"$j"_"$k"
          mkdir -p $SNAPSHOT_DIR
-         echo java -cp dl4j-core-benchmark-$i.jar -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.benchmarks.BenchmarkCnn --modelType $modelType --batchSize $j --datatype $k --cacheMode NONE --totalIterations $totalIterations > ../scripts/${modelType}_${totalIterations}_iter/output_"$i"_"$j"_"$k".txt
-         java -cp dl4j-core-benchmark-$i.jar -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.benchmarks.BenchmarkCnn --modelType $modelType --batchSize $j --datatype $k --cacheMode NONE --totalIterations $totalIterations >> ../scripts/${modelType}_${totalIterations}_iter/output_"$i"_"$j"_"$k".txt
+         echo java -agentpath:"$yourkitPath"=tracing,port=10001,dir=$SNAPSHOT_DIR,tracing_settings_path=$profilingSettingsPath -cp dl4j-core-benchmark-$i.jar -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.benchmarks.BenchmarkCnn --modelType $modelType --batchSize $j --datatype $k --cacheMode NONE --totalIterations $totalIterations > ../scripts/${modelType}_${totalIterations}_iter/output_"$i"_"$j"_"$k".txt
+         java -agentpath:"$yourkitPath"=tracing,port=10001,dir=$SNAPSHOT_DIR,tracing_settings_path=$profilingSettingsPath -cp dl4j-core-benchmark-$i.jar -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.benchmarks.BenchmarkCnn --modelType $modelType --batchSize $j --datatype $k --cacheMode NONE --totalIterations $totalIterations >> ../scripts/${modelType}_${totalIterations}_iter/output_"$i"_"$j"_"$k".txt
       done
    done
 done
