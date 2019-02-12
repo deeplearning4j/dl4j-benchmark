@@ -5,6 +5,7 @@ import org.bytedeco.javacpp.Pointer;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.utils.DTypeUtils;
 import org.deeplearning4j.utils.StringUtils;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.primitives.AtomicDouble;
@@ -275,7 +276,7 @@ public class BenchmarkReport {
         table.add(new String[]{"Memory Config - XMX", formatBytes(xmx)});
         table.add(new String[]{"Memory Config - JavaCPP MaxPhysicalBytes", formatBytes(javacppMaxPhys)});
         table.add(new String[]{"Backend", backend});
-        table.add(new String[]{"ND4J DataType", String.valueOf(Nd4j.dataType())});
+        table.add(new String[]{"ND4J DataType", DTypeUtils.getDefaultDtype()});
         table.add(new String[]{"BLAS Vendor", blasVendor});
         table.add(new String[]{"CUDA Version", cudaVersion});
         table.add(new String[]{"CUDNN Version", cudnnVersion});

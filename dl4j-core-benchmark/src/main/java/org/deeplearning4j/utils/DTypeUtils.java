@@ -30,4 +30,13 @@ public class DTypeUtils {
         }
     }
 
+    public static String getDefaultDtype(){
+        try{
+            Object o = Nd4j.class.getMethod("dataType").invoke(null,(Object[])null);
+            return String.valueOf(o);
+        } catch (Throwable e){
+            return "-";
+        }
+    }
+
 }
