@@ -114,49 +114,49 @@ public class SameDiffBenchmarkRunner {
             System.gc();
         }
 
-        /*
-        No point testing pretrained *frozen* models until this is fixed:
-        https://github.com/deeplearning4j/deeplearning4j/issues/7142
-
-        //Backprop timing
-        log.info("Starting backprop timing...");
+        //Some models can't be trained for one reason or another... for example batchnorm issues:
+        if(model.trainable()) {
+            //Backprop timing
+            log.info("Starting backprop timing...");
             //Warmup
-        log.info("Warmup: {} iterations", numIterWarmup);
-        for( int i=0; i<numIterWarmup; i++ ){
-            sd.execBackwards(phData);
-        }
+            log.info("Warmup: {} iterations", numIterWarmup);
+            for (int i = 0; i < numIterWarmup; i++) {
+                sd.execBackwards(phData);
+            }
 
             //Testing
-        System.gc();
-        log.info("Testing: {} iterations", numIter);
-        for( int i=0; i<numIter; i++ ){
-            long start = System.currentTimeMillis();
-            sd.execBackwards(phData);
-            long end = System.currentTimeMillis();
-            r.addGradientCalcTime(end-start);
             System.gc();
-        }
+            log.info("Testing: {} iterations", numIter);
+            for (int i = 0; i < numIter; i++) {
+                long start = System.currentTimeMillis();
+                sd.execBackwards(phData);
+                long end = System.currentTimeMillis();
+                r.addGradientCalcTime(end - start);
+                System.gc();
+            }
 
-        //Training timing
-        MultiDataSet mds = createMds(model, phData);
-        MultiDataSetIterator iter = new SingletonMultiDataSetIterator(mds);
+            //Training timing
+            MultiDataSet mds = createMds(model, phData);
+            MultiDataSetIterator iter = new SingletonMultiDataSetIterator(mds);
             //Warmup
-        log.info("Warmup: {} iterations", numIterWarmup);
-        for( int i=0; i<numIterWarmup; i++ ){
-            sd.fit(iter, 1);
-        }
+            log.info("Warmup: {} iterations", numIterWarmup);
+            for (int i = 0; i < numIterWarmup; i++) {
+                sd.fit(iter, 1);
+            }
 
             //Testing
-        System.gc();
-        log.info("Testing: {} iterations", numIter);
-        for( int i=0; i<numIter; i++ ){
-            long start = System.currentTimeMillis();
-            sd.fit(iter, 1);
-            long end = System.currentTimeMillis();
-            r.addForwardTimeMs(end-start);
             System.gc();
+            log.info("Testing: {} iterations", numIter);
+            for (int i = 0; i < numIter; i++) {
+                long start = System.currentTimeMillis();
+                sd.fit(iter, 1);
+                long end = System.currentTimeMillis();
+                r.addForwardTimeMs(end - start);
+                System.gc();
+            }
+        } else {
+            log.warn("Skipping backprop/fit timing for benchmarks: model is not marked as trainable...");
         }
-        */
         log.info("Testing complete");
 
         String s = r.toString();

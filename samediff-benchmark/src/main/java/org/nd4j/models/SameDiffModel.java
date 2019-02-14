@@ -16,5 +16,6 @@ public interface SameDiffModel {
 
     List<String> dataSetLabelMapping();
 
+    boolean trainable();
 
 }
