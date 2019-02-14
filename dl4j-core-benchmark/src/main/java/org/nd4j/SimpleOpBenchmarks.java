@@ -18,9 +18,11 @@ public class SimpleOpBenchmarks {
         Nd4j.getMemoryManager().togglePeriodicGc(false);
 
         List<Pair<long[],int[]>> shapeDim = new ArrayList<>();
+        shapeDim.add(new Pair<>(new long[]{100}, null));
         shapeDim.add(new Pair<>(new long[]{100}, new int[]{0}));
         shapeDim.add(new Pair<>(new long[]{32,1024}, new int[]{1}));
         shapeDim.add(new Pair<>(new long[]{32,128,256,256}, new int[]{2,3}));
+        shapeDim.add(new Pair<>(new long[]{32,128,256,256}, null));
         shapeDim.add(new Pair<>(new long[]{32,512,16,16}, new int[]{2,3}));
 
         int nIter = 100;
@@ -30,45 +32,60 @@ public class SimpleOpBenchmarks {
                 INDArray arr = Nd4j.create(test.getFirst());
                 INDArray arr2 = arr.dup();
 
+                int[] dims = test.getSecond();
 
                 System.gc();
                 long startNano = System.nanoTime();
                 for (int i = 0; i < nIter; i++) {
-                    arr.sum(test.getSecond());
+                    if(dims == null){
+                        arr.sumNumber();
+                    } else {
+                        arr.sum(dims);
+                    }
                 }
                 long endNano = System.nanoTime();
 
                 if(!warmup) {
                     double avg = (endNano - startNano) / nIter;
-                    log.info("Completed " + nIter + " iterations of " + Arrays.toString(test.getFirst()) + ".sum(" + Arrays.toString(test.getSecond())
-                            + ") in " + (endNano - startNano) + "ns - average " + formatNanos(avg) + " per iteration");
+                    log.info("Completed " + nIter + " iterations of " + Arrays.toString(test.getFirst()) +
+                                    (dims == null ? ".sumNumber()" : ".sum(" + Arrays.toString(dims) + ")") +
+                                    " in " + (endNano - startNano) + "ns - average " + formatNanos(avg) + " per iteration");
                 }
 
 
                 System.gc();
                 startNano = System.nanoTime();
                 for (int i = 0; i < nIter; i++) {
-                    arr.var(test.getSecond());
+                    if(dims == null){
+                        arr.varNumber();
+                    } else {
+                        arr.var(dims);
+                    }
                 }
                 endNano = System.nanoTime();
 
                 if(!warmup) {
                     double avg = (endNano - startNano) / nIter;
-                    log.info("Completed " + nIter + " iterations of " + Arrays.toString(test.getFirst()) + ".var(" + Arrays.toString(test.getSecond())
-                            + ") in " + (endNano - startNano) + "ns - average " + formatNanos(avg) + " per iteration");
+                    log.info("Completed " + nIter + " iterations of " + Arrays.toString(test.getFirst()) +
+                            (dims == null ? ".varNumber()" : ".var(" + Arrays.toString(dims) + ")") +
+                            " in " + (endNano - startNano) + "ns - average " + formatNanos(avg) + " per iteration");
                 }
 
 
                 System.gc();
                 startNano = System.nanoTime();
                 for (int i = 0; i < nIter; i++) {
-                    arr.mean(test.getSecond());
+                    if(dims == null){
+                        arr.meanNumber();
+                    } else {
+                        arr.mean(dims);
+                    }
                 }
                 endNano = System.nanoTime();
 
                 if(!warmup) {
                     double avg = (endNano - startNano) / nIter;
-                    log.info("Completed " + nIter + " iterations of " + Arrays.toString(test.getFirst()) + ".mean(" + Arrays.toString(test.getSecond())
+                    log.info("Completed " + nIter + " iterations of " + Arrays.toString(test.getFirst()) + ".mean(" + Arrays.toString(dims)
                             + ") in " + (endNano - startNano) + "ns - average " + formatNanos(avg) + " per iteration");
                 }
 
