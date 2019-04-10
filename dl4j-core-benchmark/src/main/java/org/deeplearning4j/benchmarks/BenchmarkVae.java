@@ -1,0 +1,127 @@
+package org.deeplearning4j.benchmarks;
+
+import lombok.extern.slf4j.Slf4j;
+import org.deeplearning4j.datasets.iterator.ExistingDataSetIterator;
+import org.deeplearning4j.models.ModelSelector;
+import org.deeplearning4j.models.ModelType;
+import org.deeplearning4j.models.TestableModel;
+import org.deeplearning4j.nn.conf.CacheMode;
+import org.deeplearning4j.nn.conf.Updater;
+import org.deeplearning4j.nn.conf.WorkspaceMode;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.indexing.NDArrayIndex;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Benchmarks popular CNN models using the CIFAR-10 dataset.
+ */
+@Slf4j
+public class BenchmarkVae extends BaseBenchmark {
+
+    // values to pass in from command line when compiled, esp running remotely
+    @Option(name = "--modelType", usage = "Model type (e.g. MLP_SMALL, RNN_SMALL).", aliases = "-model")
+    public static ModelType modelType = ModelType.VAE_SMALL;
+    @Option(name="--trainBatchSize",usage="Train batch size.",aliases = "-batch")
+    public static int trainBatchSize = 64;
+    @Option(name="--gcWindow",usage="Set Garbage Collection window in milliseconds.",aliases = "-gcwindow")
+    public static int gcWindow = 5000;
+    @Option(name="--inputDimension",usage="The input size of the network",aliases = "-dim")
+    public static int inputDimension = 4;
+    @Option(name="--outputDimension",usage="The output size of the network",aliases = "-out")
+    public static int outputDimension = 1;
+    @Option(name="--numMinibatches",usage="The number of minibatches to use",aliases = "-minibatches")
+    public static int numMinibatches = 64;
+    @Option(name="--profile",usage="Run profiler and print results",aliases = "-profile")
+    public static boolean profile = false;
+    @Option(name="--cacheMode",usage="Cache mode setting for net")
+    public static CacheMode cacheMode = CacheMode.NONE;
+    @Option(name="--workspaceMode", usage="Workspace mode for net")
+    public static WorkspaceMode workspaceMode = WorkspaceMode.SINGLE;
+    @Option(name="--updater", usage="Updater for net")
+    public static Updater updater = Updater.ADAM;
+    @Option(name="--usePW", usage="Use parallel wrapper")
+    public static boolean usePW = false;
+    @Option(name="--pwNumThreads", usage="Number of ParallelWrappe threads. If set to -1, use number of GPUs")
+    public static int pwNumThreads = -1;
+    @Option(name="--pwAvgFreq", usage="Parallel Wrapper averaging frequency")
+    public static int pwAvgFreq = 5;
+    @Option(name="--pwPrefetchBuffer", usage="Parallel Wrapper averaging frequency")
+    public static int pwPrefetchBuffer = 2;
+
+    private int seed = 42;
+
+    public void run(String[] args) throws Exception {
+        // Parse command line arguments if they exist
+        CmdLineParser parser = new CmdLineParser(this);
+        try {
+            parser.parseArgument(args);
+        } catch (CmdLineException e) {
+            // handling of wrong arguments
+            System.err.println(e.getMessage());
+            parser.printUsage(System.err);
+            System.exit(1);
+        }
+
+        switch(modelType){
+            case VAE_SMALL:
+                break;
+            default:
+                throw new UnsupportedOperationException("Benchmarks are applicable to VAE models only.");
+        }
+
+
+        log.info("Preparing benchmarks for updater: {}, workspace: {}, cache mode: {}", updater, workspaceMode, cacheMode);
+        log.info("Loading data...");
+        //TODO export instead? This won't scale to large number of minibatches due to memory requirement
+        List<DataSet> l = new ArrayList<>(numMinibatches);
+        for( int i=0; i<numMinibatches; i++ ){
+            INDArray f;
+            INDArray labels;
+            f = Nd4j.rand(trainBatchSize, inputDimension);
+            labels = Nd4j.zeros(trainBatchSize, outputDimension);
+            labels.getColumn(i%outputDimension).assign(1);
+            l.add(new DataSet(f, labels));
+        }
+
+        DataSetIterator iter = new ExistingDataSetIterator(l);
+
+        log.info("Building models for "+modelType+"....");
+        networks = ModelSelector.select(modelType, new int[]{inputDimension}, outputDimension, seed, iterations, workspaceMode, cacheMode, updater);
+
+        for (Map.Entry<ModelType, TestableModel> net : networks.entrySet()) {
+            String description = net.getKey().toString()+" 1x"+inputDimension;
+//            benchmark(net, description, outputDimension, trainBatchSize, seed, "random", iter, modelType, profile, gcWindow, 0);
+
+            new Benchmark()
+                    .net(net)
+                    .description(description)
+                    .numLabels(outputDimension)
+                    .batchSize(trainBatchSize)
+                    .seed(seed)
+                    .datasetName("random")
+                    .iter(iter)
+                    .modelType(modelType)
+                    .profile(profile)
+                    .gcWindow(gcWindow)
+                    .occasionalGCFreq(0)
+                    .usePW(usePW)
+                    .pwNumThreads(pwNumThreads)
+                    .pwAvgFreq(pwAvgFreq)
+                    .pwPrefetchBuffer(pwPrefetchBuffer)
+                    .execute();
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        new BenchmarkVae().run(args);
+    }
+}

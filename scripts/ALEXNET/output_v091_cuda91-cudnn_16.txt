@@ -1,0 +1,1 @@
+java -cp dl4j-core-benchmark-v091_cuda91-cudnn.jar org.deeplearning4j.benchmarks.BenchmarkCnn --modelType ALEXNET --batchSize 16 --cacheMode NONE

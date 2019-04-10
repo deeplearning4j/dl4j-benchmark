@@ -1,0 +1,466 @@
+java -cp dl4j-core-benchmark-v100beta_cuda91-cudnn.jar org.deeplearning4j.benchmarks.BenchmarkCnn --modelType ALEXNET --batchSize 32 --cacheMode NONE
+o.d.b.BenchmarkCnn - Building models for ALEXNET....
+o.d.b.BenchmarkCnn - Selected: ALEXNET SIMULATEDCNN 32x3x224x224
+o.d.b.BenchmarkCnn - Preparing benchmarks for 200 iterations, 1000 labels, updater: NONE, workspace: SINGLE, cache mode: NONE
+o.n.l.f.Nd4jBackend - Loaded [JCublasBackend] backend
+o.n.n.NativeOpsHolder - Number of threads used for NativeOps: 32
+o.n.n.Nd4jBlas - Number of threads used for BLAS: 0
+o.n.l.a.o.e.DefaultOpExecutioner - Backend used: [CUDA]; OS: [Linux]
+o.n.l.a.o.e.DefaultOpExecutioner - Cores: [12]; Memory: [14.0GB];
+o.n.l.a.o.e.DefaultOpExecutioner - Blas vendor: [CUBLAS]
+o.n.l.j.o.e.CudaExecutioner - Device Name: [TITAN X (Pascal)]; CC: [6.1]; Total/free memory: [12786401280]
+o.n.l.j.o.e.CudaExecutioner - Device Name: [TITAN X (Pascal)]; CC: [6.1]; Total/free memory: [12788498432]
+o.d.b.BaseBenchmark - =======================================
+o.d.b.BaseBenchmark - ===== Benchmarking selected model =====
+o.d.b.BaseBenchmark - =======================================
+o.d.n.m.MultiLayerNetwork - Starting MultiLayerNetwork with WorkspaceModes set to [training: SINGLE; inference: SINGLE], cacheMode set to [NONE]
+o.d.b.BaseBenchmark - ===== Benchmarking training iteration =====
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 1; iteration time: 160 ms; samples/sec: 200.000; batches/sec: 6.250; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 1 is 0.23075343090028122
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 2; iteration time: 88 ms; samples/sec: 363.636; batches/sec: 11.364; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 2 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 3; iteration time: 74 ms; samples/sec: 432.432; batches/sec: 13.514; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 3 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 4; iteration time: 73 ms; samples/sec: 438.356; batches/sec: 13.699; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 4 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 5; iteration time: 69 ms; samples/sec: 463.768; batches/sec: 14.493; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 5 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 6; iteration time: 68 ms; samples/sec: 470.588; batches/sec: 14.706; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 6 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 7; iteration time: 68 ms; samples/sec: 470.588; batches/sec: 14.706; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 7 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 8; iteration time: 68 ms; samples/sec: 470.588; batches/sec: 14.706; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 8 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 9; iteration time: 67 ms; samples/sec: 477.612; batches/sec: 14.925; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 9 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 10; iteration time: 67 ms; samples/sec: 477.612; batches/sec: 14.925; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 10 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 11; iteration time: 67 ms; samples/sec: 477.612; batches/sec: 14.925; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 11 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 12; iteration time: 67 ms; samples/sec: 477.612; batches/sec: 14.925; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 12 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 13; iteration time: 67 ms; samples/sec: 477.612; batches/sec: 14.925; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 13 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 14; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 14 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 15; iteration time: 67 ms; samples/sec: 477.612; batches/sec: 14.925; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 15 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 16; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 16 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 17; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 17 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 18; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 18 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 19; iteration time: 67 ms; samples/sec: 477.612; batches/sec: 14.925; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 19 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 20; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 20 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 21; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 21 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 22; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 22 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 23; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 23 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 24; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 24 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 25; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 25 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 26; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 26 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 27; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 27 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 28; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 28 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 29; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 29 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 30; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 30 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 31; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 31 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 32; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 32 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 33; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 33 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 34; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 34 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 35; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 35 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 36; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 36 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 37; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 37 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 38; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 38 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 39; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 39 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 40; iteration time: 67 ms; samples/sec: 477.612; batches/sec: 14.925; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 40 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 41; iteration time: 67 ms; samples/sec: 477.612; batches/sec: 14.925; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 41 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 42; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 42 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 43; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 43 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 44; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 44 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 45; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 45 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 46; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 46 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 47; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 47 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 48; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 48 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 49; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 49 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 50; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 50 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 51; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 51 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 52; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 52 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 53; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 53 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 54; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 54 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 55; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 55 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 56; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 56 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 57; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 57 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 58; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 58 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 59; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 59 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 60; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 60 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 61; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 61 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 62; iteration time: 66 ms; samples/sec: 484.848; batches/sec: 15.152; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 62 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 63; iteration time: 106 ms; samples/sec: 301.887; batches/sec: 9.434; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 63 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 64; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 64 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 65; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 65 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 66; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 66 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 67; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 67 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 68; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 68 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 69; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 69 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 70; iteration time: 67 ms; samples/sec: 477.612; batches/sec: 14.925; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 70 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 71; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 71 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 72; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 72 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 73; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 73 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 74; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 74 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 75; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 75 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 76; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 76 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 77; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 77 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 78; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 78 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 79; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 79 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 80; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 80 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 81; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 81 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 82; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 82 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 83; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 83 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 84; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 84 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 85; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 85 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 86; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 86 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 87; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 87 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 88; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 88 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 89; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 89 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 90; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 90 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 91; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 91 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 92; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 92 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 93; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 93 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 94; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 94 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 95; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 95 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 96; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 96 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 97; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 97 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 98; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 98 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 99; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 99 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 100; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 100 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 101; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 101 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 102; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 102 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 103; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 103 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 104; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 104 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 105; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 105 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 106; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 106 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 107; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 107 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 108; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 108 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 109; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 109 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 110; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 110 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 111; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 111 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 112; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 112 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 113; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 113 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 114; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 114 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 115; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 115 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 116; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 116 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 117; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 117 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 118; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 118 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 119; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 119 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 120; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 120 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 121; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 121 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 122; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 122 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 123; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 123 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 124; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 124 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 125; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 125 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 126; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 126 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 127; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 127 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 128; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 128 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 129; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 129 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 130; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 130 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 131; iteration time: 67 ms; samples/sec: 477.612; batches/sec: 14.925; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 131 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 132; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 132 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 133; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 133 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 134; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 134 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 135; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 135 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 136; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 136 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 137; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 137 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 138; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 138 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 139; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 139 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 140; iteration time: 100 ms; samples/sec: 320.000; batches/sec: 10.000; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 140 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 141; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 141 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 142; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 142 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 143; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 143 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 144; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 144 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 145; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 145 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 146; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 146 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 147; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 147 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 148; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 148 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 149; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 149 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 150; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 150 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 151; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 151 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 152; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 152 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 153; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 153 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 154; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 154 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 155; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 155 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 156; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 156 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 157; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 157 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 158; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 158 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 159; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 159 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 160; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 160 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 161; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 161 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 162; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 162 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 163; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 163 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 164; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 164 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 165; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 165 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 166; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 166 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 167; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 167 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 168; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 168 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 169; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 169 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 170; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 170 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 171; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 171 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 172; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 172 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 173; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 173 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 174; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 174 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 1 ms; iteration 175; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 175 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 176; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 176 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 177; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 177 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 178; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 178 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 179; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 179 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 180; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 180 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 181; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 181 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 182; iteration time: 65 ms; samples/sec: 492.308; batches/sec: 15.385; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 182 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 183; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 183 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 184; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 184 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 185; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 185 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 186; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 186 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 187; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 187 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 188; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 188 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 189; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 189 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 190; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 190 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 191; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 191 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 192; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 192 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 193; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 193 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 194; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 194 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 195; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 195 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 196; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 196 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 197; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 197 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 198; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 198 is NaN
+o.d.o.l.PerformanceListener - Device: [0]; ETL: 0 ms; iteration 199; iteration time: 64 ms; samples/sec: 500.000; batches/sec: 15.625; 
+o.d.l.TrainingDiscriminationListener - Score curve area at iteration 199 is NaN
+o.d.b.BaseBenchmark - ===== Benchmarking forward/backward pass =====
+o.d.b.BaseBenchmark - Completed 100 iterations
+o.d.b.BaseBenchmark - Completed 200 iterations
+o.d.b.BaseBenchmark - =============================
+o.d.b.BaseBenchmark - ===== Benchmark Results =====
+o.d.b.BaseBenchmark - =============================
+
+==========================================================================================================================================================================================================================================================
+LayerName (LayerType)                   nIn,nOut  TotalParams ParamsShape                             
+==========================================================================================================================================================================================================================================================
+cnn1 (ConvolutionLayer)                 3,96        34944     b:{1,96}, W:{96,3,11,11}                
+layer1 (LocalResponseNormalization)     -,-         0         -                                       
+maxpool1 (SubsamplingLayer)             -,-         0         -                                       
+cnn2 (ConvolutionLayer)                 96,256      614656    b:{1,256}, W:{256,96,5,5}               
+maxpool2 (SubsamplingLayer)             -,-         0         -                                       
+layer5 (LocalResponseNormalization)     -,-         0         -                                       
+cnn3 (ConvolutionLayer)                 256,384     885120    b:{1,384}, W:{384,256,3,3}              
+cnn4 (ConvolutionLayer)                 384,384     1327488   b:{1,384}, W:{384,384,3,3}              
+cnn5 (ConvolutionLayer)                 384,256     884992    b:{1,256}, W:{256,384,3,3}              
+maxpool3 (SubsamplingLayer)             -,-         0         -                                       
+ffn1 (DenseLayer)                       9216,4096   37752832  W:{9216,4096}, b:{1,4096}               
+ffn2 (DenseLayer)                       4096,4096   16781312  W:{4096,4096}, b:{1,4096}               
+output (OutputLayer)                    4096,1000   4097000   W:{4096,1000}, b:{1,1000}               
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            Total Parameters:  62378344
+        Trainable Parameters:  62378344
+           Frozen Parameters:  0
+==========================================================================================================================================================================================================================================================
+
+                        Name                                       ALEXNET
+                 Description                     SIMULATEDCNN 32x3x224x224
+            Operating System                  GNU/Linux Ubuntu 16.04.4 LTS
+                     Devices              TITAN X (Pascal) 6 1 12786401280
+                   CPU Cores                                            12
+                     Backend                                          CUDA
+                 BLAS Vendor                                        CUBLAS
+                CUDA Version                                          9010
+               CUDNN Version                                          7103
+         Periodic GC enabled                                          true
+       Periodic GC frequency                                          5000
+          Occasional GC Freq                                             0
+                Total Params                                      62378344
+                Total Layers                                            13
+        Avg Feedforward (ms)                                         13.26
+           Avg Backprop (ms)                                          40.1
+                Avg Fit (ms)                                         64.31
+          Avg Iteration (ms)                                         64.18
+             Avg Samples/sec                                        479.91
+             Avg Batches/sec                                            15
+                  Batch size                                            32
+

@@ -4,6 +4,7 @@ import com.beust.jcommander.ParameterException;
 import org.deeplearning4j.models.cnn.*;
 import org.deeplearning4j.models.mlp.MLP;
 import org.deeplearning4j.models.rnn.RNN;
+import org.deeplearning4j.models.vae.VAESmall;
 import org.deeplearning4j.nn.conf.CacheMode;
 import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.WorkspaceMode;
@@ -60,6 +61,11 @@ public class ModelSelector {
             case RNN:
             case RNN_SMALL:
                 netmap.put(ModelType.RNN_SMALL, new RNN(inputShape[0], new int[]{256,256},numLabels, seed, updater, workspaceMode, cacheMode ));
+                break;
+            // VAE
+            case VAE:
+            case VAE_SMALL:
+                netmap.put(ModelType.VAE_SMALL, new VAESmall(4, 1, seed, updater, workspaceMode, cacheMode));
                 break;
             default:
 //                // do nothing
