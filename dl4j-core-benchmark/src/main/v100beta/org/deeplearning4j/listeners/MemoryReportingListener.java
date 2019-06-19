@@ -1,6 +1,7 @@
 package org.deeplearning4j.listeners;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.Pointer;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.optimize.api.BaseTrainingListener;
@@ -53,8 +54,8 @@ public class MemoryReportingListener extends BaseTrainingListener {
         arr[2] = f(javacppCurrPhys);
         arr[3] = f(javacppCurrBytes);
         for( int i=0; i<nDevices; i++ ){
-            Pointer p = getDevicePointer(i);
-            long memUsed = nativeOps.getDeviceTotalMemory(p) - nativeOps.getDeviceFreeMemory(p);
+//            Pointer p = getDevicePointer(i);
+            long memUsed = nativeOps.getDeviceTotalMemory(i) - nativeOps.getDeviceFreeMemory(i);
             arr[4+i] = f(memUsed);
         }
 
