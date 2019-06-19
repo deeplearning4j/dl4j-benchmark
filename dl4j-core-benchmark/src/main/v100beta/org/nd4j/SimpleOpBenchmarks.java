@@ -18,15 +18,15 @@ public class SimpleOpBenchmarks {
 
         Nd4j.getMemoryManager().togglePeriodicGc(false);
 
-        List<Pair<long[],int[]>> shapeDim = new ArrayList<>();
-        shapeDim.add(new Pair<>(new long[]{100}, null));
-        shapeDim.add(new Pair<>(new long[]{100}, new int[]{0}));
-        shapeDim.add(new Pair<>(new long[]{32,1024}, new int[]{1}));
-        shapeDim.add(new Pair<>(new long[]{16384,256}, new int[]{0}));
-        shapeDim.add(new Pair<>(new long[]{256,16384}, new int[]{0}));
-        shapeDim.add(new Pair<>(new long[]{32,128,256,256}, new int[]{2,3}));
-        shapeDim.add(new Pair<>(new long[]{32,128,256,256}, null));
-        shapeDim.add(new Pair<>(new long[]{32,512,16,16}, new int[]{2,3}));
+        List<Pair<int[],int[]>> shapeDim = new ArrayList<>();
+        shapeDim.add(new Pair<>(new int[]{100}, null));
+        shapeDim.add(new Pair<>(new int[]{100}, new int[]{0}));
+        shapeDim.add(new Pair<>(new int[]{32,1024}, new int[]{1}));
+        shapeDim.add(new Pair<>(new int[]{16384,256}, new int[]{0}));
+        shapeDim.add(new Pair<>(new int[]{256,16384}, new int[]{0}));
+        shapeDim.add(new Pair<>(new int[]{32,128,256,256}, new int[]{2,3}));
+        shapeDim.add(new Pair<>(new int[]{32,128,256,256}, null));
+        shapeDim.add(new Pair<>(new int[]{32,512,16,16}, new int[]{2,3}));
 
 
 
@@ -34,7 +34,7 @@ public class SimpleOpBenchmarks {
 
             int nIter = warmup ? 20 : 100;
 
-            for (Pair<long[],int[]> test : shapeDim) {
+            for (Pair<int[],int[]> test : shapeDim) {
                 INDArray arr = Nd4j.create(test.getFirst());
                 INDArray arr2 = arr.dup();
 
@@ -163,7 +163,7 @@ public class SimpleOpBenchmarks {
                     for(int[] dim : new int[][]{{2,3}, {1,3}}) {
                         System.gc();
                         startNano = System.nanoTime();
-                        long[] smallerShape = new long[]{test.getFirst()[dim[0]], test.getFirst()[dim[1]]};
+                        int[] smallerShape = new int[]{test.getFirst()[dim[0]], test.getFirst()[dim[1]]};
                         INDArray smaller = Nd4j.create(smallerShape);
                         for (int i = 0; i < nIter; i++) {
                             Broadcast.add(arr, smaller, arr, dim);
