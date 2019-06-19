@@ -36,7 +36,6 @@
         <artifact.backend.name></artifact.backend.name>
     </properties>
 
-    <!--
     <repositories>
         <repository>
             <id>snapshots-repo</id>
@@ -50,8 +49,6 @@
             </snapshots>
         </repository>
     </repositories>
-    -->
-
 
     <profiles>
         <!-- Version Properties -->
@@ -105,6 +102,20 @@
                 <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper</dl4j.parallelwrapper.artifact>
             </properties>
         </profile>
+
+
+        <profile>
+            <id>v100beta4</id>
+            <properties>
+                <dl4j.version>1.0.0-beta4</dl4j.version>
+                <nd4j.version>1.0.0-beta4</nd4j.version>
+                <datavec.version>1.0.0-beta4</datavec.version>
+                <version.specific.code.dir>v100beta</version.specific.code.dir>
+                <artifact.version.name>v100beta4</artifact.version.name>
+                <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper</dl4j.parallelwrapper.artifact>
+            </properties>
+        </profile>
+
 
         <profile>
             <id>v100snapshot</id>
