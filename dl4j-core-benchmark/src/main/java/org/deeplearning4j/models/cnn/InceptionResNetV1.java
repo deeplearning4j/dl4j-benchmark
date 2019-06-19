@@ -77,7 +77,8 @@ public class InceptionResNetV1 implements TestableModel {
             .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
             .updater(updater)
             .weightInit(WeightInit.DISTRIBUTION)
-            .weightInit(new NormalDistribution(0.0, 0.5))
+//            .weightInit(new NormalDistribution(0.0, 0.5))
+            .weightInit(WeightInit.XAVIER)  //Use enum for 0.9.1 compatibility; doesn't impact performance...
             .l2(5e-5)
             .miniBatch(true)
             .convolutionMode(ConvolutionMode.Truncate)

@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.nd4j.autodiff.samediff.SameDiff;
-import org.nd4j.base.Preconditions;
 import org.nd4j.imports.graphmapper.tf.TFGraphMapper;
 import org.nd4j.linalg.function.BiFunction;
 import org.nd4j.resources.Downloader;
@@ -78,9 +77,14 @@ public class RemoteCachingLoader implements BiFunction<File,String,SameDiff> {
                         }
                     }
                 }
-                Preconditions.checkState(toExtract != null, "Found to .pb files in archive: %s", localFile.getAbsolutePath());
+                if(toExtract == null) {
+                    throw new RuntimeException("Found to .pb files in archive: " + localFile.getAbsolutePath());
+                }
 
-                Preconditions.checkNotNull(currentTestDir, "currentTestDir has not been set (is null)");
+//                Preconditions.checkNotNull(currentTestDir, );
+                if(currentTestDir == null){
+                    throw new RuntimeException("currentTestDir has not been set (is null)");
+                }
                 modelFile = new File(currentTestDir, "tf_model.pb");
                 ArchiveUtils.tarGzExtractSingleFile(localFile, modelFile, toExtract);
             } else if(filename.endsWith(".zip")){

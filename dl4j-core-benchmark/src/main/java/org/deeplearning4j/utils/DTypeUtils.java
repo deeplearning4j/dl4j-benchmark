@@ -1,6 +1,5 @@
 package org.deeplearning4j.utils;
 
-import org.nd4j.base.Preconditions;
 import org.nd4j.linalg.factory.Nd4j;
 
 import java.lang.reflect.Method;
@@ -21,7 +20,9 @@ public class DTypeUtils {
                 c = Class.forName("org.nd4j.linalg.api.buffer.DataBuffer$Type");
             } catch (Throwable e) { }
         }
-        Preconditions.checkNotNull(c);
+        if(c == null){
+            throw new RuntimeException("Could not find DataBuffer$Type");
+        }
         try {
             Method m = Nd4j.class.getMethod("setDataType", c);
             m.invoke(null, Enum.valueOf((Class<Enum>) c, datatype));

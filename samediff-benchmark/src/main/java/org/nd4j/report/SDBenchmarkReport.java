@@ -3,12 +3,8 @@ package org.nd4j.report;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import lombok.Data;
 import org.bytedeco.javacpp.Pointer;
-import org.deeplearning4j.nn.api.Model;
-import org.deeplearning4j.nn.graph.ComputationGraph;
-import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.primitives.AtomicDouble;
 import org.nd4j.util.StringUtils;
 import org.nd4j.versioncheck.VersionCheck;
 import org.nd4j.versioncheck.VersionInfo;
@@ -20,9 +16,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Reporting for BenchmarkListener.

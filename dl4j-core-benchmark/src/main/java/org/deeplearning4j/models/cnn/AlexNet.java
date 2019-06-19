@@ -61,7 +61,8 @@ public class AlexNet implements TestableModel {
 
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(seed)
-                .weightInit(new NormalDistribution(0.0, 0.01))
+                .weightInit(WeightInit.XAVIER)  //Use enum for 0.9.1 compatibility; doesn't impact performance...
+                //.weightInit(new NormalDistribution(0.0, 0.01))
                 .activation(Activation.RELU)
                 .updater(updater)
                 .convolutionMode(ConvolutionMode.Same)
@@ -126,13 +127,15 @@ public class AlexNet implements TestableModel {
                         .name("ffn1")
                         .nIn(256*6*6)
                         .nOut(4096)
-                        .weightInit(new GaussianDistribution(0, 0.005))
+//                        .weightInit(new GaussianDistribution(0, 0.005))
+                        .weightInit(WeightInit.XAVIER)  //Use enum for 0.9.1 compatibility; doesn't impact performance...
                         .biasInit(nonZeroBias)
                         .build())
                 .layer(11, new DenseLayer.Builder()
                         .name("ffn2")
                         .nOut(4096)
-                        .weightInit(new GaussianDistribution(0, 0.005))
+//                        .weightInit(new GaussianDistribution(0, 0.005))
+                        .weightInit(WeightInit.XAVIER)  //Use enum for 0.9.1 compatibility; doesn't impact performance...
                         .biasInit(nonZeroBias)
                         .dropOut(0.5)
                         .build())
@@ -140,7 +143,8 @@ public class AlexNet implements TestableModel {
                         .name("output")
                         .nOut(numLabels)
                         .activation(Activation.SOFTMAX)
-                        .weightInit(new GaussianDistribution(0, 0.005))
+//                        .weightInit(new GaussianDistribution(0, 0.005))
+                        .weightInit(WeightInit.XAVIER)  //Use enum for 0.9.1 compatibility; doesn't impact performance...
                         .biasInit(0.1)
                         .build())
                 .setInputType(InputType.convolutional(inputShape[2],inputShape[1],inputShape[0]))

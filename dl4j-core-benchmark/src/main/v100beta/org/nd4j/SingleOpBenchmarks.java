@@ -25,7 +25,7 @@ public class SingleOpBenchmarks {
 
         int nIter = 200;
 
-        long[] shape = new long[]{32,128,256,256};
+        int[] shape = new int[]{32,128,256,256};
         INDArray arr = Nd4j.create(shape);
         INDArray arr2 = arr.dup();
 
