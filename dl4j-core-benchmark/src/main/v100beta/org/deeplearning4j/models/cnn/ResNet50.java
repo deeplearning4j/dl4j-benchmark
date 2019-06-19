@@ -129,7 +129,8 @@ public class ResNet50  implements TestableModel {
                 .activation(Activation.IDENTITY)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                 .updater(updater)
-                .weightInit(new TruncatedNormalDistribution(0.0, 0.5))
+//                .weightInit(new TruncatedNormalDistribution(0.0, 0.5))
+                .weightInit(WeightInit.XAVIER)  //Use enum for 0.9.1 compatibility; doesn't impact performance...
                 .l1(1e-7)
                 .l2(5e-5)
                 .miniBatch(true)

@@ -13,12 +13,8 @@ import org.deeplearning4j.utils.DTypeUtils;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
-import org.nd4j.base.Preconditions;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-import org.nd4j.linalg.factory.Nd4j;
-import sun.misc.Cache;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 
 /**

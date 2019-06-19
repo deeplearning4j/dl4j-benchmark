@@ -6,7 +6,6 @@
     </prerequisites>
     <modules>
         <module>dl4j-core-benchmark</module>
-        <module>samediff-benchmark</module>
         <!--<module>dl4j-spark-benchmark</module>-->
     </modules>
 
@@ -65,6 +64,9 @@
                 <artifact.version.name>v091</artifact.version.name>
                 <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper_${scala.binary.version}</dl4j.parallelwrapper.artifact>
             </properties>
+            <modules>
+                <module>dl4j-core-benchmark</module>
+            </modules>
         </profile>
 
         <profile>
@@ -77,6 +79,9 @@
                 <artifact.version.name>v100alpha</artifact.version.name>
                 <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper_${scala.binary.version}</dl4j.parallelwrapper.artifact>
             </properties>
+            <modules>
+                <module>dl4j-core-benchmark</module>
+            </modules>
         </profile>
 
         <profile>
@@ -89,6 +94,9 @@
                 <artifact.version.name>v100beta</artifact.version.name>
                 <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper_${scala.binary.version}</dl4j.parallelwrapper.artifact>
             </properties>
+            <modules>
+                <module>dl4j-core-benchmark</module>
+            </modules>
         </profile>
 
         <profile>
@@ -101,6 +109,9 @@
                 <artifact.version.name>v100beta3</artifact.version.name>
                 <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper</dl4j.parallelwrapper.artifact>
             </properties>
+            <modules>
+                <module>dl4j-core-benchmark</module>
+            </modules>
         </profile>
 
 
@@ -114,6 +125,10 @@
                 <artifact.version.name>v100beta4</artifact.version.name>
                 <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper</dl4j.parallelwrapper.artifact>
             </properties>
+            <modules>
+                <module>dl4j-core-benchmark</module>
+                <module>samediff-benchmark</module>
+            </modules>
 
             <build>
                 <plugins>
@@ -177,6 +192,10 @@
                     </plugin>
                 </plugins>
             </build>
+            <modules>
+                <module>dl4j-core-benchmark</module>
+                <module>samediff-benchmark</module>
+            </modules>
         </profile>
 
 
