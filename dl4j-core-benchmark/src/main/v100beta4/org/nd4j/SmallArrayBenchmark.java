@@ -3,6 +3,7 @@ package org.nd4j;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.nd4j.linalg.api.buffer.DataType;
+import org.nd4j.linalg.api.memory.MemoryWorkspace;
 import org.nd4j.linalg.api.memory.conf.WorkspaceConfiguration;
 import org.nd4j.linalg.api.memory.enums.LearningPolicy;
 import org.nd4j.linalg.factory.Nd4j;
@@ -19,7 +20,7 @@ public class SmallArrayBenchmark {
 
         val array = Nd4j.create(DataType.FLOAT, 100);
         for (int e = 0; e < 1000; e++) {
-            try (val ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(wsconf, "kjmnf,ndsfhnsdjhflljkl131334")) {
+            try (MemoryWorkspace ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(wsconf, "kjmnf,ndsfhnsdjhflljkl131334")) {
                 array.sumNumber();
             }
         }
@@ -27,7 +28,7 @@ public class SmallArrayBenchmark {
         int iterations = 1000000;
         val timeStart = System.nanoTime();
         for (int e = 0; e < iterations; e++) {
-            try (val ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(wsconf, "kjmnf,ndsfhnsdjhflljkl131334")) {
+            try (MemoryWorkspace ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(wsconf, "kjmnf,ndsfhnsdjhflljkl131334")) {
                 array.sumNumber();
             }
         }

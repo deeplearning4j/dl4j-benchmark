@@ -114,6 +114,31 @@
                 <artifact.version.name>v100beta4</artifact.version.name>
                 <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper</dl4j.parallelwrapper.artifact>
             </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>${maven-build-helper.version}</version>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/main/${version.specific.code.dir}</source>
+                                        <source>src/main/v100beta4</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
 
@@ -127,6 +152,31 @@
                 <artifact.version.name>v100snapshot</artifact.version.name>
                 <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper</dl4j.parallelwrapper.artifact>
             </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>${maven-build-helper.version}</version>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/main/${version.specific.code.dir}</source>
+                                        <source>src/main/v100beta4</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
 
@@ -400,7 +450,7 @@
             </plugin>
 
 
-            <!-- added source folder containing the code specific to the 0.9.1 vs 1.0.0-alpha and 1.0.0-snapshot versions -->
+            <!-- added source folder containing the code specific to the different versions -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>

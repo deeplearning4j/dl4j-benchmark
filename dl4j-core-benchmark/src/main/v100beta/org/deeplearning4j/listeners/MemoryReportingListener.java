@@ -10,6 +10,7 @@ import org.nd4j.nativeblas.NativeOps;
 import org.nd4j.nativeblas.NativeOpsHolder;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,8 +55,7 @@ public class MemoryReportingListener extends BaseTrainingListener {
         arr[2] = f(javacppCurrPhys);
         arr[3] = f(javacppCurrBytes);
         for( int i=0; i<nDevices; i++ ){
-//            Pointer p = getDevicePointer(i);
-            long memUsed = nativeOps.getDeviceTotalMemory(i) - nativeOps.getDeviceFreeMemory(i);
+            long memUsed = getDeviceTotal(nativeOps, i) - getDeviceFreeMemory(nativeOps, i);
             arr[4+i] = f(memUsed);
         }
 
@@ -63,6 +63,38 @@ public class MemoryReportingListener extends BaseTrainingListener {
     }
 
     private Map<Integer, Pointer> devPointers = new HashMap<>();
+
+    private long getDeviceTotal(NativeOps nativeOps, int i){
+        try {
+            //Beta4 or later API
+            Method m = NativeOps.class.getMethod("getDeviceTotalMemory", int.class);
+            return (Long)m.invoke(nativeOps, i);
+        } catch (Throwable t){
+            //Must be beta3 or earlier
+            try {
+                Method m = NativeOps.class.getMethod("getDeviceTotalMemory", Pointer.class);
+                return (Long) m.invoke(nativeOps, getDevicePointer(i));
+            } catch (Throwable t2){
+                throw new RuntimeException(t2);
+            }
+        }
+    }
+
+    private long getDeviceFreeMemory(NativeOps nativeOps, int i){
+        try {
+            //Beta4 or later API
+            Method m = NativeOps.class.getMethod("getDeviceFreeMemory", int.class);
+            return (Long)m.invoke(nativeOps, i);
+        } catch (Throwable t){
+            //Must be beta3 or earlier
+            try {
+                Method m = NativeOps.class.getMethod("getDeviceFreeMemory", Pointer.class);
+                return (Long) m.invoke(nativeOps, getDevicePointer(i));
+            } catch (Throwable t2){
+                throw new RuntimeException(t2);
+            }
+        }
+    }
 
     private Pointer getDevicePointer(int device) {
         if (devPointers.containsKey(device)) {
