@@ -4,6 +4,8 @@ services:
     image: dl4j-benchmark-memory-dl4j:1.0.0
     container_name: dl4j-memory-test
     hostname: dl4j-memory-test
+    environment:
+      OMP_NUM_THREADS: "2"
     networks:
       skymind-benchmarking-network:
         ipv4_address: 10.119.117.10
@@ -11,6 +13,8 @@ services:
     image: dl4j-benchmark-memory-sd:1.0.0
     container_name: sd-memory-test
     hostname: sd-memory-test
+    environment:
+      OMP_NUM_THREADS: "2"
     networks:
       skymind-benchmarking-network:
         ipv4_address: 10.119.117.20
