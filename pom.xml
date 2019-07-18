@@ -6,6 +6,7 @@
     </prerequisites>
     <modules>
         <module>dl4j-core-benchmark</module>
+        <module>memory-testing</module>
         <!--<module>dl4j-spark-benchmark</module>-->
     </modules>
 
