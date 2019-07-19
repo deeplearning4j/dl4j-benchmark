@@ -63,7 +63,6 @@ public class DL4JTestRun {
 
         long start = System.currentTimeMillis();
         long end = start + runtimeSec * 1000L;
-        int iterCount = 0;
         switch (p.type()){
             case DATASET_ITERATOR:
                 DataSetIterator iter = p.getIterator();
