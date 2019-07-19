@@ -34,6 +34,7 @@ public class RNNModelMLN implements BenchmarkModel {
                 .list()
                 .layer(new SimpleRnn.Builder().nOut(64).activation(Activation.SIGMOID).build())
                 .layer(new LSTM.Builder().nOut(64).activation(Activation.TANH).build())
+                .layer(new Convolution1D.Builder().nOut(64).kernelSize(2).stride(1).convolutionMode(ConvolutionMode.Same).build())
                 .layer(new GravesLSTM.Builder().nOut(64).activation(Activation.SOFTSIGN).build())
                 .layer(new GravesBidirectionalLSTM.Builder().nOut(64).activation(Activation.TANH).build())
                 .layer(new Bidirectional(new SimpleRnn.Builder().nOut(64).activation(Activation.RELU).build()))
