@@ -11,6 +11,7 @@ import org.kohsuke.args4j.Option;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.iterator.MultiDataSetIterator;
+import org.nd4j.linalg.factory.Nd4j;
 
 @Slf4j
 public class DL4JTestRun {
@@ -21,6 +22,8 @@ public class DL4JTestRun {
     public static String dataClass;
     @Option(name = "--runtimeSec", usage = "Maximum runtime (seconds)")
     public static int runtimeSec = 3600;    //1 hour
+    @Option(name = "--periodicGC", usage = "Periodic GC frequency (<= 0 is disabled - default)")
+    public static int periodicGC = 0;
 
     public static void main(String[] args) throws Exception {
         new DL4JTestRun().run(args);
@@ -41,16 +44,22 @@ public class DL4JTestRun {
         log.info("Model class: {}", modelClass);
         log.info("Data class: {}", dataClass);
         log.info("Runtime: {} seconds", runtimeSec);
+        log.info("Periodic GC: {}", (periodicGC <= 0 ? "disabled" : periodicGC + " ms"));
 
         Utils.logMemoryConfig();
-        Utils.startMemoryLoggingThread(1000);
+        Utils.startMemoryLoggingThread(30000);
 
         BenchmarkModel m = (BenchmarkModel) Class.forName(modelClass).newInstance();
         Pipeline p = (Pipeline) Class.forName(dataClass).newInstance();
 
         Model model = m.getModel();
         boolean mln = model instanceof MultiLayerNetwork;
-        model.setListeners(new ScoreIterationListener(1));
+        model.setListeners(new ScoreIterationListener(100));
+
+        if(periodicGC > 0) {
+            Nd4j.getMemoryManager().togglePeriodicGc(true);
+            Nd4j.getMemoryManager().setAutoGcWindow(periodicGC);
+        }
 
         long start = System.currentTimeMillis();
         long end = start + runtimeSec * 1000L;
