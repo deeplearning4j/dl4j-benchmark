@@ -164,7 +164,7 @@
                 <dl4j.version>1.0.0-SNAPSHOT</dl4j.version>
                 <nd4j.version>1.0.0-SNAPSHOT</nd4j.version>
                 <datavec.version>1.0.0-SNAPSHOT</datavec.version>
-                <version.specific.code.dir>v100beta</version.specific.code.dir>
+                <version.specific.code.dir>v100snapshot</version.specific.code.dir>
                 <artifact.version.name>v100snapshot</artifact.version.name>
                 <dl4j.parallelwrapper.artifact>deeplearning4j-parallel-wrapper</dl4j.parallelwrapper.artifact>
             </properties>
@@ -381,7 +381,7 @@
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>${nd4j.backend}</artifactId>
-            <version>${nd4j.version}</version>
+            <version>${dl4j.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.oshi</groupId>

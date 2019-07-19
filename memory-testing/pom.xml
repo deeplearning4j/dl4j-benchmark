@@ -50,11 +50,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>1.6</version>
+                <version>3.2.1</version>
                 <configuration>
+                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                    <shadedClassifierName>bin</shadedClassifierName>
                     <createDependencyReducedPom>true</createDependencyReducedPom>
-                    <outputFile>dl4j-core-benchmark-${artifact.version.name}_${artifact.backend.name}.jar</outputFile>
-                    <shadedClassifierName>${artifact.version.name}_${artifact.backend.name}</shadedClassifierName>
                     <filters>
                         <filter>
                             <artifact>*:*</artifact>
@@ -66,7 +66,9 @@
                             </excludes>
                         </filter>
                     </filters>
+
                 </configuration>
+
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -74,22 +76,19 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <!--<minimizeJar>true</minimizeJar>-->
                             <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>reference.conf</resource>
                                 </transformer>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                 </transformer>
                             </transformers>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 
