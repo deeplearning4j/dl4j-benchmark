@@ -10,7 +10,7 @@ services:
       resources:
         limits:
           cpus: '2.00'
-          memory: 4192MM
+          memory: 4192M
     networks:
       skymind-benchmarking-overlay-network:
         ipv4_address: 10.119.117.10
