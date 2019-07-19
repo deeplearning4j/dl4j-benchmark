@@ -7,8 +7,8 @@ services:
     environment:
       OMP_NUM_THREADS: 1
     networks:
-      skymind-benchmarking-network:
-        ipv4_address: 10.119.117.10
+      skymind-benchmarking-bridge-network:
+        ipv4_address: 10.119.119.10
   dl4j-memory-rnn:
     image: dl4j-benchmark-memory-rnn:1.0.0
     container_name: dl4j-memory-rnn
@@ -16,8 +16,8 @@ services:
     environment:
       OMP_NUM_THREADS: 1
     networks:
-      skymind-benchmarking-network:
-        ipv4_address: 10.119.117.20
+      skymind-benchmarking-bridge-network:
+        ipv4_address: 10.119.119.20
 #  sd-memory-test:
 #    image: dl4j-benchmark-memory-sd:1.0.0
 #    container_name: sd-memory-test
@@ -28,9 +28,9 @@ services:
 #      skymind-benchmarking-network:
 #        ipv4_address: 10.119.117.20
 networks:
-  skymind-benchmarking-network:
+  skymind-benchmarking-bridge-network:
     driver: bridge
     ipam:
       driver: default
       config:
-          - subnet: 10.119.117.0/24
+          - subnet: 10.119.119.0/24

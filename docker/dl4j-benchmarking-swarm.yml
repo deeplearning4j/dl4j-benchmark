@@ -1,0 +1,46 @@
+version: "3.7"
+services:
+  dl4j-memory-conv2d:
+    image: dl4j-benchmark-memory-conv2d:1.0.0
+    container_name: dl4j-memory-conv2d
+    hostname: dl4j-memory-conv2d
+    environment:
+      OMP_NUM_THREADS: 1
+    deploy:
+      resources:
+        limits:
+          cpus: '2.00'
+          memory: 4192MM
+    networks:
+      skymind-benchmarking-overlay-network:
+        ipv4_address: 10.119.117.10
+  dl4j-memory-rnn:
+    image: dl4j-benchmark-memory-rnn:1.0.0
+    container_name: dl4j-memory-rnn
+    hostname: dl4j-memory-rnn
+    environment:
+      OMP_NUM_THREADS: 1
+    deploy:
+      resources:
+        limits:
+          cpus: '2.00'
+          memory: 4192M
+    networks:
+      skymind-benchmarking-overlay-network:
+        ipv4_address: 10.119.117.20
+#  sd-memory-test:
+#    image: dl4j-benchmark-memory-sd:1.0.0
+#    container_name: sd-memory-test
+#    hostname: sd-memory-test
+#    environment:
+#      OMP_NUM_THREADS: "2"
+#    networks:
+#      skymind-benchmarking-network:
+#        ipv4_address: 10.119.117.20
+networks:
+  skymind-benchmarking-overlay-network:
+    driver: overlay
+    ipam:
+      driver: default
+      config:
+          - subnet: 10.119.117.0/24
