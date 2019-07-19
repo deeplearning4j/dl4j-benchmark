@@ -38,7 +38,7 @@ public class CNN2DModelMLN implements BenchmarkModel {
                 .layer(new BatchNormalization.Builder().build())
                 .layer(new ZeroPaddingLayer(1,1))
                 .layer(new Cropping2D(1,1))
-                .layer(new LocallyConnected2D.Builder().nOut(8).kernelSize(2,2).stride(1,1).build())
+//                .layer(new LocallyConnected2D.Builder().nOut(8).kernelSize(2,2).stride(1,1).build())
                 .layer(new SpaceToDepthLayer.Builder().blocks(2).build())
                 .layer(new ConvolutionLayer.Builder().activation(Activation.TANH).kernelSize(2,2).stride(2,2).nOut(2).build())
                 .layer(new OutputLayer.Builder().activation(Activation.SOFTMAX).nOut(10).build())
