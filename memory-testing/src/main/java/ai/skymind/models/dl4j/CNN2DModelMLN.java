@@ -1,4 +1,4 @@
-package ai.skymind.models;
+package ai.skymind.models.dl4j;
 
 import ai.skymind.BenchmarkModel;
 import org.deeplearning4j.nn.api.Model;
@@ -40,7 +40,7 @@ public class CNN2DModelMLN implements BenchmarkModel {
                 .layer(new Cropping2D(1,1))
                 .layer(new LocallyConnected2D.Builder().nOut(8).kernelSize(2,2).stride(1,1).build())
                 .layer(new SpaceToDepthLayer.Builder().blocks(2).build())
-                .layer(new ConvolutionLayer.Builder().activation(Activation.TANH).kernelSize(2,2).stride(2,2).build())
+                .layer(new ConvolutionLayer.Builder().activation(Activation.TANH).kernelSize(2,2).stride(2,2).nOut(2).build())
                 .layer(new OutputLayer.Builder().activation(Activation.SOFTMAX).nOut(10).build())
                 .setInputType(InputType.convolutional(64, 64, 3))
                 .build();

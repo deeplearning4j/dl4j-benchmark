@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -14,12 +15,16 @@ import org.nd4j.linalg.dataset.api.iterator.MultiDataSetIterator;
 @Slf4j
 public class DL4JTestRun {
 
-    @Option(name = "--modelClass", usage = "Model class")
+    @Option(name = "--modelClass", usage = "Model class", required = true)
     public static String modelClass;
-    @Option(name = "--dataClass", usage = "Data pipeline class")
+    @Option(name = "--dataClass", usage = "Data pipeline class", required = true)
     public static String dataClass;
     @Option(name = "--runtimeSec", usage = "Maximum runtime (seconds)")
     public static int runtimeSec = 3600;    //1 hour
+
+    public static void main(String[] args) throws Exception {
+        new DL4JTestRun().run(args);
+    }
 
     public void run(String[] args) throws Exception {
         // Parse command line arguments if they exist
@@ -37,11 +42,15 @@ public class DL4JTestRun {
         log.info("Data class: {}", dataClass);
         log.info("Runtime: {} seconds", runtimeSec);
 
+        Utils.logMemoryConfig();
+        Utils.startMemoryLoggingThread(1000);
+
         BenchmarkModel m = (BenchmarkModel) Class.forName(modelClass).newInstance();
         Pipeline p = (Pipeline) Class.forName(dataClass).newInstance();
 
         Model model = m.getModel();
         boolean mln = model instanceof MultiLayerNetwork;
+        model.setListeners(new ScoreIterationListener(1));
 
         long start = System.currentTimeMillis();
         long end = start + runtimeSec * 1000L;
