@@ -29,8 +29,8 @@ public class DL4JTestRun {
     public static int runtimeSec = 3600;    //1 hour
     @Option(name = "--periodicGC", usage = "Periodic GC frequency (<= 0 is disabled - default)")
     public static int periodicGC = 0;
-    @Option(name = "--useHelpers", usage = "Whether to use MKL-DNN or not")
-    public static boolean mkldnn = false;
+    @Option(name = "--useHelpers", usage = "Whether to use MKL-DNN/cuDNN or not")
+    public static boolean useHelpers = false;
 
 
     public static void main(String[] args) throws Exception {
@@ -53,8 +53,11 @@ public class DL4JTestRun {
         log.info("Data class: {}", dataClass);
         log.info("Runtime: {} seconds", runtimeSec);
         log.info("Periodic GC: {}", (periodicGC <= 0 ? "disabled" : periodicGC + " ms"));
+        log.info("Use helpers: {}", useHelpers);
 
-        Nd4jCpu.Environment.getInstance().setUseMKLDNN(mkldnn);
+        if(!useHelpers){
+            Utils.disableMKLDNN();
+        }
 
         Utils.logMemoryConfig();
         AtomicLong[] bytes = Utils.startMemoryLoggingThread(30000);
@@ -69,6 +72,10 @@ public class DL4JTestRun {
         if(periodicGC > 0) {
             Nd4j.getMemoryManager().togglePeriodicGc(true);
             Nd4j.getMemoryManager().setAutoGcWindow(periodicGC);
+        }
+
+        if(!useHelpers){
+            Utils.removeHelpers(model);
         }
 
         long start = System.currentTimeMillis();
