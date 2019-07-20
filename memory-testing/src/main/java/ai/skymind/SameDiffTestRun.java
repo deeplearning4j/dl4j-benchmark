@@ -57,7 +57,7 @@ public class SameDiffTestRun {
         Pipeline p = (Pipeline) Class.forName(dataClass).newInstance();
 
         SameDiff model = m.getModel();
-        model.setListeners(new SDTimedScoreListener(100));
+        model.setListeners(new SDTimedScoreListener(60000));
 
         if(periodicGC > 0) {
             Nd4j.getMemoryManager().togglePeriodicGc(true);
@@ -87,7 +87,7 @@ public class SameDiffTestRun {
                 Map<String,INDArray> phMap = new HashMap<>();
                 while(System.currentTimeMillis() < end){
                     INDArray[] next = p.getFeatures();
-                    for(int i=0; i<inputs.size(); i++ ){
+                    for(int i=0; i<next.length; i++ ){
                         phMap.put(inputs.get(i), next[i]);
                     }
                     model.exec(phMap, outputs);

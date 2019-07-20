@@ -14,6 +14,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.iterator.MultiDataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.nativeblas.Nd4jCpu;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -28,6 +29,9 @@ public class DL4JTestRun {
     public static int runtimeSec = 3600;    //1 hour
     @Option(name = "--periodicGC", usage = "Periodic GC frequency (<= 0 is disabled - default)")
     public static int periodicGC = 0;
+    @Option(name = "--useHelpers", usage = "Whether to use MKL-DNN or not")
+    public static boolean mkldnn = false;
+
 
     public static void main(String[] args) throws Exception {
         new DL4JTestRun().run(args);
@@ -49,6 +53,8 @@ public class DL4JTestRun {
         log.info("Data class: {}", dataClass);
         log.info("Runtime: {} seconds", runtimeSec);
         log.info("Periodic GC: {}", (periodicGC <= 0 ? "disabled" : periodicGC + " ms"));
+
+        Nd4jCpu.Environment.getInstance().setUseMKLDNN(mkldnn);
 
         Utils.logMemoryConfig();
         AtomicLong[] bytes = Utils.startMemoryLoggingThread(30000);

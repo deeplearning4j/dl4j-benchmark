@@ -51,4 +51,8 @@ public class Utils {
         return new AtomicLong[]{maxBytes, maxPhysBytes};
     }
 
+    public static void disableMKLDNN(){
+
+
+    }
 }
