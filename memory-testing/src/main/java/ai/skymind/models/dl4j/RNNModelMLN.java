@@ -19,6 +19,13 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
+/**
+ * Activations - [4, 64, 16] - say x10 -> 163 kB
+ * Parameters: 166986 x4 (params, gradient, 2x for Adam updater) -> 2.6 MB
+ *
+ * Suggested (tested, briefly) memory for CPU:
+ * -Xmx256M -Dorg.bytedeco.javacpp.maxbytes=64M -Dorg.bytedeco.javacpp.maxphysicalbytes=512M
+ */
 public class RNNModelMLN implements BenchmarkModel {
     @Override
     public Model getModel() {

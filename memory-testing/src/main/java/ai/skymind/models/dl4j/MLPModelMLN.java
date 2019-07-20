@@ -15,6 +15,16 @@ import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.learning.config.Nesterovs;
 
+/**
+ * Params: 57710
+ * With nesterov updater (1x) + gradients + parameters, float: 3x57710x4 = 692 kB
+ * Activations: [4,64], x about 5 (including gradients, etc) = 5 kB
+ *
+ * Total memory requirements: should be runnable in < 10MB
+ *
+ * Suggested (tested, briefly) memory for CPU:
+ * -Xmx256M -Dorg.bytedeco.javacpp.maxbytes=64M -Dorg.bytedeco.javacpp.maxphysicalbytes=512M
+ */
 public class MLPModelMLN implements BenchmarkModel {
     @Override
     public Model getModel() {

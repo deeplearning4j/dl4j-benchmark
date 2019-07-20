@@ -73,6 +73,7 @@ public class SameDiffTestRun {
             Nd4j.getMemoryManager().setAutoGcWindow(periodicGC);
         }
 
+
         long start = System.currentTimeMillis();
         long end = start + runtimeSec * 1000L;
         switch (p.type()){
@@ -81,7 +82,7 @@ public class SameDiffTestRun {
                 while(System.currentTimeMillis() < end){    //TODO eventually add cutting short for iterator
                     model.fit(iter, 1);
                     if(model.getTrainingConfig().getIterationCount() > maxIters)
-                        break;
+                        break;  //TODO break before epoch is done if iter limit is hit
                 }
                 break;
             case MDS_ITERATOR:
@@ -89,7 +90,7 @@ public class SameDiffTestRun {
                 while(System.currentTimeMillis() < end){    //TODO eventually add cutting short for iterator
                     model.fit(mdsIter, 1);
                     if(model.getTrainingConfig().getIterationCount() > maxIters)
-                        break;
+                        break;  //TODO break before epoch is done if iter limit is hit
                 }
                 break;
             case INDARRAYS:

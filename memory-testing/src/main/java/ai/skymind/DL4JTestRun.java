@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -14,7 +13,6 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.iterator.MultiDataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.nativeblas.Nd4jCpu;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -60,6 +58,8 @@ public class DL4JTestRun {
             Utils.disableMKLDNN();
         }
 
+        Nd4j.create(1);
+
         Utils.logMemoryConfig();
         AtomicLong[] bytes = Utils.startMemoryLoggingThread(30000);
 
@@ -69,6 +69,8 @@ public class DL4JTestRun {
         Model model = m.getModel();
         boolean mln = model instanceof MultiLayerNetwork;
         model.setListeners(new TimedScoreListener(60000));
+
+        log.info("Num params: {}", model.numParams());
 
         if(periodicGC > 0) {
             Nd4j.getMemoryManager().togglePeriodicGc(true);
@@ -88,11 +90,11 @@ public class DL4JTestRun {
                     if(mln){
                         ((MultiLayerNetwork)model).fit(iter);
                         if(((MultiLayerNetwork) model).getIterationCount() >= maxIters)
-                            break;
+                            break;  //TODO break before epoch is done if iter limit is hit
                     } else {
                         ((ComputationGraph)model).fit(iter);
                         if(((ComputationGraph) model).getIterationCount() >= maxIters)
-                            break;
+                            break;  //TODO break before epoch is done if iter limit is hit
                     }
                 }
                 break;
@@ -102,11 +104,11 @@ public class DL4JTestRun {
                     if(mln){
                         ((MultiLayerNetwork)model).fit(mdsIter);
                         if(((MultiLayerNetwork) model).getIterationCount() >= maxIters)
-                            break;
+                            break;  //TODO break before epoch is done if iter limit is hit
                     } else {
                         ((ComputationGraph)model).fit(mdsIter);
                         if(((ComputationGraph) model).getIterationCount() >= maxIters)
-                            break;
+                            break;  //TODO break before epoch is done if iter limit is hit
                     }
                 }
                 break;
