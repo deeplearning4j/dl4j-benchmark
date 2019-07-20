@@ -17,12 +17,13 @@ import org.nd4j.linalg.learning.config.Adam;
 
 /**
  * Memory requirements:
- * Activations are [4,8,32,32] (mostly) -> assume 10x this accounting for samediff layers - 1.3 MB
+ * Activations are [4,8, 64, 64] (mostly) -> assume 10x this accounting for samediff layers - 5.2 MB
  * Params: 6356
  * With Adam updater (2x) + gradients + parameters, float: 4x6356x4 = 102 kB
  *
  * Suggested (tested, briefly) memory for CPU:
  * -Xmx256M -Dorg.bytedeco.javacpp.maxbytes=64M -Dorg.bytedeco.javacpp.maxphysicalbytes=512M
+ * --dataClass ai.skymind.pipeline.ImgRRPipeline --modelClass ai.skymind.models.dl4j.CNN2DModelMLN
  */
 public class CNN2DModelMLN implements BenchmarkModel {
     @Override

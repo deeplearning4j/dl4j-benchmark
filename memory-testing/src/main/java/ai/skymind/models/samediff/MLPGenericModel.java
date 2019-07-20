@@ -10,6 +10,11 @@ import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.learning.config.Nesterovs;
 
+/**
+ * Briefly tested memory config:
+ * -Xmx256M -Dorg.bytedeco.javacpp.maxbytes=64M -Dorg.bytedeco.javacpp.maxphysicalbytes=512M
+ * --dataClass ai.skymind.pipeline.MLPRandomPipeline --modelClass ai.skymind.models.samediff.MLPGenericModel
+ */
 public class MLPGenericModel implements SameDiffModel {
 
     @Override

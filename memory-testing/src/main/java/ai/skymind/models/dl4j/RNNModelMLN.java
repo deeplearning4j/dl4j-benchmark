@@ -25,6 +25,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
  *
  * Suggested (tested, briefly) memory for CPU:
  * -Xmx256M -Dorg.bytedeco.javacpp.maxbytes=64M -Dorg.bytedeco.javacpp.maxphysicalbytes=512M
+ * --dataClass ai.skymind.pipeline.RnnRandomPipeline --modelClass ai.skymind.models.dl4j.RNNModelMLN
  */
 public class RNNModelMLN implements BenchmarkModel {
     @Override

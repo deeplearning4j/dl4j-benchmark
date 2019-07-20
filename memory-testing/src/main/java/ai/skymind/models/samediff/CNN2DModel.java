@@ -14,6 +14,16 @@ import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.weightinit.impl.LecunUniformInitScheme;
 import org.nd4j.weightinit.impl.XavierInitScheme;
 
+/**
+ *
+ * Memory guesstimate: based on roughly equivalent DL4J model, params + gradients + updater should be around 100kB
+ * More will be kept in memory due to no workspaces...
+ * Estimate: [4,8,64,64] x 40 = 21MB
+ *
+ * Suggested (tested, briefly) memory for CPU:
+ * -Xmx256M -Dorg.bytedeco.javacpp.maxbytes=128M -Dorg.bytedeco.javacpp.maxphysicalbytes=576M
+ * --dataClass ai.skymind.pipeline.ImgRRPipeline --modelClass ai.skymind.models.samediff.CNN2DModel
+ */
 public class CNN2DModel implements SameDiffModel {
     @Override
     public SameDiff getModel() {

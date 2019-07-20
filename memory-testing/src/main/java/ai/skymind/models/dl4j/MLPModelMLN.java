@@ -24,6 +24,7 @@ import org.nd4j.linalg.learning.config.Nesterovs;
  *
  * Suggested (tested, briefly) memory for CPU:
  * -Xmx256M -Dorg.bytedeco.javacpp.maxbytes=64M -Dorg.bytedeco.javacpp.maxphysicalbytes=512M
+ * --dataClass ai.skymind.pipeline.MLPEmbeddingArraysPipeline --modelClass ai.skymind.models.dl4j.MLPModelMLN
  */
 public class MLPModelMLN implements BenchmarkModel {
     @Override
