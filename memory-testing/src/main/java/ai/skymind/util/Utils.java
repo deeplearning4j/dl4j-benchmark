@@ -1,10 +1,12 @@
-package ai.skymind;
+package ai.skymind.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.bytedeco.javacpp.Pointer;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.io.StringUtils;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 public class Utils {
@@ -23,9 +25,11 @@ public class Utils {
     }
 
 
-    public static void startMemoryLoggingThread(final long msFreq){
+    public static AtomicLong[] startMemoryLoggingThread(final long msFreq){
         Nd4j.create(1);
 
+        final AtomicLong maxPhysBytes = new AtomicLong(Pointer.physicalBytes());
+        final AtomicLong maxBytes = new AtomicLong(Pointer.totalBytes());
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -35,12 +39,16 @@ public class Utils {
                     } catch (InterruptedException e){ }
                     long b = Pointer.totalBytes();
                     long pb = Pointer.physicalBytes();
+                    maxBytes.set(b);
+                    maxPhysBytes.set(pb);
                     log.info("JavaCPP Memory: {} total, {} physical", b, pb);
                 }
             }
         });
         t.setDaemon(true);
         t.start();
+
+        return new AtomicLong[]{maxBytes, maxPhysBytes};
     }
 
 }
