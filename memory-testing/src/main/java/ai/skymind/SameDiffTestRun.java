@@ -30,6 +30,8 @@ public class SameDiffTestRun {
     public static int periodicGC = 0;
     @Option(name = "--useHelpers", usage = "Whether to use MKL-DNN/cuDNN or not")
     public static boolean useHelpers = false;
+    @Option(name = "--maxIters", usage = "Maximum number of iterations")
+    public static int maxIters = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws Exception {
         new SameDiffTestRun().run(args);
@@ -78,12 +80,16 @@ public class SameDiffTestRun {
                 DataSetIterator iter = p.getIterator();
                 while(System.currentTimeMillis() < end){    //TODO eventually add cutting short for iterator
                     model.fit(iter, 1);
+                    if(model.getTrainingConfig().getIterationCount() > maxIters)
+                        break;
                 }
                 break;
             case MDS_ITERATOR:
                 MultiDataSetIterator mdsIter = p.getMdsIterator();
                 while(System.currentTimeMillis() < end){    //TODO eventually add cutting short for iterator
                     model.fit(mdsIter, 1);
+                    if(model.getTrainingConfig().getIterationCount() > maxIters)
+                        break;
                 }
                 break;
             case INDARRAYS:
@@ -92,7 +98,7 @@ public class SameDiffTestRun {
                 List<String> inputs = model.inputs();
                 List<String> outputs = model.outputs();
                 Map<String,INDArray> phMap = new HashMap<>();
-                while(System.currentTimeMillis() < end){
+                while(System.currentTimeMillis() < end && iterCount < maxIters){
                     INDArray[] next = p.getFeatures();
                     for(int i=0; i<next.length; i++ ){
                         phMap.put(inputs.get(i), next[i]);

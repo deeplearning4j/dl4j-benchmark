@@ -31,7 +31,8 @@ public class DL4JTestRun {
     public static int periodicGC = 0;
     @Option(name = "--useHelpers", usage = "Whether to use MKL-DNN/cuDNN or not")
     public static boolean useHelpers = false;
-
+    @Option(name = "--maxIters", usage = "Maximum number of iterations")
+    public static int maxIters = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws Exception {
         new DL4JTestRun().run(args);
@@ -86,8 +87,12 @@ public class DL4JTestRun {
                 while(System.currentTimeMillis() < end){    //TODO eventually add cutting short for iterator
                     if(mln){
                         ((MultiLayerNetwork)model).fit(iter);
+                        if(((MultiLayerNetwork) model).getIterationCount() >= maxIters)
+                            break;
                     } else {
                         ((ComputationGraph)model).fit(iter);
+                        if(((ComputationGraph) model).getIterationCount() >= maxIters)
+                            break;
                     }
                 }
                 break;
@@ -96,15 +101,19 @@ public class DL4JTestRun {
                 while(System.currentTimeMillis() < end){    //TODO eventually add cutting short for iterator
                     if(mln){
                         ((MultiLayerNetwork)model).fit(mdsIter);
+                        if(((MultiLayerNetwork) model).getIterationCount() >= maxIters)
+                            break;
                     } else {
                         ((ComputationGraph)model).fit(mdsIter);
+                        if(((ComputationGraph) model).getIterationCount() >= maxIters)
+                            break;
                     }
                 }
                 break;
             case INDARRAYS:
                 int iterCount = 0;
                 long lastReport = System.currentTimeMillis();
-                while(System.currentTimeMillis() < end){
+                while(System.currentTimeMillis() < end && iterCount < maxIters){
                     INDArray[] next = p.getFeatures();
                     if(mln){
                         ((MultiLayerNetwork)model).output(next[0]);
