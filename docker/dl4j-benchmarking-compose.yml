@@ -7,8 +7,7 @@ services:
     environment:
       OMP_NUM_THREADS: 1
     networks:
-      skymind-benchmarking-bridge-network:
-        ipv4_address: 10.119.119.10
+      - skymind-benchmarking-bridge-network
 
 
   dl4j-memory-rnn:
@@ -18,8 +17,7 @@ services:
     environment:
       OMP_NUM_THREADS: 1
     networks:
-      skymind-benchmarking-bridge-network:
-        ipv4_address: 10.119.119.20
+      - skymind-benchmarking-bridge-network
 
 
   dl4j-memory-pw:
@@ -30,8 +28,7 @@ services:
       OMP_NUM_THREADS: 1
       PW_WORKERS: 2
     networks:
-      skymind-benchmarking-bridge-network:
-        ipv4_address: 10.119.119.30
+      - skymind-benchmarking-bridge-network
 
 
   sd-memory-conv2d:
@@ -41,8 +38,7 @@ services:
     environment:
       OMP_NUM_THREADS: 1
     networks:
-      skymind-benchmarking-bridge-network:
-        ipv4_address: 10.119.119.110
+      - skymind-benchmarking-bridge-network
 
 
   sd-memory-rnn:
@@ -52,8 +48,7 @@ services:
     environment:
       OMP_NUM_THREADS: 1
     networks:
-      skymind-benchmarking-bridge-network:
-        ipv4_address: 10.119.119.120
+      - skymind-benchmarking-bridge-network
 
 
 networks:
