@@ -6,7 +6,7 @@ set -e
 docker build -t dl4j-linux-base:1.0.0 ./base
 
 # base DL4j image: stack
-#docker build --no-cache -t dl4j-base:1.0.0 ./deeplearning4j-base
+docker build --no-cache -t dl4j-base:1.0.0 ./deeplearning4j-base
 
 # benchmark image: contains base dl4j image + dl4j-benchmarking jars
 docker build -t dl4j-benchmark-base:1.0.0 ../
