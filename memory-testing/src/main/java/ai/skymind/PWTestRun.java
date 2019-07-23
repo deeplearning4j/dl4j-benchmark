@@ -59,12 +59,15 @@ public class PWTestRun {
         int nWorkers = Nd4j.getAffinityManager().getNumberOfDevices();
         Properties props = Nd4j.getExecutioner().getEnvironmentInformation();
         if("cpu".equalsIgnoreCase((String)props.get("backend"))){
-            nWorkers = 4;
-            log.info("CPU - Using 4 workers");
-        } else {
-            Preconditions.checkState(nWorkers > 1, "On CUDA, ParallelWrapper run must be done with 2+ GPUs, got {} devices", nWorkers);
-            log.info("CUDA - Using {} workers", nWorkers);
+            String envWorkers = System.getenv("PW_WORKERS");
+            if (envWorkers != null)
+                nWorkers = Integer.valueOf(envWorkers);
+            else
+                nWorkers = 4;
         }
+
+        Preconditions.checkState(nWorkers > 1, "ParallelWrapper run must be done with 2+ GPUs, got {} devices", nWorkers);
+        log.info("PW uses {} workers", nWorkers);
 
 
         if(!useHelpers){
