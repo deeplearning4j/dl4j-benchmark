@@ -18,15 +18,24 @@ services:
     networks:
       skymind-benchmarking-bridge-network:
         ipv4_address: 10.119.119.20
-#  sd-memory-test:
-#    image: dl4j-benchmark-memory-sd:1.0.0
-#    container_name: sd-memory-test
-#    hostname: sd-memory-test
-#    environment:
-#      OMP_NUM_THREADS: "2"
-#    networks:
-#      skymind-benchmarking-network:
-#        ipv4_address: 10.119.117.20
+  sd-memory-conv2d:
+    image: sd-benchmark-memory-conv2d:1.0.0
+    container_name: sd-memory-conv2d
+    hostname: sd-memory-conv2d
+    environment:
+      OMP_NUM_THREADS: 1
+    networks:
+      skymind-benchmarking-network:
+        ipv4_address: 10.119.117.30
+  sd-memory-rnn:
+    image: sd-benchmark-memory-rnn:1.0.0
+    container_name: sd-memory-rnn
+    hostname: sd-memory-rnn
+    environment:
+      OMP_NUM_THREADS: 1
+    networks:
+      skymind-benchmarking-network:
+        ipv4_address: 10.119.117.40
 networks:
   skymind-benchmarking-bridge-network:
     driver: bridge
