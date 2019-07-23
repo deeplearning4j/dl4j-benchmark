@@ -15,6 +15,9 @@ docker build -t dl4j-benchmark-base:1.0.0 ../
 docker build -t dl4j-benchmark-memory-conv2d:1.0.0 ./benchmark-memory-dl4j-conv2d
 docker build -t dl4j-benchmark-memory-rnn:1.0.0 ./benchmark-memory-dl4j-rnn
 
+# dl4j pw memory benchmark containers
+docker build -t dl4j-benchmark-memory-pw:1.0.0 ./benchmark-memory-dl4j-pw
+
 # samediff memory benchmark container
 docker build -t sd-benchmark-memory-conv2d:1.0.0 ./benchmark-memory-sd-conv2d
 docker build -t sd-benchmark-memory-rnn:1.0.0 ./benchmark-memory-sd-rnn
