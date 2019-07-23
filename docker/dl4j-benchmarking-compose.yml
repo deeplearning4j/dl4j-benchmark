@@ -26,7 +26,7 @@ services:
       OMP_NUM_THREADS: 1
     networks:
       skymind-benchmarking-bridge-network:
-        ipv4_address: 10.119.117.30
+        ipv4_address: 10.119.119.30
   sd-memory-rnn:
     image: sd-benchmark-memory-rnn:1.0.0
     container_name: sd-memory-rnn
@@ -35,7 +35,7 @@ services:
       OMP_NUM_THREADS: 1
     networks:
       skymind-benchmarking-bridge-network:
-        ipv4_address: 10.119.117.40
+        ipv4_address: 10.119.119.40
 networks:
   skymind-benchmarking-bridge-network:
     driver: bridge
