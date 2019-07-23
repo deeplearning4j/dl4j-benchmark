@@ -35,7 +35,7 @@ public class CNN2DModel implements SameDiffModel {
         SDVariable w1 = sd.var(Nd4j.rand(DataType.FLOAT, 2, 2, 3, 8));
         SDVariable l1 = sd.cnn().conv2d(in, w1, Conv2DConfig.builder().kH(2).kW(2).sH(1).sW(1).dataFormat("nchw").isSameMode(true).build());
         SDVariable l2 = sd.cnn().upsampling2d(l1, 2);
-        SDVariable l3 = sd.cnn().avgPooling2d(l2, Pooling2DConfig.builder().kH(2).kH(2).sH(1).sW(1).isNHWC(true).isSameMode(true).build());
+        SDVariable l3 = sd.cnn().avgPooling2d(l2, Pooling2DConfig.builder().kH(2).kW(2).sH(1).sW(1).isNHWC(true).isSameMode(true).build());
         SDVariable w4 = sd.var(Nd4j.rand(DataType.FLOAT, 2, 2, 2, 8));
         SDVariable l4 = sd.cnn().deconv2d(l3, w4, DeConv2DConfig.builder().kH(2).kW(2).dataFormat("nchw").isSameMode(true).build());
         SDVariable dw5 = sd.var("dw", new XavierInitScheme('c', 32, 32), DataType.FLOAT, 2, 2, 2, 2);
