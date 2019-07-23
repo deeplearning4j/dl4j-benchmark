@@ -60,7 +60,7 @@ public class PWTestRun {
         Properties props = Nd4j.getExecutioner().getEnvironmentInformation();
         if("cpu".equalsIgnoreCase((String)props.get("backend"))){
             nWorkers = 4;
-            log.info("CUDA - Using 4 workers");
+            log.info("CPU - Using 4 workers");
         } else {
             Preconditions.checkState(nWorkers > 1, "On CUDA, ParallelWrapper run must be done with 2+ GPUs, got {} devices", nWorkers);
             log.info("CUDA - Using {} workers", nWorkers);
