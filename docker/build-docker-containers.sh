@@ -20,4 +20,4 @@ docker build -t dl4j-benchmark-memory-pw:1.0.0 ./benchmark-memory-dl4j-pw
 
 # samediff memory benchmark container
 docker build -t sd-benchmark-memory-conv2d:1.0.0 ./benchmark-memory-sd-conv2d
-docker build -t sd-benchmark-memory-rnn:1.0.0 ./benchmark-memory-sd-rnn
+docker build -t sd-benchmark-memory-mlp:1.0.0 ./benchmark-memory-sd-mlp

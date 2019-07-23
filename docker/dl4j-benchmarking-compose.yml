@@ -41,10 +41,10 @@ services:
       - skymind-benchmarking-bridge-network
 
 
-  sd-memory-rnn:
-    image: sd-benchmark-memory-rnn:1.0.0
-    container_name: sd-memory-rnn
-    hostname: sd-memory-rnn
+  sd-memory-mlp:
+    image: sd-benchmark-memory-mlp:1.0.0
+    container_name: sd-memory-mlp
+    hostname: sd-memory-mlp
     environment:
       OMP_NUM_THREADS: 1
     networks:
