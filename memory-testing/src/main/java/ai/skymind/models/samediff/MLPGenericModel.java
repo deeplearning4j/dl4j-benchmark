@@ -40,9 +40,9 @@ public class MLPGenericModel implements SameDiffModel {
         SDVariable l7a = sd.zerosLike(l7);
         SDVariable l7b = sd.onesLike(l7);
         SDVariable l8 = l7.add(l7a).mul(l7b);
-        SDVariable l9 = l8.sub(sd.rank(l8).mul(0).reshape(1, 1));
+        SDVariable l9 = l8.sub(sd.rank(l8).mul(0).reshape(1, 1));//.add(0.5);
         SDVariable l10 = l9.castTo(DataType.DOUBLE).castTo(DataType.HALF).castTo(DataType.FLOAT);
-        SDVariable l11 = sd.math().reciprocal(l10).permute(1,0).permute(1,0);
+        SDVariable l11 = sd.math().reciprocal(sd.max(l10, sd.constant(0.1f))).permute(1,0).permute(1,0);
         SDVariable l12 = sd.math().log(l11);
         SDVariable l13 = sd.nn().sigmoid(sd.math().mergeAdd(l12, l11));
         SDVariable l14 = sd.nn().swish(l13);
