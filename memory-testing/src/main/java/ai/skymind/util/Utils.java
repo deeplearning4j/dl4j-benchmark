@@ -13,8 +13,6 @@ import org.deeplearning4j.nn.layers.normalization.LocalResponseNormalization;
 import org.deeplearning4j.nn.layers.recurrent.LSTM;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.io.StringUtils;
-import org.nd4j.nativeblas.Nd4jCpu;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
