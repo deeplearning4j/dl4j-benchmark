@@ -14,7 +14,7 @@ docker build --no-cache -t dl4j-base:1.0.0 ./deeplearning4j-base
 docker build -t dl4j-benchmark-base:1.0.0 ../
 
 # dl4j memory benchmark containers
-docker build -t dl4j-benchmark-memory-conv2d:1.0.0 ./benchmark-memory-dl4j-conv2d
+docker build -t dl4j-benchmark-memory-single:1.0.0 ./benchmark-memory-single
 
 # dl4j pw memory benchmark containers
-#docker build -t dl4j-benchmark-memory-pw:1.0.0 ./benchmark-memory-dl4j-pw
+#docker build -t dl4j-benchmark-memory-multi:1.0.0 ./benchmark-memory-multi
