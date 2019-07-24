@@ -12,3 +12,5 @@ RUN wget https://deeplearning4jblob.blob.core.windows.net/datasets/tinyimagenet_
 # upgrade cmake
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.15.0/cmake-3.15.0.tar.gz && tar -xzf cmake-3.15.0.tar.gz && cd cmake-3.15.0 && ./configure --prefix=/usr && make all -j 8 && make install -j 8
 
+# copy libraries
+RUN cp /usr/local/cuda-10.1/compat/* /usr/lib/

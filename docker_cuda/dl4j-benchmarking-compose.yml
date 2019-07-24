@@ -6,6 +6,8 @@ services:
     hostname: dl4j-memory-conv2d
     environment:
       OMP_NUM_THREADS: 1
+    devices:
+      - "/dev/nvidia0:/dev/nvidia0"
     networks:
       - skymind-benchmarking-bridge-network
 
