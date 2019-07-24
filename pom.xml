@@ -295,6 +295,35 @@
                 </dependency>
             </dependencies>
         </profile>
+
+
+        <profile>
+            <id>cuda101</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <nd4j.backend>nd4j-cuda-10.1</nd4j.backend>
+                <artifact.backend.name>cuda11</artifact.backend.name>
+            </properties>
+        </profile>
+        <profile>
+            <id>cudnn101</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <nd4j.backend>nd4j-cuda-10.1</nd4j.backend>
+                <artifact.backend.name>cuda101-cudnn</artifact.backend.name>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.deeplearning4j</groupId>
+                    <artifactId>deeplearning4j-cuda-10.1</artifactId>
+                    <version>${dl4j.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 
 

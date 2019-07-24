@@ -8,3 +8,7 @@ RUN apt-get update && \
 
 # download datasets
 RUN wget https://deeplearning4jblob.blob.core.windows.net/datasets/tinyimagenet_200_dl4j.v1.zip && mkdir -p ~/.deeplearning4j/data/TINYIMAGENET_200 && unzip tinyimagenet_200_dl4j.v1.zip -d ~/.deeplearning4j/data/TINYIMAGENET_200
+
+# upgrade cmake
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.15.0/cmake-3.15.0.tar.gz && tar -xzf cmake-3.15.0.tar.gz && cd cmake-3.15.0 && ./configure --prefix=/usr && make all -j 8 && make install -j 8
+

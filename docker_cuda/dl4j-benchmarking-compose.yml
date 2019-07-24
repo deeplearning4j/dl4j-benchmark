@@ -10,47 +10,6 @@ services:
       - skymind-benchmarking-bridge-network
 
 
-  dl4j-memory-rnn:
-    image: dl4j-benchmark-memory-rnn:1.0.0
-    container_name: dl4j-memory-rnn
-    hostname: dl4j-memory-rnn
-    environment:
-      OMP_NUM_THREADS: 1
-    networks:
-      - skymind-benchmarking-bridge-network
-
-
-  dl4j-memory-pw:
-    image: dl4j-benchmark-memory-pw:1.0.0
-    container_name: dl4j-memory-pw
-    hostname: dl4j-memory-pw
-    environment:
-      OMP_NUM_THREADS: 1
-      PW_WORKERS: 2
-    networks:
-      - skymind-benchmarking-bridge-network
-
-
-  sd-memory-conv2d:
-    image: sd-benchmark-memory-conv2d:1.0.0
-    container_name: sd-memory-conv2d
-    hostname: sd-memory-conv2d
-    environment:
-      OMP_NUM_THREADS: 1
-    networks:
-      - skymind-benchmarking-bridge-network
-
-
-  sd-memory-mlp:
-    image: sd-benchmark-memory-mlp:1.0.0
-    container_name: sd-memory-mlp
-    hostname: sd-memory-mlp
-    environment:
-      OMP_NUM_THREADS: 1
-    networks:
-      - skymind-benchmarking-bridge-network
-
-
 networks:
   skymind-benchmarking-bridge-network:
     driver: bridge

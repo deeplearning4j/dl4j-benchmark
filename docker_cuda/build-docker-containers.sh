@@ -2,8 +2,10 @@
 
 set -e
 
+cp Dockerfile ../
+
 # base image: java, cpp and full DL4j stack
-docker build -t dl4j-linux-base:1.0.0 ./base
+docker build -t dl4j-cuda-base:1.0.0 ./base
 
 # base DL4j image: stack
 docker build --no-cache -t dl4j-base:1.0.0 ./deeplearning4j-base

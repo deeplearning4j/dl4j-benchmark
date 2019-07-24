@@ -2,6 +2,8 @@
 
 set -e
 
+cp Dockerfile ../
+
 # base image: java, cpp and full DL4j stack
 docker build -t dl4j-linux-base:1.0.0 ./base
 
