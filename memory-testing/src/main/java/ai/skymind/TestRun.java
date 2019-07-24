@@ -63,6 +63,9 @@ public class TestRun {
             System.exit(1);
         }
 
+        INDArray array = Nd4j.create(1);
+        array.addi(3);
+        log.info("Array confirmation: {}", array);
         log.info("Model classes: {}", modelClasses);
         log.info("Data classes: {}", dataClasses);
         log.info("Runtime: {} seconds", runtimeSec);
@@ -71,6 +74,7 @@ public class TestRun {
         log.info("Max iters: {}", maxIters);
         log.info("Async shield: {}", asyncShield);
         log.info("Debug mode: {}", debugMode);
+
 
         Preconditions.checkState(modelClasses.size() == dataClasses.size(), "Number of model classes (%s) must match " +
                 "number of data classes (%s)", modelClasses.size(), dataClasses.size());
