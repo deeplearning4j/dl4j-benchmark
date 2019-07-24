@@ -13,6 +13,7 @@ import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+import org.kohsuke.args4j.spi.StringArrayOptionHandler;
 import org.nd4j.autodiff.listeners.impl.ScoreListener;
 import org.nd4j.autodiff.samediff.SameDiff;
 import org.nd4j.base.Preconditions;
@@ -29,9 +30,9 @@ import java.util.concurrent.atomic.AtomicLong;
 @Slf4j
 public class TestRun {
 
-    @Option(name = "--modelClass", usage = "Model class", required = true)
+    @Option(name = "--modelClass", usage = "Model class(es)", handler = StringArrayOptionHandler.class, required = true)
     public static List<String> modelClasses;
-    @Option(name = "--dataClass", usage = "Data pipeline classes", required = true)
+    @Option(name = "--dataClass", usage = "Data pipeline class(es)", handler = StringArrayOptionHandler.class, required = true)
     public static List<String> dataClasses;
     @Option(name = "--runtimeSec", usage = "Maximum runtime (seconds) for each model")
     public static int runtimeSec = 3600;    //1 hour
@@ -42,12 +43,12 @@ public class TestRun {
     @Option(name = "--maxIters", usage = "Maximum number of iterations")
     public static int maxIters = Integer.MAX_VALUE;
     @Option(name = "--asyncShield", usage = "Whether an async shield should be added")
-    public static boolean asyncShield = true;
+    public static boolean asyncShield = false;
     @Option(name = "--debugMode", usage = "Debug mode: should we log every iteration?")
     public static boolean debugMode = false;
 
     public static void main(String[] args) throws Exception {
-        new SameDiffTestRun().run(args);
+        new TestRun().run(args);
     }
 
     public void run(String[] args) throws Exception {
@@ -67,6 +68,9 @@ public class TestRun {
         log.info("Runtime: {} seconds", runtimeSec);
         log.info("Periodic GC: {}", (periodicGC <= 0 ? "disabled" : periodicGC + " ms"));
         log.info("Use helpers: {}", useHelpers);
+        log.info("Max iters: {}", maxIters);
+        log.info("Async shield: {}", asyncShield);
+        log.info("Debug mode: {}", debugMode);
 
         Preconditions.checkState(modelClasses.size() == dataClasses.size(), "Number of model classes (%s) must match " +
                 "number of data classes (%s)", modelClasses.size(), dataClasses.size());
@@ -211,8 +215,8 @@ public class TestRun {
                         Map<String, INDArray> phMap = new HashMap<>();
                         while(System.currentTimeMillis() < end && iterCount < maxIters){
                             INDArray[] next = p.getFeatures();
-                            for(int i=0; i<next.length; i++ ){
-                                phMap.put(inputs.get(i), next[i]);
+                            for(int j=0; j<next.length; j++ ){
+                                phMap.put(inputs.get(j), next[j]);
                             }
                             model.exec(phMap, outputs);
                             if(++iterCount % 1000 == 0 && System.currentTimeMillis() > lastReport + 60000L ){
@@ -229,6 +233,8 @@ public class TestRun {
             }
 
             log.info("========== Completed model {} of {} ==========", (i+1), modelClasses.size());
+            System.gc();
+            Nd4j.getWorkspaceManager().destroyAllWorkspacesForCurrentThread();
         }
     }
 
