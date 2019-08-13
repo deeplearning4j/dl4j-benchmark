@@ -97,6 +97,7 @@ public class BenchmarkUtil {
             //Prepare network for backprop benchmark:
             //We need to do forward pass, and keep input activation arrays set on the layer input field, in the appropriate workspace
 
+            net.setLabels(labels);
 
             LayerWorkspaceMgr mgr;
             if(net.getLayerWiseConfigurations().getTrainingWorkspaceMode() == WorkspaceMode.NONE){

@@ -42,7 +42,7 @@ public abstract class BaseBenchmark {
                           boolean usePW, int pwNumThreads, int pwAvgFreq, int pwPrefetchBuffer, boolean memoryListener) throws Exception {
 
         iter = new EarlyTerminationDataSetIterator(iter, 6);
-        iter = new AsyncShieldDataSetIterator(iter);
+//        iter = new AsyncShieldDataSetIterator(iter);
 
         log.info("=======================================");
         log.info("===== Benchmarking selected model =====");
