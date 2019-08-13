@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.deeplearning4j.BenchmarkUtil;
+import org.deeplearning4j.datasets.iterator.AsyncShieldDataSetIterator;
 import org.deeplearning4j.datasets.iterator.EarlyTerminationDataSetIterator;
 import org.deeplearning4j.listeners.BenchmarkListener;
 import org.deeplearning4j.listeners.BenchmarkReport;
@@ -40,6 +41,8 @@ public abstract class BaseBenchmark {
                           DataSetIterator iter, ModelType modelType, boolean profile, int gcWindow, int occasionalGCFreq,
                           boolean usePW, int pwNumThreads, int pwAvgFreq, int pwPrefetchBuffer, boolean memoryListener) throws Exception {
 
+        iter = new EarlyTerminationDataSetIterator(iter, 2);
+//        iter = new AsyncShieldDataSetIterator(iter);
 
         log.info("=======================================");
         log.info("===== Benchmarking selected model =====");
