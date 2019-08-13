@@ -41,7 +41,7 @@ public abstract class BaseBenchmark {
                           DataSetIterator iter, ModelType modelType, boolean profile, int gcWindow, int occasionalGCFreq,
                           boolean usePW, int pwNumThreads, int pwAvgFreq, int pwPrefetchBuffer, boolean memoryListener) throws Exception {
 
-        iter = new EarlyTerminationDataSetIterator(iter, 2);
+        iter = new EarlyTerminationDataSetIterator(iter, 6);
 //        iter = new AsyncShieldDataSetIterator(iter);
 
         log.info("=======================================");
