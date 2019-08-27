@@ -58,6 +58,8 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
     public static int pwAvgFreq = 5;
     @Option(name="--pwPrefetchBuffer", usage="Parallel Wrapper averaging frequency")
     public static int pwPrefetchBuffer = 2;
+    @Option(name="--useMKLDNN", usage="MKLDNN usage required setting")
+    public static boolean useMKLDNN = false;
 
     private int seed = 42;
 
@@ -126,6 +128,7 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
                     .pwNumThreads(pwNumThreads)
                     .pwAvgFreq(pwAvgFreq)
                     .pwPrefetchBuffer(pwPrefetchBuffer)
+                    .useMKLDNN(useMKLDNN)
                     .execute();
         }
     }

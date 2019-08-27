@@ -56,6 +56,8 @@ public class BenchmarkCnn extends BaseBenchmark {
     public static String datatype = "FLOAT";
     @Option(name="--memoryListener", usage="Add MemoryReportingListener")
     public static boolean memoryListener = false;
+    @Option(name="--useMKLDNN", usage="MKLDNN usage required setting")
+    public static boolean useMKLDNN = false;
 
     private String datasetName  = "SIMULATEDCNN";
     private int seed = 42;
@@ -106,6 +108,7 @@ public class BenchmarkCnn extends BaseBenchmark {
                     .pwAvgFreq(pwAvgFreq)
                     .pwPrefetchBuffer(pwPrefetchBuffer)
                     .memoryListener(memoryListener)
+                    .useMKLDNN(useMKLDNN)
                     .execute();
         }
 

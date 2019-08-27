@@ -22,6 +22,7 @@ import org.nd4j.linalg.dataset.api.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.profiler.OpProfiler;
+import org.nd4j.nativeblas.Nd4jCpu;
 
 import java.util.*;
 
@@ -38,7 +39,7 @@ public abstract class BaseBenchmark {
     @Builder(builderClassName = "Benchmark", buildMethodName = "execute")
     public void benchmark(Map.Entry<ModelType, TestableModel> net, String description, int numLabels, int batchSize, int seed, String datasetName,
                           DataSetIterator iter, ModelType modelType, boolean profile, int gcWindow, int occasionalGCFreq,
-                          boolean usePW, int pwNumThreads, int pwAvgFreq, int pwPrefetchBuffer, boolean memoryListener) throws Exception {
+                          boolean usePW, int pwNumThreads, int pwAvgFreq, int pwPrefetchBuffer, boolean memoryListener, boolean useMKLDNN) throws Exception {
 
 
         log.info("=======================================");
@@ -52,6 +53,7 @@ public abstract class BaseBenchmark {
             throw new IllegalStateException("Null model");
         }
         BenchmarkUtil.enableRegularization(model);
+        Nd4jCpu.Environment.getInstance().setUseMKLDNN(useMKLDNN);
 
         if(usePW && pwNumThreads < 0){
             Properties p = Nd4j.getExecutioner().getEnvironmentInformation();
