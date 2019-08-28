@@ -23,6 +23,8 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.profiler.OpProfiler;
 import org.nd4j.nativeblas.Nd4jCpu;
+import org.nd4j.linalg.factory.Nd4j;
+
 
 import java.util.*;
 
@@ -54,6 +56,8 @@ public abstract class BaseBenchmark {
         }
         BenchmarkUtil.enableRegularization(model);
         Nd4jCpu.Environment.getInstance().setUseMKLDNN(useMKLDNN);
+        Nd4j.getExecutioner().enableDebugMode(true);
+        Nd4j.getExecutioner().enableVerboseMode(true);
 
         if(usePW && pwNumThreads < 0){
             Properties p = Nd4j.getExecutioner().getEnvironmentInformation();
