@@ -38,11 +38,16 @@ do
       do
          for l in "${mklUse[@]}"
          do
-                 echo "Running test: $i, batch size $j, data type $k, $l"
-                 export SNAPSHOT_DIR=../scripts/${modelType}_${totalIterations}_iter/profileOutput_"$i"_"$j"_"$k"_"$l"
+                 if [ -n "$l" ]; then
+                     m="withMKL"
+                 else
+                     m="withoutMKL"
+                 fi
+                 echo "Running test: $i, batch size $j, data type $k, $m"
+                 export SNAPSHOT_DIR=../scripts/${modelType}_${totalIterations}_iter/profileOutput_"$i"_"$j"_"$k"_"$m"
                  mkdir -p $SNAPSHOT_DIR
-                 echo "java -agentpath:"$yourkitPath"=tracing,port=10001,dir=$SNAPSHOT_DIR,tracing_settings_path=$profilingSettingsPath -cp dl4j-core-benchmark-$i.jar -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.benchmarks.BenchmarkCnn --modelType $modelType --batchSize $j --datatype $k --cacheMode NONE --totalIterations $totalIterations $l > ../scripts/${modelType}_${totalIterations}_iter/output_"$i"_"$j"_"$k"_"$l".txt"
-                 java -agentpath:"$yourkitPath"=tracing,port=10001,dir=$SNAPSHOT_DIR,tracing_settings_path=$profilingSettingsPath -cp dl4j-core-benchmark-$i.jar -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.benchmarks.BenchmarkCnn --modelType $modelType --batchSize $j --datatype $k --cacheMode NONE --totalIterations $totalIterations $l > ../scripts/${modelType}_${totalIterations}_iter/output_"$i"_"$j"_"$k"_"$l".txt
+                 echo "java -agentpath:"$yourkitPath"=tracing,port=10001,dir=$SNAPSHOT_DIR,tracing_settings_path=$profilingSettingsPath -cp dl4j-core-benchmark-$i.jar -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.benchmarks.BenchmarkCnn --modelType $modelType --batchSize $j --datatype $k --cacheMode NONE --totalIterations $totalIterations $l > ../scripts/${modelType}_${totalIterations}_iter/output_"$i"_"$j"_"$k"_"$m".txt"
+                 java -agentpath:"$yourkitPath"=tracing,port=10001,dir=$SNAPSHOT_DIR,tracing_settings_path=$profilingSettingsPath -cp dl4j-core-benchmark-$i.jar -Xmx$xmx -Dorg.bytedeco.javacpp.maxbytes=$javacpp -Dorg.bytedeco.javacpp.maxphysicalbytes=$javacpp org.deeplearning4j.benchmarks.BenchmarkCnn --modelType $modelType --batchSize $j --datatype $k --cacheMode NONE --totalIterations $totalIterations $l > ../scripts/${modelType}_${totalIterations}_iter/output_"$i"_"$j"_"$k"_"$m".txt
          done
       done
    done
