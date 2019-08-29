@@ -144,36 +144,35 @@ public class ConvLayersBenchmarks {
         }
         INDArray out = Nd4j.createUninitialized(DataType.FLOAT, inShape[0], nIn, outSize[0], outSize[1]);
 
-
-        OpContext context = Nd4j.getExecutioner().buildContext();
-        context.setIArguments(kernel[0], kernel[1],
-                strides[0], strides[1],
-                pad[0], pad[1],
-                dilation[0], dilation[1],
-                same ? 1 : 0,  //Same mode
-                0   //0=NCHW
-        );
-
-        INDArray[] inputsArr = new INDArray[]{input, weights, bias};
-        context.getInputArrays().clear();
-        for( int i=0; i<inputsArr.length; i++ ){
-            context.setInputArray(i, inputsArr[i]);
+        long mkldnn = 0;
+        long opNoMKLDNN = 0;
+        for(boolean mkl : new boolean[]{false, true}) {
+            Nd4jCpu.Environment.getInstance().setUseMKLDNN(mkl);
+            OpContext context = Nd4j.getExecutioner().buildContext();
+            context.setIArguments(kernel[0], kernel[1],
+                    strides[0], strides[1],
+                    pad[0], pad[1],
+                    dilation[0], dilation[1],
+                    same ? 1 : 0,  //Same mode
+                    0   //0=NCHW
+            );
+            INDArray[] inputsArr = new INDArray[]{input, weights, bias};
+            context.getInputArrays().clear();
+            for (int i = 0; i < inputsArr.length; i++) {
+                context.setInputArray(i, inputsArr[i]);
+            }
+            context.setOutputArray(0, out);
+            Conv2D op = new Conv2D();
+            long start = System.currentTimeMillis();
+            for (int i = 0; i < numRuns; i++) {
+                Nd4j.exec(op, context);
+            }
+            if(mkl){
+                mkldnn = System.currentTimeMillis() - start;
+            } else {
+                opNoMKLDNN = System.currentTimeMillis() - start;
+            }
         }
-        context.getOutputArrays().clear();
-        context.setOutputArray(0, out);
-        Conv2D op = new Conv2D();
-        Nd4jCpu.Environment.getInstance().setUseMKLDNN(false);
-        long start = System.currentTimeMillis();
-        for( int i=0; i<numRuns; i++ ) {
-            Nd4j.exec(op, context);
-        }
-        long opNoMKLDNN = System.currentTimeMillis() - start;
-        Nd4jCpu.Environment.getInstance().setUseMKLDNN(true);
-        start = System.currentTimeMillis();
-        for( int i=0; i<numRuns; i++ ) {
-            Nd4j.exec(op, context);
-        }
-        long mkldnn = System.currentTimeMillis() - start;
 
         //DL4J layer:
         ConvolutionLayer conf = new ConvolutionLayer.Builder()
@@ -199,14 +198,13 @@ public class ConvLayersBenchmarks {
                 .defaultWorkspace("workspace", WS_CONFIG)
                 .build();
 
-        long layerTime = 0;
+        long start = System.currentTimeMillis();
         for( int i=0; i<numRuns; i++ ) {
             try (MemoryWorkspace ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(WS_CONFIG, "workspace")) {
-                start = System.currentTimeMillis();
                 layer.activate(input, true, mgr);
-                layerTime += System.currentTimeMillis() - start;
             }
         }
+        long layerTime = System.currentTimeMillis() - start;
 
         input.close();
         weights.close();
@@ -242,36 +240,39 @@ public class ConvLayersBenchmarks {
         INDArray out = Nd4j.createUninitialized(DataType.FLOAT, inShape[0], nIn, outSize[0], outSize[1]);
 
 
-        OpContext context = Nd4j.getExecutioner().buildContext();
-        context.setIArguments(
-                kernel[0], kernel[1],
-                strides[0], strides[1],
-                pad[0], pad[1],
-                dilation[0], dilation[1],
-                same ? 1 : 0,
-                0,  //Extra - not used?
-                0); //0 = NCHW
+        long mkldnn = 0;
+        long opNoMKLDNN = 0;
+        for(boolean mkl : new boolean[]{false, true}) {
+            Nd4jCpu.Environment.getInstance().setUseMKLDNN(mkl);
+            OpContext context = Nd4j.getExecutioner().buildContext();
+            context.setIArguments(
+                    kernel[0], kernel[1],
+                    strides[0], strides[1],
+                    pad[0], pad[1],
+                    dilation[0], dilation[1],
+                    same ? 1 : 0,
+                    0,  //Extra - not used?
+                    0); //0 = NCHW
 
-        context.setInputArray(0, input);
-        context.setOutputArray(0, out);
-        DynamicCustomOp op;
-        if(max){
-            op = new MaxPooling2D();
-        } else {
-            op = new AvgPooling2D();
+            context.setInputArray(0, input);
+            context.setOutputArray(0, out);
+            DynamicCustomOp op;
+            if (max) {
+                op = new MaxPooling2D();
+            } else {
+                op = new AvgPooling2D();
+            }
+            Nd4jCpu.Environment.getInstance().setUseMKLDNN(false);
+            long start = System.currentTimeMillis();
+            for (int i = 0; i < numRuns; i++) {
+                Nd4j.exec(op, context);
+            }
+            if(mkl){
+                mkldnn = System.currentTimeMillis() - start;
+            } else {
+                opNoMKLDNN = System.currentTimeMillis() - start;
+            }
         }
-        Nd4jCpu.Environment.getInstance().setUseMKLDNN(false);
-        long start = System.currentTimeMillis();
-        for( int i=0; i<numRuns; i++ ) {
-            Nd4j.exec(op, context);
-        }
-        long opNoMKLDNN = System.currentTimeMillis() - start;
-        Nd4jCpu.Environment.getInstance().setUseMKLDNN(true);
-        start = System.currentTimeMillis();
-        for( int i=0; i<numRuns; i++ ) {
-            Nd4j.exec(op, context);
-        }
-        long mkldnn = System.currentTimeMillis() - start;
 
         //DL4J layer:
         SubsamplingLayer conf = new SubsamplingLayer.Builder()
@@ -292,14 +293,14 @@ public class ConvLayersBenchmarks {
                 .defaultWorkspace("workspace", WS_CONFIG)
                 .build();
 
-        long layerTime = 0;
+
+        long start = System.currentTimeMillis();
         for( int i=0; i<numRuns; i++ ) {
             try (MemoryWorkspace ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(WS_CONFIG, "workspace")) {
-                start = System.currentTimeMillis();
                 layer.activate(input, true, mgr);
-                layerTime += System.currentTimeMillis() - start;
             }
         }
+        long layerTime = System.currentTimeMillis() - start;
 
         input.close();
 
