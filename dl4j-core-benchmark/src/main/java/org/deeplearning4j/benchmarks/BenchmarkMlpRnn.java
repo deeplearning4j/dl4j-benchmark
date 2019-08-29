@@ -16,6 +16,8 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
+import org.nd4j.nativeblas.Nd4jCpu;
+
 
 import java.util.ArrayList;
 import java.util.List;

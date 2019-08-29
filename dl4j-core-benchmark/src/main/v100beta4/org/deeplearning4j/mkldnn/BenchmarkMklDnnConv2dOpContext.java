@@ -1,6 +1,6 @@
 package org.deeplearning4j.mkldnn;
 
-import org.deeplearning4j.nn.api.OutputAdapter;
+import org.nd4j.adapters.OutputAdapter;
 import org.deeplearning4j.nn.conf.ConvolutionMode;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
