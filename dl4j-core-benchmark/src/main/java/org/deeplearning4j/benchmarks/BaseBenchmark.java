@@ -93,14 +93,14 @@ public abstract class BaseBenchmark {
         //Warm-up
         log.info("===== Warming up =====");
         if(!usePW) {
-            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 2);
+            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 10);
             if (model instanceof MultiLayerNetwork) {
                 ((MultiLayerNetwork) model).fit(warmup);
             } else if (model instanceof ComputationGraph) {
                 ((ComputationGraph) model).fit(warmup);
             }
         } else {
-            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 2 * pwNumThreads);
+            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 10 * pwNumThreads);
             pw.fit(warmup);
         }
         iter.reset();
