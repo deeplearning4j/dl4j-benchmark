@@ -14,6 +14,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.nativeblas.Nd4jCpu;
 
 import java.util.Map;
 
@@ -74,6 +75,14 @@ public class BenchmarkCnn extends BaseBenchmark {
             System.exit(1);
         }
 
+        if (useMKLDNN) {
+            log.info("Defaulting to MKLDNN usage");
+        }
+        else {
+            log.info("Turning off MKLDNN");
+        }
+        Nd4jCpu.Environment.getInstance().setUseMKLDNN(useMKLDNN);
+
         log.info("Using DataType {}", datatype);
         DTypeUtils.setDataType(datatype);
 
@@ -108,7 +117,6 @@ public class BenchmarkCnn extends BaseBenchmark {
                     .pwAvgFreq(pwAvgFreq)
                     .pwPrefetchBuffer(pwPrefetchBuffer)
                     .memoryListener(memoryListener)
-                    .useMKLDNN(useMKLDNN)
                     .execute();
         }
 

@@ -13,7 +13,6 @@ import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.optimize.api.TrainingListener;
 import org.deeplearning4j.optimize.listeners.PerformanceListener;
 import org.deeplearning4j.parallelism.ParallelWrapper;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -22,9 +21,6 @@ import org.nd4j.linalg.dataset.api.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.profiler.OpProfiler;
-import org.nd4j.nativeblas.Nd4jCpu;
-import org.nd4j.linalg.factory.Nd4j;
-
 
 import java.util.*;
 
@@ -41,7 +37,7 @@ public abstract class BaseBenchmark {
     @Builder(builderClassName = "Benchmark", buildMethodName = "execute")
     public void benchmark(Map.Entry<ModelType, TestableModel> net, String description, int numLabels, int batchSize, int seed, String datasetName,
                           DataSetIterator iter, ModelType modelType, boolean profile, int gcWindow, int occasionalGCFreq,
-                          boolean usePW, int pwNumThreads, int pwAvgFreq, int pwPrefetchBuffer, boolean memoryListener, boolean useMKLDNN) throws Exception {
+                          boolean usePW, int pwNumThreads, int pwAvgFreq, int pwPrefetchBuffer, boolean memoryListener) throws Exception {
 
 
         log.info("=======================================");
@@ -55,9 +51,6 @@ public abstract class BaseBenchmark {
             throw new IllegalStateException("Null model");
         }
         BenchmarkUtil.enableRegularization(model);
-        Nd4jCpu.Environment.getInstance().setUseMKLDNN(useMKLDNN);
-        Nd4j.getExecutioner().enableDebugMode(true);
-        Nd4j.getExecutioner().enableVerboseMode(true);
 
         if(usePW && pwNumThreads < 0){
             Properties p = Nd4j.getExecutioner().getEnvironmentInformation();
@@ -100,14 +93,14 @@ public abstract class BaseBenchmark {
         //Warm-up
         log.info("===== Warming up =====");
         if(!usePW) {
-            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 10);
+            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 2);
             if (model instanceof MultiLayerNetwork) {
                 ((MultiLayerNetwork) model).fit(warmup);
             } else if (model instanceof ComputationGraph) {
                 ((ComputationGraph) model).fit(warmup);
             }
         } else {
-            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 10 * pwNumThreads);
+            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 2 * pwNumThreads);
             pw.fit(warmup);
         }
         iter.reset();

@@ -75,6 +75,14 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
             System.exit(1);
         }
 
+        if (useMKLDNN) {
+            log.info("Defaulting to MKLDNN usage");
+        }
+        else {
+            log.info("Turning off MKLDNN");
+        }
+        Nd4jCpu.Environment.getInstance().setUseMKLDNN(useMKLDNN);
+
         switch(modelType){
             case MLP_SMALL:
             case RNN_SMALL:
@@ -128,7 +136,6 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
                     .pwNumThreads(pwNumThreads)
                     .pwAvgFreq(pwAvgFreq)
                     .pwPrefetchBuffer(pwPrefetchBuffer)
-                    .useMKLDNN(useMKLDNN)
                     .execute();
         }
     }

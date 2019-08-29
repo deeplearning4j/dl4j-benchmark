@@ -25,7 +25,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.nativeblas.Nd4jCpu;
 
 import java.io.File;
 import java.util.Map;
@@ -84,8 +84,17 @@ public class BenchmarkCustom extends BaseBenchmark {
             System.exit(1);
         }
 
+        if (useMKLDNN) {
+            log.info("Defaulting to MKLDNN usage");
+        }
+        else {
+            log.info("Turning off MKLDNN");
+        }
+        Nd4jCpu.Environment.getInstance().setUseMKLDNN(useMKLDNN);
+
         if(datasetPath==null)
             throw new IllegalArgumentException("You must specify a valid path to a labelled dataset of images.");
+
 
         log.info("Building models for "+modelType+"....");
         networks = ModelSelector.select(modelType, null, numLabels, seed, iterations, workspaceMode, cacheMode, updater);
@@ -129,7 +138,6 @@ public class BenchmarkCustom extends BaseBenchmark {
                     .pwNumThreads(pwNumThreads)
                     .pwAvgFreq(pwAvgFreq)
                     .pwPrefetchBuffer(pwPrefetchBuffer)
-                    .useMKLDNN(useMKLDNN)
                     .execute();
         }
 
