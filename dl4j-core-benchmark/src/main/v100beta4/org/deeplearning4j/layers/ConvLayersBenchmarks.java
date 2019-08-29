@@ -41,7 +41,7 @@ public class ConvLayersBenchmarks {
 
         List<long[]> convSizes = Arrays.asList(new long[]{32, 3, 64, 64}, new long[]{64, 128, 16, 16}, new long[]{128, 512, 64, 64});
 
-//        for(boolean permutedIn : new boolean[]{false, true}) {
+//        for(boolean permutedIn : new boolean[]{false, true}) {    //TODO add support for permuted inputs, as might occur in DL4J
         for(boolean permutedIn : new boolean[]{false}) {
             for (long[] inShape : convSizes) {
                 INDArray in;
@@ -65,6 +65,8 @@ public class ConvLayersBenchmarks {
                 System.out.println("Conv2d, shape=" + Arrays.toString(inShape) + ", k=3, s=2, same");
                 System.out.println(t);
 
+                System.out.println("-----------------");
+
                 //Pooling2d
                 conv2d_NCHW(WARMUP, inShape, 2, 1, true);
                 t = pool2d_NCHW(ITERS, inShape, 2, 1, true, true);
@@ -76,6 +78,18 @@ public class ConvLayersBenchmarks {
                 System.out.println("maxPool2d, shape=" + Arrays.toString(inShape) + ", k=3, s=2, same");
                 System.out.println(t);
 
+                conv2d_NCHW(WARMUP, inShape, 2, 1, true);
+                t = pool2d_NCHW(ITERS, inShape, 2, 1, true, false);
+                System.out.println("avgPool2d, shape=" + Arrays.toString(inShape) + ", k=2, s=1, same");
+                System.out.println(t);
+
+                conv2d_NCHW(WARMUP, inShape, 3, 2, true);
+                t = pool2d_NCHW(ITERS, inShape, 3, 2, true, false);
+                System.out.println("avgPool2d, shape=" + Arrays.toString(inShape) + ", k=3, s=2, same");
+                System.out.println(t);
+
+
+                System.out.println("-----------------");
 
                 //Batch norm
 
