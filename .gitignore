@@ -58,3 +58,6 @@ dl4j-core-benchmark/src/main/resources/tf_data
 dl4j-core-benchmark/src/main/resources/tensorflow_data
 dl4j-core-benchmark/src/main/resources/torch-data
 data
+
+#exclude root Dockerfile
+/Dockerfile

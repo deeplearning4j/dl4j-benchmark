@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  dl4j-memory-conv2d:
+    image: dl4j-benchmark-memory-conv2d:1.0.0
+    container_name: dl4j-memory-conv2d
+    hostname: dl4j-memory-conv2d
+    environment:
+      OMP_NUM_THREADS: 1
+    devices:
+      - "/dev/nvidia0:/dev/nvidia0"
+    networks:
+      - skymind-benchmarking-bridge-network
+
+
+networks:
+  skymind-benchmarking-bridge-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+          - subnet: 10.119.119.0/24
