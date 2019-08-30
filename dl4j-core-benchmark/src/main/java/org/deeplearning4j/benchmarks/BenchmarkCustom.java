@@ -39,7 +39,7 @@ public class BenchmarkCustom extends BaseBenchmark {
 
     // values to pass in from command line when compiled, esp running remotely
     @Option(name = "--modelType", usage = "Model type (e.g. ALEXNET, VGG16, or CNN).", aliases = "-model")
-    public static ModelType modelType = ModelType.ALEXNET;
+    public static ModelType modelType = ModelType.VGG16;
     //    @Option(name="--numGPUs",usage="How many workers to use for multiple GPUs.",aliases = "-ng")
 //    public int numGPUs = 0;
     @Option(name="--datasetPath",usage="Path to the parent directly of multiple directories of classes of images.",aliases = "-dataset")
