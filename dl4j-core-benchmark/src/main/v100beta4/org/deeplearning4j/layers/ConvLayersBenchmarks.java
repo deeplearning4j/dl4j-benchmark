@@ -134,9 +134,9 @@ public class ConvLayersBenchmarks {
         convLayerSize = new long[]{128, 64, 224, 224};
         in = Nd4j.create(DataType.FLOAT, convLayerSize);
 
-        conv2d_NCHW(WARMUP, convLayerSize, 2, 1, false);
-        t = pool2d_NCHW(ITERS, convLayerSize, 2, 1, false, true);
-        System.out.println("Conv2d, shape=" + Arrays.toString(convLayerSize) + ", k=2, s=1, truncate");
+        conv2d_NCHW(WARMUP, convLayerSize, 2, 2, false);
+        t = pool2d_NCHW(ITERS, convLayerSize, 2, 2, false, true);
+        System.out.println("Conv2d, shape=" + Arrays.toString(convLayerSize) + ", k=2, s=2, truncate");
         System.out.println(t);
     }
 
