@@ -111,7 +111,6 @@ public class ConvLayersBenchmarks {
          */
         //most activations - layer 1
         long[] convLayerSize = new long[]{128, 64, 224, 224};
-        INDArray in = Nd4j.create(DataType.FLOAT, convLayerSize);
         conv2d_NCHW(WARMUP, convLayerSize, 3, 1, false);
         Timings t = conv2d_NCHW(ITERS, convLayerSize, 3, 1, false);
         System.out.println("Conv2d, shape=" + Arrays.toString(convLayerSize) + ", k=3, s=1, truncate");
@@ -119,8 +118,6 @@ public class ConvLayersBenchmarks {
 
         //most parameters - layer11 or 12
         convLayerSize = new long[]{128, 512, 28, 28};
-        in = Nd4j.create(DataType.FLOAT, convLayerSize);
-
         conv2d_NCHW(WARMUP, convLayerSize, 3, 1, false);
         t = conv2d_NCHW(ITERS, convLayerSize, 3, 1, false);
         System.out.println("Conv2d, shape=" + Arrays.toString(convLayerSize) + ", k=3, s=1, truncate");
@@ -132,8 +129,6 @@ public class ConvLayersBenchmarks {
          */
         //most activations - layer 2
         convLayerSize = new long[]{128, 64, 224, 224};
-        in = Nd4j.create(DataType.FLOAT, convLayerSize);
-
         pool2d_NCHW(WARMUP, convLayerSize, 2, 2, false, true);
         t = pool2d_NCHW(ITERS, convLayerSize, 2, 2, false, true);
         System.out.println("maxPool2d, shape=" + Arrays.toString(convLayerSize) + ", k=2, s=2, truncate");
