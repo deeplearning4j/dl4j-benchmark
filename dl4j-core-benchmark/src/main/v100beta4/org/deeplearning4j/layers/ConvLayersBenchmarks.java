@@ -122,7 +122,7 @@ public class ConvLayersBenchmarks {
         in = Nd4j.create(DataType.FLOAT, convLayerSize);
 
         conv2d_NCHW(WARMUP, convLayerSize, 3, 1, false);
-        Timings t = conv2d_NCHW(ITERS, convLayerSize, 3, 1, false);
+        t = conv2d_NCHW(ITERS, convLayerSize, 3, 1, false);
         System.out.println("Conv2d, shape=" + Arrays.toString(convLayerSize) + ", k=3, s=1, truncate");
         System.out.println(t);
 
