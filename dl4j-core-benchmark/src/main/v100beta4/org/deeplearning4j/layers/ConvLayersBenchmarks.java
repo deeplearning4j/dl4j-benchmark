@@ -40,8 +40,8 @@ public class ConvLayersBenchmarks {
     public static void main(String[] args) {
 
 
-        //List<long[]> convSizes = Arrays.asList(new long[]{32, 3, 64, 64}, new long[]{64, 128, 16, 16}, new long[]{128, 512, 64, 64});
-        List<long[]> convSizes = Arrays.asList(new long[]{32, 3, 64, 64});
+        List<long[]> convSizes = Arrays.asList(new long[]{32, 3, 64, 64}, new long[]{64, 128, 16, 16}, new long[]{128, 512, 64, 64});
+        //List<long[]> convSizes = Arrays.asList(new long[]{32, 3, 64, 64});
 
 //        for(boolean permutedIn : new boolean[]{false, true}) {    //TODO add support for permuted inputs, as might occur in DL4J
         for (boolean permutedIn : new boolean[]{false}) {
@@ -104,6 +104,40 @@ public class ConvLayersBenchmarks {
                 //LRN
             }
         }
+        /*
+            VGG16 benchmark convolution
+            largest activation size - layer0 and layer1 (1 has more parameters)
+            largest number of parameters - layer11,12,14,15,16 (11 and 12 have more activations)
+         */
+        //most activations - layer 1
+        long[] convLayerSize = new long[]{128, 64, 224, 224};
+        INDArray in = Nd4j.create(DataType.FLOAT, convLayerSize);
+        conv2d_NCHW(WARMUP, convLayerSize, 3, 1, false);
+        Timings t = conv2d_NCHW(ITERS, convLayerSize, 3, 1, false);
+        System.out.println("Conv2d, shape=" + Arrays.toString(convLayerSize) + ", k=3, s=1, truncate");
+        System.out.println(t);
+
+        //most parameters - layer11 or 12
+        convLayerSize = new long[]{128, 512, 28, 28};
+        in = Nd4j.create(DataType.FLOAT, convLayerSize);
+
+        conv2d_NCHW(WARMUP, convLayerSize, 3, 1, false);
+        Timings t = conv2d_NCHW(ITERS, convLayerSize, 3, 1, false);
+        System.out.println("Conv2d, shape=" + Arrays.toString(convLayerSize) + ", k=3, s=1, truncate");
+        System.out.println(t);
+
+        /*
+            VGG16 benchmark subsampling layers
+            largest activation size - layer2
+         */
+        //most activations - layer 2
+        convLayerSize = new long[]{128, 64, 224, 224};
+        in = Nd4j.create(DataType.FLOAT, convLayerSize);
+
+        conv2d_NCHW(WARMUP, convLayerSize, 2, 1, false);
+        t = pool2d_NCHW(ITERS, convLayerSize, 2, 1, false, true);
+        System.out.println("Conv2d, shape=" + Arrays.toString(convLayerSize) + ", k=2, s=1, truncate");
+        System.out.println(t);
     }
 
     @Data
