@@ -93,18 +93,12 @@ public class ConvLayersBenchmarks {
                 System.out.println("-----------------");
 
                 //Batch norm
-                conv2d_NCHW(WARMUP, inShape, 3, 2, true);
-                t = batchNorm_NCHW(ITERS,inShape,false,-1,-1);
-                System.out.println("batchNorm, shape=" + Arrays.toString(inShape));
-                System.out.println(t);
-
-                conv2d_NCHW(WARMUP, inShape, 3, 2, true);
-                t = batchNorm_NCHW(ITERS,inShape,true,2.0,3.0);
-                System.out.println("batchNorm, shape=" + Arrays.toString(inShape) + ", lock gamma beta");
+                batchNorm_NCHW(WARMUP, inShape, 2.0, 3.0);
+                t = batchNorm_NCHW(ITERS, inShape, 2.0, 3.0);
+                System.out.println("batchNorm, shape=" + Arrays.toString(inShape) + ", locked gamma beta");
                 System.out.println(t);
 
                 System.out.println("-----------------");
-
 
 
                 //LRN
@@ -322,7 +316,7 @@ public class ConvLayersBenchmarks {
         return new Timings(numRuns, opNoMKLDNN, mkldnn, layerTime);
     }
 
-    private static Timings batchNorm_NCHW(int numRuns, long[] inShape, boolean lockGammaBeta, double gamma, double beta) {
+    private static Timings batchNorm_NCHW(int numRuns, long[] inShape, double beta, double gamma) {
 
         int nOut = (int) inShape[1];
         INDArray input = Nd4j.createUninitialized(DataType.FLOAT, inShape);
@@ -334,16 +328,17 @@ public class ConvLayersBenchmarks {
             Nd4jCpu.Environment.getInstance().setUseMKLDNN(mkl);
             OpContext context = Nd4j.getExecutioner().buildContext();
             context.setIArguments(
-                    lockGammaBeta ? 1 : 0,  //applyGamma
-                    lockGammaBeta ? 1 : 0);  //applyBeta
+                    1,  //applyGamma
+                    1,  //applyBeta
+                    1);  //NCHW, use axis = 1
 
             context.setTArguments(Nd4j.EPS_THRESHOLD);
             //libnd4j expects [input, mean, variance, gamma, beta
             context.setInputArray(0, input);
-            if (!lockGammaBeta) {
-                context.setInputArray(3, Nd4j.valueArrayOf(new int[]{1, nOut}, gamma));
-                context.setInputArray(4, Nd4j.valueArrayOf(new int[]{1, nOut}, beta));
-            }
+            context.setInputArray(1, Nd4j.valueArrayOf(new int[]{nOut}, 0.0)); //mean
+            context.setInputArray(2, Nd4j.valueArrayOf(new int[]{nOut}, 0.0)); //variance
+            context.setInputArray(3, Nd4j.valueArrayOf(new int[]{nOut}, (float) gamma));
+            context.setInputArray(4, Nd4j.valueArrayOf(new int[]{nOut}, (float) beta));
             context.setOutputArray(0, out);
             DynamicCustomOp op;
             op = new BatchNorm();
@@ -361,11 +356,7 @@ public class ConvLayersBenchmarks {
         }
 
         //DL4J layer:
-        BatchNormalization.Builder b = new BatchNormalization.Builder().nOut(nOut);
-        if (lockGammaBeta) {
-            b.lockGammaBeta(lockGammaBeta).gamma(gamma).beta(beta);
-        }
-        BatchNormalization conf = b.build();
+        BatchNormalization conf = new BatchNormalization.Builder().nOut(nOut).lockGammaBeta(true).gamma(gamma).beta(beta).build();
         NeuralNetConfiguration nnc = new NeuralNetConfiguration();
         nnc.setLayer(conf);
 
