@@ -14,7 +14,6 @@ import java.lang.reflect.Method;
 public class BenchmarkUtil {
 
     public static void enableND4JDebug(boolean enable){
-        Nd4j.getExecutioner().enableDebugMode(enable);
     }
 
     public static void enableRegularization(Model model){

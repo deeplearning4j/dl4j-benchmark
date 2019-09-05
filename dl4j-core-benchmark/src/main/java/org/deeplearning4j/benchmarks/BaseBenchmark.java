@@ -13,7 +13,6 @@ import org.deeplearning4j.models.TestableModel;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.optimize.api.TrainingListener;
 import org.deeplearning4j.optimize.listeners.PerformanceListener;
 import org.deeplearning4j.parallelism.ParallelWrapper;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -94,14 +93,14 @@ public abstract class BaseBenchmark {
         //Warm-up
         log.info("===== Warming up =====");
         if(!usePW) {
-            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 10);
+            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 2);
             if (model instanceof MultiLayerNetwork) {
                 ((MultiLayerNetwork) model).fit(warmup);
             } else if (model instanceof ComputationGraph) {
                 ((ComputationGraph) model).fit(warmup);
             }
         } else {
-            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 10 * pwNumThreads);
+            DataSetIterator warmup = new EarlyTerminationDataSetIterator(iter, 2 * pwNumThreads);
             pw.fit(warmup);
         }
         iter.reset();

@@ -16,6 +16,8 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
+import org.nd4j.nativeblas.Nd4jCpu;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +60,8 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
     public static int pwAvgFreq = 5;
     @Option(name="--pwPrefetchBuffer", usage="Parallel Wrapper averaging frequency")
     public static int pwPrefetchBuffer = 2;
+    @Option(name="--useMKLDNN", usage="MKLDNN usage required setting")
+    public static boolean useMKLDNN = false;
 
     private int seed = 42;
 
@@ -72,6 +76,14 @@ public class BenchmarkMlpRnn extends BaseBenchmark {
             parser.printUsage(System.err);
             System.exit(1);
         }
+
+        if (useMKLDNN) {
+            log.info("Defaulting to MKLDNN usage");
+        }
+        else {
+            log.info("Turning off MKLDNN");
+        }
+        Nd4jCpu.Environment.getInstance().setUseMKLDNN(useMKLDNN);
 
         switch(modelType){
             case MLP_SMALL:
